@@ -215,6 +215,12 @@ footer.site .inner{display:flex;flex-direction:column;gap:6px}
 .df-go i{font-style:normal}
 @media (max-width:640px){.disc-feature{grid-template-columns:auto 1fr;padding:16px}.df-ico{width:44px;height:44px}.df-go{grid-column:1/-1;text-align:center}}
 @media (prefers-reduced-motion:reduce){.disc-feature{transition:none}.disc-feature:hover{transform:none}}
+.navtip{position:fixed;z-index:1000;max-width:260px;padding:8px 11px;border-radius:10px;background:rgba(29,29,31,.94);color:#fff;font:400 12.5px/1.4 var(--body);box-shadow:0 8px 24px rgba(0,0,0,.18);pointer-events:none;opacity:0;transform:translateY(-3px);transition:opacity .12s,transform .12s}
+.navtip.on{opacity:1;transform:none}
+.navtip::before{content:"";position:absolute;top:-5px;left:var(--ax,50%);margin-left:-5px;border:5px solid transparent;border-top:0;border-bottom-color:rgba(29,29,31,.94)}
+[data-theme="dark"] .navtip,[data-theme="dark"] .navtip::before{background:#3a3a3c;border-bottom-color:#3a3a3c}
+[data-theme="dark"] .navtip::before{background:none}
+@media (prefers-reduced-motion:reduce){.navtip{transition:none}}
 .i-gray{background:#8e8e93} .i-pink{background:linear-gradient(180deg,#ff6ea8,#ff2d78)}
 </style>
 <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
@@ -223,7 +229,7 @@ footer.site .inner{display:flex;flex-direction:column;gap:6px}
 <header class="gnav"><div class="inner">
   <a class="brand" href="index.html">ANTH 104</a>
   <nav aria-label="Modules">
-    <a href="read/index.html">Read</a><a href="drill/index.html">Drill</a><a href="board/index.html">Anthro-pardy</a><a href="roots/index.html">Word Roots</a><a href="readings/index.html">Readings</a><a href="mock/index.html">Mock Exam</a><a href="review/index.html">Review List</a><a href="discuss/index.html" class="nav-disc">Discuss <span class="beta-chip">Beta</span></a><a href="archive/index.html">Archive</a>
+    <a href="drill/index.html" data-tip="Multiple-choice practice on every textbook chapter, sorted by subject. Tracks what you've mastered and what to review.">Drill</a><a href="board/index.html" data-tip="A Jeopardy-style review game: 6 categories, 5 values each, and a hidden double-points tile.">Anthro-pardy</a><a href="roots/index.html" data-tip="The Greek and Latin roots behind course terms (hetero- + -glossia…), with a quick drill.">Word Roots</a><a href="readings/index.html" data-tip="Practice questions on each assigned article. Derived from the original reading PDFs in the Archive.">Readings</a><a href="mock/index.html" data-tip="A fresh timed-style practice exam each time: 50 or 100 questions, a quarter from the readings.">Mock Exam</a><a href="review/index.html" data-tip="Every question you've flagged for review, from the drills and mock exams, in one place.">Review List</a><a href="discuss/index.html" data-tip="Beta, testing mode: post responses to weekly discussion questions and reply to classmates. Demo account for now." class="nav-disc">Discuss <span class="beta-chip">Beta</span></a><a href="archive/index.html" data-tip="The original course material: textbook chapters, assigned reading PDFs, lecture slides and class videos. The drills are built from these.">Archive</a>
   </nav>
   <button type="button" class="setbtn" id="settingsBtn" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span>Settings</span></button>
 </div></header>
@@ -249,15 +255,14 @@ footer.site .inner{display:flex;flex-direction:column;gap:6px}
 </div></section>
 
 <nav class="modbar" aria-label="Which modules go with the exam"><ul>
-  <li><a href="read/index.html"><span class="ico i-teal"><svg viewBox="0 0 24 24"><path d="M3 5.5C5.5 4.5 8.5 4.5 12 6.5v13c-3.5-2-6.5-2-9-1z"/><path d="M21 5.5c-2.5-1-5.5-1-9 1v13c3.5-2 6.5-2 9-1z"/></svg></span>Read &amp; Learn</a></li>
-  <li><a href="drill/index.html"><span class="ico i-blue"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12l3 3 5-6"/></svg></span>Multiple&#8209;Choice Drill</a></li>
-  <li><a href="board/index.html"><span class="ico t i-orange">$</span>Anthro&#8209;pardy</a></li>
-  <li><a href="roots/index.html"><span class="ico t i-purple">Aa</span>Word Roots</a></li>
-  <li><a href="readings/index.html"><span class="ico t i-green">R</span>Readings</a></li>
-  <li><a href="mock/index.html"><span class="ico i-red"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="7"/><path d="M12 9v4l2.5 2M10 3h4"/></svg></span>Mock Exam</a></li>
-  <li><a href="review/index.html"><span class="ico i-yellow"><svg viewBox="0 0 24 24"><path d="M6 21V4M6 4h11l-2.5 4L17 12H6"/></svg></span>Review List</a></li>
-  <li><a href="discuss/index.html"><span class="ico i-pink"><svg viewBox="0 0 24 24"><path d="M4 5h11a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H9l-4 3v-3H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/><path d="M19 9h1a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-1v2l-3-2h-4"/></svg></span>Discuss <span class="beta-chip">Beta</span></a></li>
-  <li><a href="archive/index.html"><span class="ico i-gray"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="5" rx="1.5"/><path d="M5 9v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9M10 13h4"/></svg></span>Archive</a></li>
+  <li><a href="drill/index.html" data-tip="Multiple-choice practice on every textbook chapter, sorted by subject. Tracks what you've mastered and what to review."><span class="ico i-blue"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12l3 3 5-6"/></svg></span>Multiple&#8209;Choice Drill</a></li>
+  <li><a href="board/index.html" data-tip="A Jeopardy-style review game: 6 categories, 5 values each, and a hidden double-points tile."><span class="ico t i-orange">$</span>Anthro&#8209;pardy</a></li>
+  <li><a href="roots/index.html" data-tip="The Greek and Latin roots behind course terms (hetero- + -glossia…), with a quick drill."><span class="ico t i-purple">Aa</span>Word Roots</a></li>
+  <li><a href="readings/index.html" data-tip="Practice questions on each assigned article. Derived from the original reading PDFs in the Archive."><span class="ico t i-green">R</span>Readings</a></li>
+  <li><a href="mock/index.html" data-tip="A fresh timed-style practice exam each time: 50 or 100 questions, a quarter from the readings."><span class="ico i-red"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="7"/><path d="M12 9v4l2.5 2M10 3h4"/></svg></span>Mock Exam</a></li>
+  <li><a href="review/index.html" data-tip="Every question you've flagged for review, from the drills and mock exams, in one place."><span class="ico i-yellow"><svg viewBox="0 0 24 24"><path d="M6 21V4M6 4h11l-2.5 4L17 12H6"/></svg></span>Review List</a></li>
+  <li><a href="discuss/index.html" data-tip="Beta, testing mode: post responses to weekly discussion questions and reply to classmates. Demo account for now."><span class="ico i-pink"><svg viewBox="0 0 24 24"><path d="M4 5h11a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H9l-4 3v-3H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/><path d="M19 9h1a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-1v2l-3-2h-4"/></svg></span>Discuss <span class="beta-chip">Beta</span></a></li>
+  <li><a href="archive/index.html" data-tip="The original course material: textbook chapters, assigned reading PDFs, lecture slides and class videos. The drills are built from these."><span class="ico i-gray"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="5" rx="1.5"/><path d="M5 9v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9M10 13h4"/></svg></span>Archive</a></li>
 </ul></nav>
 
 <main class="inner">
@@ -333,7 +338,7 @@ footer.site .inner{display:flex;flex-direction:column;gap:6px}
       <article class="card wide" data-key="a104-readings-v1" data-total="133">
         <div class="chead"><span class="ico t i-green">R</span>
           <div><h3><a href="readings/index.html">Readings</a></h3>
-          <p>Every assigned reading, from Rickford &amp; King to Alim, as its own tab of multiple-choice questions, with its own progress. The answer key keeps the answers hidden until you reveal them.</p></div></div>
+          <p>Every assigned reading, from Rickford &amp; King to Alim, as its own tab of multiple-choice questions, with its own progress. The questions are derived from the original reading PDFs in the <a href="archive/index.html">Archive</a>. The answer key keeps the answers hidden until you reveal them.</p></div></div>
         <div class="prow"><div class="stack"></div><span class="ptext">133 questions · not started</span><a class="plink" href="readings/index.html">Start</a></div>
         <div class="ctas">
           <a class="cta" href="readings/index.html"><strong>Multiple choice</strong><small>133 questions in 11 tabs, one per reading, in syllabus order</small><span class="go2">Practice</span></a>
@@ -355,7 +360,7 @@ footer.site .inner{display:flex;flex-direction:column;gap:6px}
       <article class="card">
         <div class="chead"><span class="ico i-gray"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="5" rx="1.5"/><path d="M5 9v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9M10 13h4"/></svg></span>
           <div><h3><a href="archive/index.html">Archive</a></h3>
-          <p>The original course materials, week by week: all 13 textbook chapters, the assigned readings, the lecture slides and the class videos. Search them, open them, or jump to the matching Read &amp; Learn chapter.</p></div></div>
+          <p><b>The original material</b> everything on this site is built from, week by week: all 13 textbook chapters, the assigned readings, the lecture slides and the class videos. Search them, open them, or jump to the matching Read &amp; Learn chapter.</p></div></div>
         <div class="prow"><span class="ptext">16 weeks · 13 chapters · 12 readings · 16 videos and links</span><a class="plink ghost" href="archive/index.html">Open</a></div>
       </article>
     </div>
@@ -501,6 +506,23 @@ footer.site .inner{display:flex;flex-direction:column;gap:6px}
   fill(); door.hidden = false;
   door.onclick = () => { B.openCafe(); const t = setInterval(() => { if (!document.querySelector(".cf-veil")) { clearInterval(t); fill() } }, 500) };
   addEventListener("pageshow", fill); document.addEventListener("visibilitychange", () => { if (!document.hidden) fill() });
+})();
+</script>
+<script>
+(() => {   // hover / focus descriptions for the top nav and the module icons
+  const tip = document.createElement("div"); tip.className = "navtip"; tip.setAttribute("role", "tooltip"); tip.id = "navTip"; document.body.appendChild(tip);
+  let cur = null;
+  const show = a => {
+    cur = a; tip.textContent = a.dataset.tip; a.setAttribute("aria-describedby", "navTip"); tip.classList.add("on");
+    const r = a.getBoundingClientRect(), w = tip.offsetWidth, x = Math.max(8, Math.min(innerWidth - w - 8, r.left + r.width / 2 - w / 2));
+    tip.style.left = x + "px"; tip.style.top = (r.bottom + 8) + "px"; tip.style.setProperty("--ax", (r.left + r.width / 2 - x) + "px");
+  };
+  const hide = () => { if (cur) cur.removeAttribute("aria-describedby"); cur = null; tip.classList.remove("on") };
+  document.querySelectorAll("[data-tip]").forEach(a => {
+    a.addEventListener("mouseenter", e => { if (matchMedia("(hover:hover)").matches) show(a) });
+    a.addEventListener("mouseleave", hide); a.addEventListener("focus", () => show(a)); a.addEventListener("blur", hide);
+  });
+  addEventListener("scroll", hide, { passive: true }); addEventListener("keydown", e => { if (e.key === "Escape") hide() });
 })();
 </script>
 </body></html>

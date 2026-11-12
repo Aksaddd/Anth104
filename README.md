@@ -11,11 +11,11 @@ Everything is plain static HTML, CSS and JavaScript, with no build step and no s
 | Multiple-Choice Drill | `drill/` | 586 questions in 10 subject tabs, plus **Mixed**, **Missed** and **Progress**. **Group by: Source** practices chosen chapters or the readings together |
 | Anthro-pardy | `board/` | A Jeopardy-style board: 6 categories × 5 values, one hidden ×2 tile |
 | Word Roots | `roots/` | 77 Greek and Latin roots behind course terms (*hetero-* + *-glossia*, *il-* + *locution*…), sorted by subject, with a drill |
-| Readings | `readings/` | Its own drill: 133 questions, one tab per assigned article in syllabus order, with separate progress (`a104-readings-v1`). `readings/key.html` is the answer key, **answers hidden by default** |
+| Readings | `readings/` | Derived from the original reading PDFs in the Archive. Its own drill: 133 questions, one tab per assigned article in syllabus order, with separate progress (`a104-readings-v1`). `readings/key.html` is the answer key, **answers hidden by default** |
 | Mock Exam | `mock/` | A fresh 50- or 100-question exam each time, a quarter from the readings |
 | Review List | `review/` | Every question marked ⚑ for review, from both drills and mock exams |
 | Discussion Board (beta) | `discuss/` | **In testing mode** (marked Beta). Google sign-in isn't set up yet, so a clearly labelled **demo account** lets anyone, including the professor, try every feature: it is not a real sign-in, posts stay in that browser (`a104-discuss-demo-db`), and a few "Sample classmate" posts show likes and replies. Students sign in with Google and post one response per question (32 starter questions, two per week, plus questions students add), with likes, replies and an "answer first" gate. Needs Firestore rules: see [docs/discussion-board.md](docs/discussion-board.md) |
-| Archive | `archive/` | The original course materials week by week (13 textbook chapters, 12 reading PDFs, the lecture slides, 14 videos, 2 links), with search, type filters and links into Read & Learn and the readings drill |
+| Archive | `archive/` | The original course material that everything else is built from, week by week (13 textbook chapters, 12 reading PDFs, the lecture slides, 14 videos, 2 links), with search, type filters and links into Read & Learn and the readings drill |
 
 ## Subjects
 
