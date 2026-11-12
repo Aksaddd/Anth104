@@ -48,6 +48,8 @@ textarea.sm{min-height:60px}
 .titlerow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .beta-box{margin-top:10px;background:rgba(255,159,10,.14);border:1px solid rgba(255,159,10,.45);border-radius:var(--radius);padding:12px 14px;font-size:14.5px;line-height:1.5}
 .beta-box b{color:#c25e00}[data-theme="dark"] .beta-box b{color:#ffb340}
+.demo-tag{display:inline-block;font:700 10.5px var(--body);letter-spacing:.04em;text-transform:uppercase;color:#c25e00;background:rgba(255,159,10,.18);border-radius:6px;padding:2px 6px;margin-left:4px;vertical-align:1px}
+.acct{flex-wrap:wrap}
 .gate{background:var(--accent-soft);border-radius:var(--radius);padding:14px 16px;font-size:14.5px;line-height:1.5}
 .note{font-size:13px;color:var(--muted);margin:0}
 .err{background:#fff2f2;color:#a10000;border-radius:12px;padding:12px 14px;font-size:14px;line-height:1.5}
@@ -62,8 +64,9 @@ textarea.sm{min-height:60px}
   <header>
     <a class="back" id="back" href="../index.html">← All drills</a>
     <div class="titlerow"><h1 id="title">Discussion Board</h1><span class="beta-tag">Beta</span></div>
-    <div class="beta-box" role="note"><b>🧪 Testing mode.</b> We're just trying the discussion board out right now. Anyone in the class, including our professor, is welcome to sign in with Google and use it like a regular student: post, like and reply. Posts made during testing may be cleared, and features may change.</div>
-    <p class="sub" id="lead">Post your response to a discussion question and read how your classmates answered. Pick one of the starter questions or add the exact question your professor asked. Everyone signs in with Google, and each person gets one response per question (you can edit it any time).</p>
+    <div class="beta-box" role="note"><b>🧪 Testing mode.</b> We're just trying the discussion board out right now, and posts made during testing may be cleared.
+      <br><b>Google sign-in isn't set up yet.</b> Until it is, use the <b>demo account</b> to explore every feature: post a response, like, reply and add a question. The demo is not a real Google sign-in. Anything you post in it stays in your own browser, so no one else can see it. Our professor is welcome to try it the same way.</div>
+    <p class="sub" id="lead">Post your response to a discussion question and read how your classmates answered. Pick one of the starter questions or add the exact question your professor asked. Each person gets one response per question (you can edit it any time).</p>
   </header>
   <div class="acct" id="acct"></div>
   <main id="view" style="display:flex;flex-direction:column;gap:12px"></main>
@@ -88,12 +91,68 @@ textarea.sm{min-height:60px}
   const avatar = (photo, name) => photo ? `<img src="${esc(photo)}" alt="" referrerpolicy="no-referrer">` : `<span class="av">${esc((name || "?").trim()[0] || "?")}</span>`;
   const friendly = e => /permission|insufficient/i.test((e && (e.code || e.message)) || "") ? "The discussion board isn't switched on yet: the site owner still needs to add its Firestore rules (see docs/discussion-board.md)." : "Something went wrong: " + esc((e && (e.code || e.message)) || "unknown error");
 
+  // ----- demo mode: a fake account and a local, in-browser stand-in for Firestore, so people can
+  // explore the board before Google sign-in is set up. Nothing leaves the browser.
+  const DEMO_KEY = "a104-discuss-demo", DEMO_DB = "a104-discuss-demo-db";
+  let demo = null; try { demo = JSON.parse(localStorage.getItem(DEMO_KEY) || "null") } catch (e) { }
+  const demoFb = (() => {
+    let db = {}; try { db = JSON.parse(localStorage.getItem(DEMO_DB) || "{}") } catch (e) { }
+    const subs = [], save = () => { try { localStorage.setItem(DEMO_DB, JSON.stringify(db)) } catch (e) { } };
+    const col = c => (db[c] = db[c] || {});
+    const ts = n => n == null ? null : { toMillis: () => n };
+    const wrap = d => Object.assign({}, d, { createdAt: ts(d.createdAt), updatedAt: ts(d.updatedAt) });
+    const snap = s => ({ docs: Object.entries(col(s.col)).filter(([, d]) => !s.where || s.where.every(w => d[w.f] === w.v)).map(([id, d]) => ({ id, data: () => wrap(d) })) });
+    const emit = () => subs.forEach(s => s.cb(snap(s)));
+    const apply = (data, prev) => { const o = Object.assign({}, prev); for (const [k, v] of Object.entries(data)) o[k] = v && v.__ts ? Date.now() : v && v.__au ? [...new Set((prev[k] || []).concat(v.__au))] : v && v.__ar ? (prev[k] || []).filter(x => !v.__ar.includes(x)) : v; return o };
+    const store = {
+      collection: (_, c) => ({ col: c }), doc: (_, c, id) => ({ col: c, id }), query: (r, ...w) => ({ col: r.col, where: w }), where: (f, _, v) => ({ f, v }),
+      serverTimestamp: () => ({ __ts: 1 }), arrayUnion: (...v) => ({ __au: v }), arrayRemove: (...v) => ({ __ar: v }),
+      onSnapshot(r, cb) { const s = Object.assign({ cb }, r); subs.push(s); setTimeout(() => cb(snap(s))); return () => { const i = subs.indexOf(s); if (i >= 0) subs.splice(i, 1) } },
+      async setDoc(r, d) { col(r.col)[r.id] = apply(d, {}); save(); emit() },
+      async updateDoc(r, d) { const c = col(r.col); if (!c[r.id]) throw new Error("not found"); c[r.id] = apply(d, c[r.id]); save(); emit() },
+      async addDoc(r, d) { const id = "d" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); await store.setDoc({ col: r.col, id }, d); return { id } },
+      async deleteDoc(r) { delete col(r.col)[r.id]; save(); emit() },
+    };
+    // sample classmates (clearly labelled) so likes, replies and the "answer first" gate have something to show
+    function seed() {
+      if (db.seeded) return; db.seeded = 1;
+      const h = 3600e3, now = Date.now(), R = col(COL.resp), P = col(COL.reps);
+      const S = [
+        ["w01-a", "sample-1", "Sample classmate · Maya", "With my friends I say \"it's giving\" all the time. It indexes that I'm young and online, and that we share the same jokes. When I said it in a meeting with my advisor it landed weird: the word carried the group chat into a formal room, and I sounded less serious than I meant to.", 30],
+        ["w01-a", "sample-2", "Sample classmate · Daniel", "\"Wagwan\" is how I greet my cousins. It points to our Jamaican family and to growing up in Queens. With my grandmother it's fine, but with a professor it would sound like I'm performing an identity instead of just talking.", 20],
+        ["w01-b", "sample-3", "Sample classmate · Priya", "I think bias mattered most. Rickford and King show the jurors didn't just misunderstand AAVE grammar, they judged Jeantel as not credible because of how she sounded. Courts should provide dialect-aware transcription and tell juries that AAVE is rule-governed.", 10],
+      ];
+      S.forEach(([pid, uid, name, text, ago], i) => { R[pid + "__" + uid] = { promptId: pid, uid, name, photo: "", text, likes: i === 0 ? ["sample-2", "sample-3"] : [], createdAt: now - ago * h, updatedAt: now - ago * h } });
+      P["seed1"] = { promptId: "w01-a", responseId: "w01-a__sample-1", uid: "sample-2", name: "Sample classmate · Daniel", photo: "", text: "Same! That's Bakhtin's point exactly: the phrase brings its old contexts with it.", createdAt: now - 18 * h };
+      save();
+    }
+    return { store, db: null, seed, reset() { db = {}; try { localStorage.removeItem(DEMO_DB) } catch (e) { } } };
+  })();
+  function startDemo() {
+    const n = prompt("Pick a name for your demo account (shown on your posts in this browser only):", (demo && demo.name) || "Demo Student");
+    if (n === null) return;
+    demo = { uid: "demo-" + Math.random().toString(36).slice(2, 10), name: n.trim().slice(0, 40) || "Demo Student" };
+    try { localStorage.setItem(DEMO_KEY, JSON.stringify(demo)) } catch (e) { }
+    enterDemo();
+  }
+  function enterDemo() { demoFb.seed(); fb = demoFb; me = { uid: demo.uid, displayName: demo.name, photoURL: "" }; err = ""; paintAcct(); listen(); route() }
+  function leaveDemo() {
+    if (!confirm("Leave the demo? Your demo posts stay in this browser if you come back.")) return;
+    demo = null; try { localStorage.removeItem(DEMO_KEY) } catch (e) { } location.hash = ""; location.reload();
+  }
+
   // ----- account bar
   function paintAcct() {
     const info = A ? A.info() : null, u = info && info.user;
-    if (!A || !A.configured()) { $("acct").innerHTML = `<span class="who">Sign-in isn't set up on this site yet, so the board is read-only.</span>`; return }
+    if (demo) {
+      $("acct").innerHTML = `${avatar("", demo.name)}<span class="who"><b>${esc(demo.name)} <span class="demo-tag">Demo account</span></b><small>Not a real Google sign-in. Your posts stay in this browser; the "Sample classmate" posts are examples.</small></span><button type="button" class="pill ghost" id="outBtn">Leave demo</button>`;
+      $("outBtn").onclick = leaveDemo; return;
+    }
+    const demoBtn = `<button type="button" class="pill" id="demoBtn">Try the demo account</button>`;
+    if (!A || !A.configured()) { $("acct").innerHTML = `<span class="who"><b>Google sign-in isn't set up yet</b><small>Explore every feature with a demo account. Nothing you post leaves your browser.</small></span>${demoBtn}`; $("demoBtn").onclick = startDemo; return }
     $("acct").innerHTML = u ? `${avatar(u.photo, u.name)}<span class="who"><b>${esc(u.name || "Signed in")}</b><small>Posting as this name</small></span><button type="button" class="pill ghost" id="outBtn">Sign out</button>`
-      : `<span class="who"><b>Sign in to join the discussion</b><small>Use your Google account. Your progress on this site syncs too.</small></span><button type="button" class="pill" id="inBtn">Sign in with Google</button>`;
+      : `<span class="who"><b>Join the discussion</b><small>Google sign-in isn't set up yet, so it may not work. Use the demo account to explore: it isn't a real Google sign-in, and what you post stays in your browser.</small></span>${demoBtn}<button type="button" class="pill ghost" id="inBtn">Sign in with Google</button>`;
+    if ($("demoBtn")) $("demoBtn").onclick = startDemo;
     if ($("inBtn")) $("inBtn").onclick = () => A.signIn();
     if ($("outBtn")) $("outBtn").onclick = () => A.signOut();
   }
@@ -160,7 +219,7 @@ textarea.sm{min-height:60px}
     let html = err ? `<div class="err">${err}</div>` : "";
     html += `<article class="q"><span class="count">${p.static ? esc(p.src || "") + " · starter question" : "Added by " + esc(p.name || "a classmate")}</span><h2>${esc(p.title)}</h2><p>${esc(p.text)}</p>
       ${!p.static && me && (p.uid === me.uid) ? `<div class="row" style="margin-top:10px"><button type="button" class="pill warn" id="delQ">Delete this question</button></div>` : ""}</article>`;
-    if (!me) html += `<div class="gate">Sign in with Google (above) to post your response and read your classmates' answers.</div>`;
+    if (!me) html += `<div class="gate">Sign in above, or use the <b>demo account</b>, to post your response and read your classmates' answers.</div>`;
     else if (!mine || editing) html += `<div class="box"><h3>${mine ? "Edit your response" : "Your response"}</h3><textarea id="rt" maxlength="${LIM.resp}" placeholder="Write your answer. Use the readings: name the concept, give an example.">${esc(mine ? mine.text : (localStorage.getItem("a104-discuss-draft-" + id) || ""))}</textarea>
       <div class="row"><button type="button" class="pill" id="post">${mine ? "Save changes" : "Post response"}</button>${mine ? `<button type="button" class="pill ghost" id="cancelE">Cancel</button>` : ""}<span class="sp"></span><span class="count" id="rc"></span></div></div>`;
     const respHTML = r => {
@@ -230,11 +289,12 @@ textarea.sm{min-height:60px}
   // ----- boot: wait for the account module (loaded by settings.js), then Firebase
   async function start() {
     A = window.BioAccount;
+    if (demo) { enterDemo(); return }
     paintAcct(); route();
     if (!A || !A.configured()) return;
     fb = await A.firebase();
-    if (!fb) { err = "Couldn't load Google sign-in."; route(); return }
-    fb.auth.onAuthStateChanged(fb.au, u => { me = u; paintAcct(); listen(); route() });
+    if (!fb) { err = "Couldn't load Google sign-in. Use the demo account above to explore the board."; route(); return }
+    fb.auth.onAuthStateChanged(fb.au, u => { if (demo) return; me = u; paintAcct(); listen(); route() });
     A.on(() => paintAcct());
   }
   let tries = 0; (function wait() { if (window.BioAccount || tries++ > 40) start(); else setTimeout(wait, 100) })();
