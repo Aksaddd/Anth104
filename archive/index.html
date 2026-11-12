@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Archive · ANTH 104</title>
+<meta name="description" content="The original ANTH 104 course materials, week by week: textbook chapters, assigned readings, lecture slides and videos.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#f5f5f7">
+<link rel="stylesheet" href="../assets/drill.css">
+<script src="../assets/settings.js"></script>
+<style>
+/* Layout: header + search and type filters → one card per week → a row per file or link
+   (icon · title and details · Open, plus Study it / Practice links into the site). */
+.ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ctl input[type=search]{flex:1;min-width:200px;font:inherit;font-size:15px;padding:9px 14px;border-radius:980px;border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+.ctl .chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.jump{display:flex;flex-wrap:wrap;gap:6px}
+.jump a{font:600 12px var(--body);color:var(--accent);background:var(--accent-soft);border-radius:8px;padding:4px 9px;text-decoration:none}
+.jump a:hover{background:var(--accent);color:var(--accent-ink)}
+.wk{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px 18px;display:flex;flex-direction:column;gap:4px;scroll-margin-top:16px}
+.wk h2{margin:0 0 6px;font:700 13px var(--body);color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.it{display:grid;grid-template-columns:40px 1fr auto;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.wk h2+.it{border-top:0}
+.ic{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;font:700 11px var(--body);color:#fff;letter-spacing:.02em}
+.ic.textbook{background:#0a84ff}.ic.reading{background:#af52de}.ic.slides{background:#ff9f0a}.ic.video{background:#ff375f}.ic.link{background:#30b0c7}.ic.file{background:#8e8e93}
+.it b{display:block;font-weight:600;font-size:calc(15px * var(--rs));line-height:1.35}
+.it small{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+.it small a{color:var(--accent);text-decoration:none;font-weight:600}.it small a:hover{text-decoration:underline}
+.open{font:600 14px var(--body);color:var(--accent);background:var(--accent-soft);border-radius:980px;padding:7px 14px;text-decoration:none;white-space:nowrap}
+.open:hover{background:var(--accent);color:var(--accent-ink)}
+.thumb{width:72px;height:40px;border-radius:8px;object-fit:cover;background:#000;display:block}
+.it.vid{grid-template-columns:72px 1fr auto}
+.empty{color:var(--muted);text-align:center;padding:24px}
+@media (max-width:520px){.it.vid{grid-template-columns:72px 1fr}.it{grid-template-columns:34px 1fr}.ic{width:34px;height:34px}.open{grid-column:2;justify-self:start;margin-top:4px}}
+</style>
+<script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</head><body>
+<div class="wrap">
+  <header>
+    <a class="back" href="../index.html">← All drills</a>
+    <div class="titlerow"><h1>Archive</h1></div>
+    <p class="sub">The original course materials, week by week: the textbook chapters, the assigned readings, the lecture slides, and the videos and links shared in class. Open any file to read the source, or jump to its Read &amp; Learn chapter or the readings drill to practice it.</p>
+  </header>
+  <div class="ctl" role="search">
+    <input type="search" id="q" placeholder="Search titles (e.g. Perley, gender, Ch 5)" aria-label="Search the archive">
+    <div id="types" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+  </div>
+  <nav class="jump" id="jump" aria-label="Jump to a week"></nav>
+  <main id="list" style="display:flex;flex-direction:column;gap:12px"></main>
+  <p class="foot">These are the class files as shared for the course, for students enrolled in ANTH 104. Please don't redistribute them. Videos and articles open on their own sites.</p>
+</div>
+<script src="files.js"></script>
+<script>
+(() => {
+  const W = window.ARCHIVE || [], $ = id => document.getElementById(id);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const TYPES = [["all", "All"], ["textbook", "Textbook"], ["reading", "Readings"], ["slides", "Slides"], ["video", "Videos"], ["link", "Links"]];
+  const kindOf = i => i.kind === "link" ? (i.type === "video" ? "video" : "link") : i.kind;
+  const LABEL = { textbook: "PDF", reading: "PDF", slides: "ZIP", video: "▶", link: "↗", file: "FILE" };
+  const mb = n => n ? (n / 1048576 < 1 ? Math.max(1, Math.round(n / 1024)) + " KB" : (n / 1048576).toFixed(1) + " MB") : "";
+  let type = "all", query = "";
+  // YouTube: thumbnail from the video id; the real title is looked up in the browser (noembed.com) and cached
+  const ytId = h => (h.match(/(?:v=|shorts\/|youtu\.be\/)([\w-]{11})/) || [])[1];
+  const TKEY = "a104-archive-titles"; let titles = {}; try { titles = JSON.parse(localStorage.getItem(TKEY) || "{}") } catch (e) { }
+  function fetchTitles() {
+    W.forEach(w => w.items.forEach(i => { const id = kindOf(i) === "video" && ytId(i.href); if (!id || titles[id]) return;
+      fetch("https://noembed.com/embed?url=" + encodeURIComponent("https://www.youtube.com/watch?v=" + id)).then(r => r.json()).then(d => {
+        if (!d || !d.title) return; titles[id] = d.author_name ? `${d.title} · ${d.author_name}` : d.title;
+        try { localStorage.setItem(TKEY, JSON.stringify(titles)) } catch (e) { } paint();
+      }).catch(() => { }) }));
+  }
+  function row(i) {
+    const k = kindOf(i), ext = /^https?:/.test(i.href), id = k === "video" && ytId(i.href);
+    if (id) {
+      const tt = titles[id] || "Video";
+      return `<div class="it vid"><a href="${esc(i.href)}" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"><img class="thumb" src="https://i.ytimg.com/vi/${id}/mqdefault.jpg" alt="" loading="lazy"></a><span><b>${esc(tt)}</b><small>YouTube</small></span>
+      <a class="open" href="${esc(i.href)}" target="_blank" rel="noopener">Watch</a></div>`;
+    }
+    const extra = [i.sub, i.size ? mb(i.size) : "", ext ? i.href.replace(/^https?:\/\/(www\.)?/, "").split("/")[0] : "",
+      i.read ? `<a href="../read/index.html#${i.read}">Study it in Read &amp; Learn</a>` : "", i.drill ? `<a href="../readings/index.html">Practice in the readings drill</a>` : ""].filter(Boolean).join(" · ");
+    return `<div class="it"><span class="ic ${k}" aria-hidden="true">${LABEL[k]}</span><span><b>${esc(i.title)}</b><small>${extra}</small></span>
+      <a class="open" href="${ext ? esc(i.href) : "../" + esc(i.href)}" target="_blank" rel="noopener">${k === "video" ? "Watch" : k === "slides" ? "Download" : "Open"}</a></div>`;
+  }
+  function paint() {
+    const q = query.trim().toLowerCase();
+    const shown = W.map(w => ({ ...w, items: w.items.filter(i => (type === "all" || kindOf(i) === type) && (!q || (i.title + " " + (i.sub || "") + " week " + w.week).toLowerCase().includes(q))) })).filter(w => w.items.length);
+    $("list").innerHTML = shown.length ? shown.map(w => `<section class="wk" id="w${w.week}"><h2>Week ${w.week}</h2>${w.items.map(row).join("")}</section>`).join("") : `<p class="empty">Nothing matches “${esc(query)}”.</p>`;
+    $("jump").innerHTML = shown.map(w => `<a href="#w${w.week}">Week ${w.week}</a>`).join("");
+    $("types").innerHTML = TYPES.map(([k, l]) => { const n = k === "all" ? W.reduce((s, w) => s + w.items.length, 0) : W.reduce((s, w) => s + w.items.filter(i => kindOf(i) === k).length, 0); return n ? `<button type="button" class="chip" data-t="${k}" aria-pressed="${type === k}">${l} <span style="opacity:.6">${n}</span></button>` : "" }).join("");
+    $("types").querySelectorAll("button").forEach(b => b.onclick = () => { type = b.dataset.t; paint() });
+  }
+  $("q").oninput = e => { query = e.target.value; paint() };
+  paint(); fetchTitles();
+})();
+</script>
+</body></html>

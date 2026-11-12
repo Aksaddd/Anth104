@@ -14,6 +14,7 @@ Everything is plain static HTML, CSS and JavaScript, with no build step and no s
 | Readings | `readings/` | Its own drill: 133 questions, one tab per assigned article in syllabus order, with separate progress (`a104-readings-v1`). `readings/key.html` is the answer key, **answers hidden by default** |
 | Mock Exam | `mock/` | A fresh 50- or 100-question exam each time, a quarter from the readings |
 | Review List | `review/` | Every question marked ⚑ for review, from both drills and mock exams |
+| Archive | `archive/` | The original course materials week by week (13 textbook chapters, 12 reading PDFs, the lecture slides, 14 videos, 2 links), with search, type filters and links into Read & Learn and the readings drill |
 
 ## Subjects
 
@@ -63,6 +64,16 @@ node tools/build.js
 This rebuilds `review/bank.js` (Review List) and `mock/bank.js` (Mock Exam). Also update the counts on the landing page if they change.
 
 The double-tap dictionary is `assets/lexicon.js`; the "Why not …?" notes after a wrong answer come from `assets/glossary.js`. Underlined key terms in the reading (`<b>`) should have a lexicon entry; use `<strong>` for names and other emphasis.
+
+## Archive
+
+`archive/files.js` lists every file and link in the `Week_*` / `week_*` folders. It's generated: after adding, renaming or removing course files, run
+
+```bash
+node tools/build-archive.js
+```
+
+Textbook PDFs are named `<chapter number> <title>.pdf`; readings are matched to the drill's article list by author name; `.txt` files hold one URL per line (videos show their YouTube thumbnail, and the title is looked up in the visitor's browser). The page has `noindex` so search engines skip it, but the files are publicly reachable by URL, like everything else in a public repository and deployment.
 
 ## How progress is saved
 
