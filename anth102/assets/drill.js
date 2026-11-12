@@ -451,8 +451,11 @@
     $("card").querySelectorAll(".opt").forEach(o => { o.disabled = true; if (o.dataset.c === "true") o.classList.add("right") });
     b.classList.add("picked", good ? "pop" : "shake"); if (!good) b.classList.add("wrong");
     if (good) { r.streak++; r.best = Math.max(r.best | 0, r.streak); missed.delete(id) } else { r.streak = 0; missed.add(id) }
+    const prevStat = (S.stats[id] || [0, 0]).slice(), prevHist = S.hist[id];
     S.hist[id] = good ? 1 : 0;
     const s = S.stats[id] || [0, 0]; S.stats[id] = [s[0] + 1, s[1] + (good ? 1 : 0)];
+    // study buddy (shared/buddy.js): XP by difficulty × win streak
+    window.dispatchEvent(new CustomEvent(good ? "bio:correct" : "bio:wrong", { detail: { kind: "drill", from: B.storageKey, id, q: x, prev: prevStat, prevHist } }));
     const dk = dayKey(); S.days[dk] = (S.days[dk] | 0) + 1;
     save(); paintChrome();
     const sq = $("map").querySelector(`[data-k="${r.pos}"]`); if (sq) sq.classList.add("just");

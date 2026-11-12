@@ -78,6 +78,9 @@ h1{font:700 clamp(28px,6vw,40px)/1.08 var(--display);letter-spacing:-.03em}
 <link rel="stylesheet" href="../assets/shell.css">
 <script src="../../shared/platform.js"></script>
 <script src="../course.js"></script>
+<script src="../../shared/xp.js"></script>
+<script src="../../shared/wardrobe.js"></script>
+<script src="../../shared/buddy.js"></script>
 <script src="../assets/shell.js"></script>
 <!-- Vercel Web Analytics: anonymous page views, no cookies (enable Analytics for the project in the Vercel dashboard) -->
 <script src="../assets/glossary.js"></script>
@@ -181,6 +184,7 @@ h1{font:700 clamp(28px,6vw,40px)/1.08 var(--display);letter-spacing:-.03em}
       el.querySelectorAll(".opt").forEach(b => b.onclick = () => {
         const o = opts[+b.dataset.j], ok = o.c, gain = ok ? worth : (G.harsh ? -worth : 0);
         G.done[id] = { ok, gain }; G.score += gain; save();
+        window.dispatchEvent(new CustomEvent(ok ? "bio:correct" : "bio:wrong", { detail: { kind: "board", from: "board", val: worth } }));
         el.querySelectorAll(".opt").forEach(x => { x.disabled = true; if (opts[+x.dataset.j].c) x.classList.add("right"); else if (x === b) x.classList.add("wrong") });
         const f = $("fbx"); f.hidden = false;
         f.innerHTML = `<span class="earn ${gain > 0 ? "plus" : gain < 0 ? "minus" : "zero"}">${ok ? "Correct! +" + money(worth) : gain < 0 ? "Not quite. " + money(gain) : "Not quite. +$0"}</span>${!ok ? `<span>The answer: <b>${txt(q.ok)}</b></span>` : ""}${q.ex ? `<span class="sub"><b>Why:</b> ${txt(q.ex)}</span>` : ""}${!ok ? whyNot(o.t) : ""}`;

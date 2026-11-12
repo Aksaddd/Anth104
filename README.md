@@ -10,7 +10,7 @@ It combines three repositories that used to be separate sites: [Anth104](https:/
 | `shared/` | The engine every class uses: study buddy and Cat Café (`buddy.js`, `wardrobe.js`, `xp.js`), settings and Google account (`settings.js`, `account.js`), the drill engine (`drill.js`, `drill.css`), the double-tap dictionary (`lookup.js`), and the class list and class codes (`platform.js`) |
 | `anth104/` | ANTH 104: Language, Culture & Society. See [anth104/README.md](anth104/README.md) |
 | `bio239/` | Bi 239: Plants, Fungi & Signals. See [bio239/README.md](bio239/README.md) |
-| `anth102/` | ANTH 102: Biology & Evolution of Human Species. See [anth102/README.md](anth102/README.md). Still on its own older drill engine (`anth102/assets/`), so it has no study buddy yet |
+| `anth102/` | ANTH 102: Biology & Evolution of Human Species. See [anth102/README.md](anth102/README.md). Its drills run on its own older drill engine (`anth102/assets/`) with the shared study buddy on top, and its café visitors are primates |
 | `docs/` | Setting up Google sign-in and the ANTH 104 discussion board |
 | `tools/class-code.js` | Makes the fingerprint for a new class code |
 
@@ -44,6 +44,12 @@ Every page of a class loads `shared/platform.js`, then the class's own `course.j
 Progress is saved in the browser per class (`a104-drill-v1`, `bio-read-v1`, `ant1-progress-v2` …). The cats, gold, outfits, theme and reading settings are shared by every class; they keep their original `a104-` key names so nobody's existing cats were lost in the move.
 
 To add a class: make a folder with its pages and a `course.js`, add it to `COURSES` in `shared/platform.js`, and (if it has Read & Learn chapters) add its badges to `COURSE_BADGES` in `shared/wardrobe.js`.
+
+## Primates (ANTH 102)
+
+Alongside the cat breeds, `shared/buddy.js` has ten primate species in taxonomic order: ring-tailed lemur, tarsier, golden lion tamarin, capuchin, macaque, gibbon, orangutan, gorilla, chimpanzee and bonobo. In ANTH 102 they visit the Cat Café and can be adopted; once adopted they come along in every class, like any cat.
+
+They have their own bodies and postures (knuckle-walking great apes that stand taller at the shoulder, an upright gibbon with its arms raised, a crouched tarsier, monkeys with their hands on their knees) and the anatomy the course teaches: platyrrhine and catarrhine nostrils, the lemur's wet nose and ringed tail, the capuchin's prehensile tail, the macaque's sitting pads, no tails on the apes, the gorilla's sagittal crest and silver saddle, the orangutan's cheek flanges. They wear a bead necklace where the cats wear a collar.
 
 ## Old addresses
 

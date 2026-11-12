@@ -97,6 +97,9 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center}
 <link rel="stylesheet" href="../assets/shell.css">
 <script src="../../shared/platform.js"></script>
 <script src="../course.js"></script>
+<script src="../../shared/xp.js"></script>
+<script src="../../shared/wardrobe.js"></script>
+<script src="../../shared/buddy.js"></script>
 <script src="../assets/shell.js"></script>
 <!-- Vercel Web Analytics: anonymous page views, no cookies (enable Analytics for the project in the Vercel dashboard) -->
 <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
@@ -267,6 +270,7 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center}
     document.querySelectorAll(".opt").forEach(b => b.onclick = () => {
       const ok = it.opts[+b.dataset.k] === r;
       if (ok) quiz.right++; quiz.done++;
+      window.dispatchEvent(new CustomEvent(ok ? "bio:correct" : "bio:wrong", { detail: { kind: "root", from: "roots" } }));
       const S = st(); if (ok) delete S.x[r.root]; else { S.x[r.root] = 1; quiz.missed.push(r.root) } saveST();
       document.querySelectorAll(".opt").forEach(x => { x.disabled = true; const o = it.opts[+x.dataset.k]; if (o === r) x.classList.add("right"); else if (x === b) x.classList.add("wrong") });
       $("fb").hidden = false; $("next").hidden = false; $("next").focus();

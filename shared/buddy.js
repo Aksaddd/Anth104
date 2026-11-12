@@ -180,6 +180,46 @@
         red: { name: "Red", fur: ["#e59a5a", "#c27136", "#ffe0bf"], pink: ["#f29a8c", "#c9705a"], eyes: EYES_AMBER, pat: "#a95a20" },
         silver: { name: "Silver", fur: ["#c3c8d1", "#959ba7", "#f2f3f6"], pink: ["#eaa3ad", "#c9707a"], eyes: EYES_GREEN, pat: "#5e6470" } } }
   };
+
+  // ===== Primates (the ANTH 102 line). Same chibi body and poses as the cats, with a primate head: round ears on the
+  // sides, a bare face, forward-facing eyes, nostrils and no whiskers. In taxonomic order, strepsirrhines to hominins' kin.
+  //   shape: primate (draw the primate head) · ear = ear radius · eye = eye size · notail (apes) · rings = tail ring color
+  //          patch = dark eye patches · wet = wet nose (strepsirrhines) · mane · brow = brow ridge · flange = cheek pads · tuft = crest of hair
+  //          arm / leg = limb length · slope = how much higher the shoulders stand than the hips (knuckle-walkers) · knuckle
+  //          upright = stands on two legs ("up": arms raised to balance, the gibbon; "front": crouched clinger, the tarsier)
+  //          platy = platyrrhine nose (wide-set nostrils that open sideways; otherwise catarrhine: close together, opening down)
+  //          tailStyle = up | curl (prehensile) | short | tuft · callos = sitting pads · snout, muzzle, cheeks, beard, shaggy, pads, claws
+  //   colors: face = bare skin color · ring = pale ring of fur around the face · hand = hands and feet · saddle = silver back
+  const EYES_BROWN = ["#f3cf9a", "#c98f45", "#8f5d2a", "#5c3a1a", "#2e1c0c"];
+  Object.assign(BREEDS, {
+    lemur: { kind: "primate", name: "Ring-tailed Lemur", taxon: "Strepsirrhine · Lemuroidea", desc: "A strepsirrhine from Madagascar: wet nose, tooth comb, grooming claw and a tail with 13 rings", shape: { primate: true, ear: 7.4, patch: "#2b2a30", wet: true, snout: true, rings: "#2b2a30", tail: 6.4, pointy: true, arm: .9, leg: 1.25, slope: -4, tailStyle: "up" }, names: ["Zoboo", "Maki", "Julien", "Ringo"],
+      colors: { gray: { name: "Gray", fur: ["#b9bcc4", "#8e929c", "#f6f6f8"], pink: ["#3a3640", "#2b2a30"], eyes: EYES_AMBER, face: "#f7f7f8" } } },
+    tarsier: { kind: "primate", name: "Tarsier", taxon: "Haplorhine · Tarsiiformes", desc: "A tiny haplorhine with eyes bigger than its brain, a dry nose and a head that turns 180°", shape: { primate: true, ear: 10.6, eye: 1.3, tail: 2.6, wb: .82, arm: .8, leg: 1.45, upright: "front", foot: 4, pads: true, tailStyle: "tuft" }, names: ["Yoda", "Pip", "Gizmo", "Bean"],
+      colors: { tan: { name: "Tan", fur: ["#c9a777", "#a5835a", "#eedfc4"], pink: ["#e6b79a", "#8a5a48"], eyes: EYES_AMBER, face: "#e9d3ae" },
+        gray: { name: "Gray", fur: ["#a9a39a", "#857f76", "#e2ddd4"], pink: ["#dcb3a0", "#8a5a48"], eyes: EYES_GOLD, face: "#d8cfc0" } } },
+    tamarin: { kind: "primate", name: "Golden Lion Tamarin", taxon: "Platyrrhine · New World monkey", desc: "A New World monkey (platyrrhine): flat nose with nostrils to the sides, a golden mane and claws instead of nails", shape: { primate: true, ear: 6, mane: true, tail: 5, wb: .86, platy: true, claws: true, leg: 1.05 }, names: ["Leo", "Mango", "Sol", "Nala"],
+      colors: { gold: { name: "Golden", fur: ["#f29a2e", "#d07416", "#ffd08a"], pink: ["#6b5140", "#3f2e24"], eyes: EYES_BROWN, face: "#6b5140" } } },
+    capuchin: { kind: "primate", name: "Capuchin", taxon: "Platyrrhine · New World monkey", desc: "A clever New World monkey that cracks nuts with stone tools and holds on with a prehensile tail", shape: { primate: true, ear: 7.6, tuft: true, tail: 5.2, platy: true, arm: 1.05, tailStyle: "curl" }, names: ["Marcel", "Coco", "Abu", "Nutmeg"],
+      colors: { brown: { name: "Tufted", fur: ["#6b4a33", "#4a3222", "#f1dfc0"], pink: ["#e0b594", "#8a5a48"], eyes: EYES_BROWN, face: "#f0d3b3" },
+        white: { name: "White-faced", fur: ["#34303a", "#222027", "#fbf3e2"], pink: ["#eac5a8", "#8a5a48"], eyes: EYES_BROWN, face: "#f6e2c9", ring: "#fbf3e2" } } },
+    macaque: { kind: "primate", name: "Macaque", taxon: "Catarrhine · Old World monkey", desc: "An Old World monkey (catarrhine): downward nostrils, bilophodont molars and sitting pads. Snow monkeys bathe in hot springs", shape: { primate: true, ear: 7.4, tail: 4.6, wb: 1.08, tailStyle: "short", callos: true, cheeks: true }, names: ["Yuki", "Momo", "Kiko", "Rhesus"],
+      colors: { snow: { name: "Japanese", fur: ["#b8ab9c", "#948677", "#ece5da"], pink: ["#e58a86", "#b85c5c"], eyes: EYES_BROWN, face: "#ee8f8a" },
+        rhesus: { name: "Rhesus", fur: ["#a9834f", "#876436", "#e8d3ad"], pink: ["#e9b39f", "#b5705e"], eyes: EYES_BROWN, face: "#f0bca8" } } },
+    gibbon: { kind: "primate", name: "Gibbon", taxon: "Hominoid · lesser ape", desc: "A lesser ape: no tail, very long arms for brachiation, pair bonds and duets sung at dawn", shape: { primate: true, ear: 5.4, notail: true, wb: .86, arm: 1.55, upright: "up" }, names: ["Swing", "Echo", "Lar", "Aria"],
+      colors: { black: { name: "Black", fur: ["#2f2e36", "#1f1e24", "#5a5966"], pink: ["#3a3640", "#221f26"], eyes: EYES_BROWN, face: "#3a3640", ring: "#f4f1ea", hand: "#f4f1ea" },
+        blonde: { name: "Blonde", fur: ["#ecd9a8", "#cfb47a", "#fff4d6"], pink: ["#3a3640", "#221f26"], eyes: EYES_BROWN, face: "#3a3640", ring: "#fffaf0", hand: "#3a3640" } } },
+    orangutan: { kind: "primate", name: "Orangutan", taxon: "Hominoid · great ape (Pongo)", desc: "The red great ape of Borneo and Sumatra: mostly solitary, lives in the trees, and adult males grow cheek flanges", shape: { primate: true, ear: 5, notail: true, flange: true, tuft: true, beard: true, shaggy: true, wb: 1.16, arm: 1.42, slope: 6, knuckle: true }, names: ["Clyde", "Rusty", "Ginger", "Pongo"],
+      colors: { bornean: { name: "Bornean", fur: ["#d9672a", "#b34d17", "#f2a05e"], pink: ["#8a5f4a", "#5a3d30"], eyes: EYES_BROWN, face: "#9a6c55" },
+        sumatran: { name: "Sumatran", fur: ["#e88a45", "#c56a26", "#ffc58f"], pink: ["#a57660", "#6b4838"], eyes: EYES_BROWN, face: "#b08068" } } },
+    gorilla: { kind: "primate", name: "Gorilla", taxon: "Hominoid · great ape (Gorilla)", desc: "The largest living primate: a knuckle-walker that lives in one-male groups led by a silverback", shape: { primate: true, ear: 5.4, notail: true, brow: true, crest: true, wb: 1.3, hx: 1.04, arm: 1.25, slope: 8, knuckle: true, chest: "bare" }, names: ["Koko", "Kong", "Juba", "Titus"],
+      colors: { black: { name: "Blackback", fur: ["#3a3941", "#26252b", "#5e5d6a"], pink: ["#2c2b31", "#1b1a1f"], eyes: EYES_BROWN, face: "#2e2d34" },
+        silver: { name: "Silverback", fur: ["#3a3941", "#26252b", "#5e5d6a"], pink: ["#2c2b31", "#1b1a1f"], eyes: EYES_BROWN, face: "#2e2d34", saddle: "#cfd3da" } } },
+    chimp: { kind: "primate", name: "Chimpanzee", taxon: "Hominoid · great ape (Pan troglodytes)", desc: "Our closest living relative along with the bonobo: male-bonded, fission-fusion groups, tool use and termite fishing", shape: { primate: true, ear: 10.4, notail: true, brow: true, muzzle: true, wb: 1.08, arm: 1.25, slope: 7, knuckle: true }, names: ["Caesar", "Flo", "Fifi", "David Greybeard"],
+      colors: { tan: { name: "Common", fur: ["#35302e", "#221e1d", "#5c5450"], pink: ["#d9ad8c", "#8a5a48"], eyes: EYES_BROWN, face: "#e3b998" },
+        dark: { name: "Dark-faced", fur: ["#2e2a2a", "#1c1919", "#514a4a"], pink: ["#7a5a4c", "#4a342c"], eyes: EYES_BROWN, face: "#7f5d4e" } } },
+    bonobo: { kind: "primate", name: "Bonobo", taxon: "Hominoid · great ape (Pan paniscus)", desc: "Pan paniscus: female-bonded and peaceful, with a dark face, pink lips, hair parted in the middle and long legs", shape: { primate: true, ear: 8, notail: true, part: true, muzzle: true, wb: .96, arm: 1.2, leg: 1.15, slope: 5, knuckle: true }, names: ["Kanzi", "Lola", "Panbanisha", "Mimi"],
+      colors: { black: { name: "Black", fur: ["#28252c", "#18161b", "#4d4853"], pink: ["#3d3338", "#e58a9a"], eyes: EYES_BROWN, face: "#3f353a" } } }
+  });
   // older saves used one key per coat; map them to breed + color
   const LEGACY = { golden: ["domestic", "golden"], orange: ["tabby", "orange"], silver: ["tabby", "silver"], black: ["bombay", "black"], tuxedo: ["tuxedo", "black"], siamese: ["siamese", "seal"], calico: ["calico", "classic"], russian: ["russian", "blue"], snow: ["persian", "white"] };
   function resolveBreed(breed, color) {
@@ -188,10 +228,14 @@
     return [b, cs[color] ? color : Object.keys(cs)[0]];
   }
   const breedName = (breed, color) => { const [b, c] = resolveBreed(breed, color); const B = BREEDS[b]; return Object.keys(B.colors).length > 1 && b !== "domestic" ? `${B.colors[c].name} ${B.name}` : b === "domestic" ? `${B.colors[c].name} ${B.name}` : B.name };
-  let SHAPE = {};
+  const isPrimate = breed => { const B = BREEDS[resolveBreed(breed)[0]]; return !!(B && B.kind === "primate") };
+  // form names for a primate (the cats keep "Tiny kitten" … from STAGES)
+  const PRIMATE_FORMS = ["Clinging infant", "Curious juvenile", "Playful juvenile", "Bold adolescent", "Skilled adult", "Wise elder"];
+  const formOf = (k, breed) => isPrimate(breed) ? PRIMATE_FORMS[k] : STAGES[k].form;
+  let SHAPE = {}, FACE = "#f0d3b3", RING = "", LID = null, SKIN = "#f0d3b3", SADDLE = "";
   function setCoat(breed, color) {
     const [b, c] = resolveBreed(breed, color), B = BREEDS[b], C = B.colors[c];
-    [FUR, FUR_D, FUR_L] = C.fur; [PINK, PINK_D] = C.pink; IRIS = C.eyes; SHAPE = B.shape || {};
+    [FUR, FUR_D, FUR_L] = C.fur; [PINK, PINK_D] = C.pink; IRIS = C.eyes; SHAPE = B.shape || {}; FACE = C.face || "#f0d3b3"; RING = C.ring || ""; LID = SHAPE.primate ? (SHAPE.patch || FACE) : null; SKIN = C.hand || C.face || "#f0d3b3"; SADDLE = C.saddle || "";
     const pat = B.pattern === "tabby" ? { head: tabbyHead(C.pat), body: tabbyBody(C.pat) } : B.pattern === "tux" ? { head: tuxHead(C.pat) } : B.pattern === "points" ? { head: pointsHead(C.pat) } : B.pattern === "calico" ? { head: calicoHead(C.pat[0], C.pat[1]), body: calicoBody(C.pat[0], C.pat[1]) } : {};
     return { head: (pat.head || "") + (SHAPE.sleek ? gloss : ""), body: pat.body, shape: SHAPE };
   }
@@ -221,7 +265,7 @@
       <ellipse cx="${x + m(.6)}" cy="${y + 2.2}" rx="${e.p[0]}" ry="${e.p[1]}" fill="#1f2a18"/>
       <ellipse cx="${x + m(-2)}" cy="${y - 1.6}" rx="${2 * h}" ry="${2.4 * h}" fill="#fff"/><circle cx="${x + m(2.4)}" cy="${y + 4}" r="${1 * h}" fill="#fff"/>
       ${e.star ? `<path d="M${x + m(2.6)} ${y - .6} l.7 1.6 1.6 .7 -1.6 .7 -.7 1.6 -.7 -1.6 -1.6 -.7 1.6 -.7Z" fill="#fff"/>` : ""}
-      <path d="M${x + m(-6.6)} ${y - 6.4} Q${x} ${y - 5.4} ${x + m(6.6)} ${y - 6.4} L${x + m(6.6)} ${y - 2 + dI} Q${x} ${y - 3.2 + (dO + dI) / 2} ${x + m(-6.6)} ${y - 2 + dO}Z" fill="${FUR}"/><path d="M${x + m(-7.2)} ${y - 1.6 + dO} Q${x} ${y - 3.6 + (dO + dI) / 2} ${x + m(7.4)} ${y - 1.2 + dI}" stroke="${OL}" stroke-width="3.4" fill="none" stroke-linecap="round"/>
+      <path d="M${x + m(-6.6)} ${y - 6.4} Q${x} ${y - 5.4} ${x + m(6.6)} ${y - 6.4} L${x + m(6.6)} ${y - 2 + dI} Q${x} ${y - 3.2 + (dO + dI) / 2} ${x + m(-6.6)} ${y - 2 + dO}Z" fill="${LID || FUR}"/><path d="M${x + m(-7.2)} ${y - 1.6 + dO} Q${x} ${y - 3.6 + (dO + dI) / 2} ${x + m(7.4)} ${y - 1.2 + dI}" stroke="${OL}" stroke-width="3.4" fill="none" stroke-linecap="round"/>
       <path d="M${x + m(-6)} ${y + 6.4} Q${x} ${y + 9.2} ${x + m(5)} ${y + 6.6}" stroke="${OL}" stroke-width="1.2" fill="none" stroke-linecap="round" opacity=".6"/>
       <path d="M${x + m(-7.8)} ${y + e.bO} L${x + m(6.8)} ${y + e.bI}" stroke="#6b3f17" stroke-width="4.2" stroke-linecap="round"/>
       ${e.tear && out < 0 ? `<path d="M${x - 5.2} ${y + 6.6} q-1.6 2.8 0 4 q1.6 -1.2 0 -4Z" fill="#8fd3ff" stroke="${OL}" stroke-width=".9"/>` : ""}`;
@@ -242,7 +286,7 @@
   // o.w is his weight (0.75 slim … 1.5 chonky): it widens the body, belly and legs in every pose.
   // Parts keep their class names (dx-torso, dx-tail, dx-pawl, dx-pawr, dx-hindl, dx-hindr, dx-head …) so the study pal can animate them.
   const f1 = n => Math.round(n * 10) / 10;
-  function furTail(d, w2) { w2 = SHAPE.tail || w2; return `<path d="${d}" stroke="${OL}" stroke-width="${w2 + 4.4}" fill="none" stroke-linecap="round"/><path d="${d}" stroke="${FUR}" stroke-width="${w2}" fill="none" stroke-linecap="round"/>` }
+  function furTail(d, w2) { w2 = SHAPE.tail || w2; if (SHAPE.notail) return ""; return (SHAPE.rings ? `<path d="${d}" stroke="${OL}" stroke-width="${w2 + 4.4}" fill="none" stroke-linecap="round"/><path d="${d}" stroke="${FUR_L}" stroke-width="${w2}" fill="none" stroke-linecap="round"/><path d="${d}" stroke="${SHAPE.rings}" stroke-width="${w2}" fill="none" stroke-dasharray="4.4 4.8" stroke-dashoffset="-3"/>` : "") || `<path d="${d}" stroke="${OL}" stroke-width="${w2 + 4.4}" fill="none" stroke-linecap="round"/><path d="${d}" stroke="${FUR}" stroke-width="${w2}" fill="none" stroke-linecap="round"/>` }
   function leg(x, top, bot, wd, cls, far) {   // a leg column (open at the top so it blends into the body) with a paw
     const h = wd / 2, c = far ? FUR_D : FUR;
     return `<g class="${cls}"><path d="M${f1(x - h)} ${top} L${f1(x - h - .3)} ${bot - 4} Q${f1(x - h - 1.4)} ${bot + .6} ${x} ${bot + .6} Q${f1(x + h + 1.4)} ${bot + .6} ${f1(x + h + .3)} ${bot - 4} L${f1(x + h)} ${top}Z" fill="${c}"/>
@@ -338,7 +382,140 @@
     const j = str.lastIndexOf("</g>"), open = '<g class="dx-tail">';
     return str.slice(0, i) + open + before + str.slice(i + open.length, j) + after + str.slice(j);
   }
+  // A primate's head on the same anchor points as the cat's (eyes at 48.5/71.5 × 60, nose at 60 × 68), so hats, glasses
+  // and expressions all still fit.
+  function primateHead(u, o) {
+    const S = SHAPE, er = (S.ear || 7.5) * (o.baby ? .9 : 1), ey = 58, skin = PINK, es = S.eye || 1;
+    const ear = (x, cls) => `<g class="${cls}">${S.pointy ? `<path d="M${x - 7} ${ey} Q${x - 9} ${ey - 16} ${x} ${ey - 20} Q${x + 9} ${ey - 16} ${x + 7} ${ey}Z" fill="${FUR}" ${ln}/><path d="M${x - 3.6} ${ey - 2} Q${x - 4.6} ${ey - 12} ${x} ${ey - 15} Q${x + 4.6} ${ey - 12} ${x + 3.6} ${ey - 2}Z" fill="${FUR_L}"/>` : `<circle cx="${x}" cy="${ey}" r="${er}" fill="${S.patch || skin === FACE ? FUR : FACE}" ${ln}/><circle cx="${x}" cy="${ey}" r="${f1(er * .56)}" fill="${skin}" opacity=".9"/>`}</g>`;
+    const mane = S.mane ? `<path d="M26 58 Q22 44 32 38 Q34 26 46 27 Q54 18 64 24 Q76 20 82 31 Q94 34 92 48 Q100 58 92 68 Q94 80 82 84 Q74 93 60 90 Q46 93 38 84 Q26 80 28 68 Q22 62 26 58Z" fill="${FUR}" ${ln}/><path d="M34 44 l-3 -4 M44 32 l-2 -5 M60 28 v-5 M76 32 l2 -5 M86 44 l3 -4 M33 76 l-4 3 M87 76 l4 3" stroke="${FUR_D}" stroke-width="1.5" stroke-linecap="round"/>` : "";
+    const flange = S.flange && !o.baby ? `<ellipse cx="35" cy="64" rx="7.6" ry="13" fill="${PINK_D}" ${ln}/><ellipse cx="85" cy="64" rx="7.6" ry="13" fill="${PINK_D}" ${ln}/>` : "";
+    const beard = S.beard && !o.baby ? `<path d="M46 80 Q48 92 54 89 Q57 95 60 90 Q63 95 66 89 Q72 92 74 80Z" fill="${FUR}" ${ln}/>` : "";
+    // cheek ruffs (macaque) frame the face
+    const cheeks = S.cheeks ? `<path d="M36 62 L28 64 L34 68 L28 73 L36 75 L33 80 L42 80Z M84 62 L92 64 L86 68 L92 73 L84 75 L87 80 L78 80Z" fill="${FUR_L}" ${ln}/>` : "";
+    // the gorilla's sagittal crest: a ridge of bone along the top of the skull that anchors big chewing muscles
+    const crest = S.crest && !o.baby ? `<path d="M46 37 Q52 20 60 18.6 Q68 20 74 37Z" fill="${FUR}" ${ln}/><path d="M60 21 V32" stroke="${FUR_D}" stroke-width="1.6" stroke-linecap="round"/>` : "";
+    const skull = `<path d="M33 60 Q32 33 60 32 Q88 33 87 60 Q87 77 77 82.6 Q69 86.5 60 86.5 Q51 86.5 43 82.6 Q33 77 33 60Z" fill="${FUR}" ${ln}/>`;
+    const top = S.tuft ? `<path d="M49 34 L51 26 L55 32 L58 23 L61 31 L65 24 L67 32 L71 27 L71 35 Q60 31 49 34Z" fill="${FUR}" ${ln}/>` : S.part ? `<path d="M60 32.6 Q58 38 50 41 M60 32.6 Q62 38 70 41" stroke="${FUR_D}" stroke-width="1.6" fill="none" stroke-linecap="round"/>` : "";
+    // the bare face: a heart-shaped mask around the eyes that widens into the muzzle
+    const maskD = "M60 45.5 Q53 40.5 45.5 44.5 Q38.6 49 39.4 59.5 Q39.6 66.5 45.4 70.5 Q44.6 79.5 52 83 Q60 85.6 68 83 Q75.4 79.5 74.6 70.5 Q80.4 66.5 80.6 59.5 Q81.4 49 74.5 44.5 Q67 40.5 60 45.5Z";
+    const mask = `${RING ? `<path d="${maskD}" fill="${RING}" stroke="${RING}" stroke-width="6.5" stroke-linejoin="round"/>` : ""}<path d="${maskD}" fill="${FACE}" stroke="${OL}" stroke-width="1.5" stroke-linejoin="round"/>
+      ${S.muzzle ? `<path d="M47 71 Q47 63.5 60 63.5 Q73 63.5 73 71 Q73 82.6 60 83.4 Q47 82.6 47 71Z" fill="#fff" opacity=".16" stroke="${OL}" stroke-opacity=".35" stroke-width="1"/>` : S.snout ? "" : `<ellipse cx="60" cy="74.4" rx="11.6" ry="8" fill="#fff" opacity=".12"/>`}`;
+    const patch = S.patch ? `<path d="M48.5 50.5 Q57.5 51 57.5 61 Q57 70 48.5 70.5 Q40 70 40 61 Q40 51 48.5 50.5Z" fill="${S.patch}"/><path d="M71.5 50.5 Q62.5 51 62.5 61 Q63 70 71.5 70.5 Q80 70 80 61 Q80 51 71.5 50.5Z" fill="${S.patch}"/>` : "";
+    // strepsirrhine snout: a longer, fox-like muzzle with a wet nose at the tip
+    const snout = S.snout ? `<path d="M52 68 Q52 63 60 63 Q68 63 68 68 Q68 80.6 60 81.4 Q52 80.6 52 68Z" fill="${FACE}" stroke="${OL}" stroke-width="1.3"/><path d="M56.4 65.4 Q60 63 63.6 65.4 Q63 70.4 60 71 Q57 70.4 56.4 65.4Z" fill="#1d1c21" stroke="${OL}" stroke-width="1"/><path d="M58.4 66 q1 -.8 2 0" stroke="#fff" stroke-width=".8" fill="none" opacity=".7"/>` : "";
+    const brow = S.brow && !o.baby ? `<path d="M39.6 51 Q48.5 44.6 58 49.6 Q60 50.6 62 49.6 Q71.5 44.6 80.4 51 Q71.5 48.6 62 52.4 Q60 53.2 58 52.4 Q48.5 48.6 39.6 51Z" fill="${FUR_D}" stroke="${OL}" stroke-width="1.3" stroke-linejoin="round"/>` : "";
+    const eyes = eye(u, 48.5, 60, o.eyes) + eye(u, 71.5, 60, o.eyes), E = o.baby ? noBrows(eyes) : S.patch || S.brow ? noBrows(eyes) : eyes, k = es * (o.baby ? 1.12 : 1);
+    // noses: platyrrhines (New World monkeys) have wide-set nostrils that open to the sides; catarrhines (Old World monkeys,
+    // apes) have close-set nostrils that open downward
+    const nose = S.snout ? "" : S.wet ? `<path d="M57.6 67 Q60 65.8 62.4 67 L60 70Z" fill="#1d1c21" stroke="${OL}" stroke-width="1" stroke-linejoin="round"/>`
+      : S.platy ? `<path d="M55 66.4 Q60 64.6 65 66.4" stroke="${OL}" stroke-width="1.1" fill="none" opacity=".5"/><ellipse cx="55.4" cy="68.2" rx="1.9" ry="1.2" fill="${OL}" opacity=".85" transform="rotate(-28 55.4 68.2)"/><ellipse cx="64.6" cy="68.2" rx="1.9" ry="1.2" fill="${OL}" opacity=".85" transform="rotate(28 64.6 68.2)"/>`
+      : `<path d="M58 65.4 Q60 64.4 62 65.4" stroke="${OL}" stroke-width="1.1" fill="none" opacity=".5"/><ellipse cx="58.7" cy="68.3" rx=".95" ry="1.7" fill="${OL}" opacity=".85" transform="rotate(12 58.7 68.3)"/><ellipse cx="61.3" cy="68.3" rx=".95" ry="1.7" fill="${OL}" opacity=".85" transform="rotate(-12 61.3 68.3)"/>`;
+    const lips = S.part ? `<path d="M55.6 72.6 Q60 75.6 64.4 72.6" stroke="${PINK_D}" stroke-width="2.6" fill="none" stroke-linecap="round" opacity=".9"/>` : "";
+    return `${ear(30.5, "dx-earl")}${ear(89.5, "dx-earr")}${mane}${flange}${beard}${cheeks}${crest}${skull}${top}${mask}${patch}${snout}${brow}
+      <g class="dx-eyes"><g class="dx-blink">${k !== 1 ? `<g transform="translate(60 61) scale(${f1(k * 100) / 100}) translate(-60 -61)">` : ""}${E}${k !== 1 ? "</g>" : ""}</g></g>
+      ${o.baby ? `<ellipse cx="42.6" cy="72" rx="4" ry="2.4" fill="#ff9fb0" opacity=".5"/><ellipse cx="77.4" cy="72" rx="4" ry="2.4" fill="#ff9fb0" opacity=".5"/>` : ""}
+      ${nose}${lips}${S.snout ? `<path d="M56.6 75.4 Q60 77.6 63.4 75.4" stroke="${OL}" stroke-width="1.4" fill="none" stroke-linecap="round"/>` : mouth(o.eyes)}`;
+  }
+
+  // ===== Primate bodies. Limbs are drawn as thick rounded strokes (outline under fur), with bare grasping hands and feet.
+  //   sit    upright on the haunches, knees up and out. Monkeys rest their hands on their knees; apes' long arms reach the ground
+  //   stand  quadrupedal, side view. Knuckle-walkers (chimp, bonobo, gorilla, orangutan) stand taller at the shoulder than the hip;
+  //          the lemur stands taller at the hip. The gibbon walks upright with its arms raised; the tarsier crouches, ready to leap
+  //   lie    resting on the belly with the head on folded arms
+  // Parts keep the cat's class names (dx-torso, dx-tail, dx-pawl/r = arms, dx-hindl/r = legs) so the same animations drive them.
+  const limb = (d, tk, c) => `<path d="${d}" stroke="${OL}" stroke-width="${f1(tk + 4.2)}" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="${d}" stroke="${c}" stroke-width="${f1(tk)}" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+  const skinLn = `stroke="${OL}" stroke-width="1.5" stroke-linejoin="round"`;
+  // a hand: palm with finger creases (dir: -1 fingers point left, 1 right); tarsiers have round finger pads, tamarins claws
+  function pHand(x, y, dir) {
+    const S = SHAPE;
+    return `<ellipse cx="${f1(x)}" cy="${f1(y)}" rx="4.6" ry="3.1" fill="${SKIN}" ${skinLn}/><path d="M${f1(x + dir * 1)} ${f1(y - 1.6)} v3 M${f1(x + dir * 2.8)} ${f1(y - 1.2)} v2.4" stroke="${OL}" stroke-width=".9" stroke-linecap="round" opacity=".7"/>
+      ${S.pads ? [0, 1, 2].map(i => `<circle cx="${f1(x + dir * 4.6)}" cy="${f1(y - 2.4 + i * 2.4)}" r="1.5" fill="${SKIN}" stroke="${OL}" stroke-width=".9"/>`).join("") : ""}
+      ${S.claws ? `<path d="M${f1(x + dir * 4.4)} ${f1(y - 1.4)} l${dir * 2.2} -.6 M${f1(x + dir * 4.6)} ${f1(y + .6)} l${dir * 2.2} .2" stroke="${OL}" stroke-width="1" stroke-linecap="round"/>` : ""}`;
+  }
+  // a knuckle-walking hand: the weight rests on the backs of the bent fingers
+  const pKnuckle = (x, y) => `<rect x="${f1(x - 4)}" y="${f1(y - 3)}" width="8" height="5.4" rx="2.6" fill="${SKIN}" ${skinLn}/><path d="M${f1(x - 1.4)} ${f1(y - 2.6)} v2.6 M${f1(x + 1.2)} ${f1(y - 2.6)} v2.6" stroke="${OL}" stroke-width=".9" stroke-linecap="round" opacity=".7"/>`;
+  // a grasping foot with the big toe set apart (dir: which way the toes point)
+  function pFoot(x, y, dir) {
+    const S = SHAPE, L = 6 + (S.foot || 0);
+    return `<ellipse cx="${f1(x + dir * (L - 5))}" cy="${f1(y)}" rx="${L}" ry="3" fill="${SKIN}" ${skinLn}/><ellipse cx="${f1(x - dir * 3.2)}" cy="${f1(y - 2.6)}" rx="2.3" ry="1.7" fill="${SKIN}" ${skinLn}/>
+      <path d="M${f1(x + dir * (L - 2))} ${f1(y - 1.4)} v2.6 M${f1(x + dir * (L + .2))} ${f1(y - 1)} v2" stroke="${OL}" stroke-width=".9" stroke-linecap="round" opacity=".7"/>
+      ${S.pads ? `<circle cx="${f1(x + dir * (2 * L - 5))}" cy="${f1(y)}" r="1.6" fill="${SKIN}" stroke="${OL}" stroke-width=".9"/>` : ""}`;
+  }
+  const pShag = (pts) => SHAPE.shaggy ? `<path d="${pts.map(([x, y]) => `M${f1(x)} ${f1(y)} l-1.4 5 l2.4 -2.4`).join(" ")}" stroke="${FUR_D}" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>` : "";
+  function pTail(d, tk) { return furTail(d, tk) + (SHAPE.tailStyle === "tuft" ? (() => { const m = d.match(/(-?[\d.]+) (-?[\d.]+)$/); return m ? `<ellipse cx="${m[1]}" cy="${m[2]}" rx="4.4" ry="3" fill="${FUR_D}" ${ln}/>` : "" })() : "") }
+  function primateSit(o, w) {
+    const S = SHAPE, A = S.arm || 1, G = S.leg || 1, tk = 6.4 * (.78 + .22 * w), sx = 11.5 * w;
+    const kx = 19 * w + 1.5 * G, ky = 92 - 14 * (G - 1), fx = 13 * w + 4;
+    const st = S.tailStyle, tb = [60 + 15 * w, 103];
+    const tail = st === "curl" ? `M${f1(tb[0])} 103 C${f1(80 + 16 * w)} 105 ${f1(88 + 14 * w)} 92 ${f1(84 + 13 * w)} 80 C${f1(81 + 13 * w)} 71 ${f1(72 + 13 * w)} 72 ${f1(73 + 13 * w)} 79 C${f1(74 + 13 * w)} 84 ${f1(80 + 13 * w)} 83 ${f1(79 + 13 * w)} 79`
+      : st === "short" ? `M${f1(tb[0])} 103 q9 1 11 -6`
+      : st === "up" ? `M${f1(tb[0])} 103 C${f1(82 + 16 * w)} 104 ${f1(84 + 15 * w)} 88 ${f1(80 + 15 * w)} 72 C${f1(78 + 15 * w)} 60 ${f1(84 + 15 * w)} 52 ${f1(88 + 14 * w)} 58`
+      : st === "tuft" ? `M${f1(tb[0])} 104 C${f1(78 + 14 * w)} 108 ${f1(88 + 14 * w)} 100 ${f1(92 + 13 * w)} 88`
+      : `M${f1(60 + 17 * w)} 102 C${f1(74 + 22 * w)} 104 ${f1(84 + 16 * w)} 92 ${f1(82 + 14 * w)} 76 C${f1(81 + 14 * w)} 68 ${f1(76 + 13 * w)} 66 ${f1(77 + 13 * w)} 71`;
+    const tip = (tail.match(/(-?[\d.]+) (-?[\d.]+)$/) || [0, 80, 70]).slice(1).map(Number);
+    const back = `<g class="dx-tail">${pTail(tail, 5.4)}</g>`;
+    const legD = s => `M${f1(60 + s * 9 * w)} 103 C${f1(60 + s * (kx + 7))} 102 ${f1(60 + s * (kx + 6))} ${f1(ky - 2)} ${f1(60 + s * (kx - 1))} ${f1(ky)} L${f1(60 + s * fx)} 104`;
+    const legC = SADDLE || FUR;
+    const chest = S.chest === "bare" ? `<path d="M${f1(60 - 9 * w)} 84 Q60 80 ${f1(60 + 9 * w)} 84 Q${f1(60 + 10 * w)} 96 60 100 Q${f1(60 - 10 * w)} 96 ${f1(60 - 9 * w)} 84Z" fill="${PINK}" stroke="${OL}" stroke-width="1.1" stroke-opacity=".5"/><path d="M60 84 V98 M${f1(60 - 6 * w)} 90 Q60 93 ${f1(60 + 6 * w)} 90" stroke="${OL}" stroke-width="1" fill="none" opacity=".45"/>`
+      : `<ellipse cx="60" cy="93" rx="${f1(8.6 * w)}" ry="10.4" fill="${FUR_L}" opacity=".9"/>`;
+    const body = `<g class="dx-torso">
+      <path d="M${f1(60 - 12 * w)} 78 Q60 71 ${f1(60 + 12 * w)} 78 C${f1(60 + 16 * w)} 87 ${f1(60 + 17 * w)} 97 ${f1(60 + 15 * w)} 104 Q${f1(60 + 12 * w)} 109 60 109 Q${f1(60 - 12 * w)} 109 ${f1(60 - 15 * w)} 104 C${f1(60 - 17 * w)} 97 ${f1(60 - 16 * w)} 87 ${f1(60 - 12 * w)} 78Z" fill="${FUR}" ${ln}/>
+      ${chest}${pShag([[60 - 13 * w, 90], [60 + 13 * w, 90], [60 - 8 * w, 102], [60 + 8 * w, 102]])}
+      <g class="dx-hindl">${limb(legD(-1), tk + 1.4, legC)}${pFoot(60 - fx - 2, 106.2, -1)}</g><g class="dx-hindr">${limb(legD(1), tk + 1.4, legC)}${pFoot(60 + fx + 2, 106.2, 1)}</g></g>`;
+    // arms: apes' reach the ground beside the feet (knuckles down); monkeys' rest on the knees
+    const long = A >= 1.15, hx2 = long ? 22 * w + 5 * A : kx - 3, hy = long ? 104.6 : ky + 2.4, cx2 = sx + (long ? 9 + 22 * (A - 1) : 8), cy2 = long ? 88 : 89;
+    const armD = s => `M${f1(60 + s * sx)} 82 Q${f1(60 + s * cx2)} ${cy2} ${f1(60 + s * hx2)} ${f1(hy)}`;
+    const arm = (s, cls) => `<g class="${cls}">${limb(armD(s), tk, FUR)}${pShag(long ? [[60 + s * (cx2 - 3), 92], [60 + s * (cx2 - 1), 97]] : [])}${long && S.knuckle ? pKnuckle(60 + s * hx2, hy + 1.8) : pHand(60 + s * hx2, hy + 1, s)}</g>`;
+    return { back, body, legs: arm(-1, "dx-pawl") + arm(1, "dx-pawr"), head: "translate(60 12) scale(.9) translate(-60 -12)", shadow: (long ? 30 : 27) * w, outfitMap: "", tail: { d: tail, base: tb, tip } };
+  }
+  function primateUpright(o, w, u) {   // the gibbon (arms up for balance) and the tarsier (a crouched vertical clinger)
+    const S = SHAPE, up = S.upright === "up", tk = 5.6 * (.8 + .2 * w), hw = 9.5 * w;
+    const bodyPath = `M${f1(60 - hw)} 80 Q60 74.5 ${f1(60 + hw)} 80 C${f1(60 + hw + 3)} 88 ${f1(60 + hw + 3)} 97 ${f1(60 + hw - 1)} 101.6 Q60 105 ${f1(60 - hw + 1)} 101.6 C${f1(60 - hw - 3)} 97 ${f1(60 - hw - 3)} 88 ${f1(60 - hw)} 80Z`;
+    const tail = S.notail ? "" : `M${f1(60 + hw - 2)} 100 C${f1(76 + hw)} 104 ${f1(88 + hw)} 100 ${f1(92 + hw)} 88`;
+    const leg = s => up ? limb(`M${f1(60 + s * 4.6)} 99 Q${f1(60 + s * 7)} 103 ${f1(60 + s * 5.4)} 105`, tk, FUR) + pFoot(60 + s * 6.4, 106.4, s)
+      : limb(`M${f1(60 + s * 5)} 98 C${f1(60 + s * 19)} 93 ${f1(60 + s * 21)} 101 ${f1(60 + s * 9)} 104.4`, tk, FUR) + pFoot(60 + s * 9, 106.4, s);
+    const armD = s => up ? `M${f1(60 + s * (hw - 1))} 82 C${f1(60 + s * (hw + 12))} 82 ${f1(60 + s * (hw + 17))} 70 ${f1(60 + s * (hw + 15))} 56` : `M${f1(60 + s * (hw - 1))} 84 Q${f1(60 + s * (hw + 7))} 89 ${f1(60 + s * (hw + 3))} 94.6`;
+    const hand = s => up ? pHand(60 + s * (hw + 15), 54, s) : pHand(60 + s * (hw + 4), 96, s);
+    const back = `<g class="dx-tail">${tail ? pTail(tail, 4) : ""}</g><g class="dx-hindr">${leg(1)}</g>`;
+    const body = `<g class="dx-torso"><defs><clipPath id="${u}bc"><path d="${bodyPath}"/></clipPath></defs><path d="${bodyPath}" fill="${FUR}" ${ln}/><ellipse cx="60" cy="91" rx="${f1(hw * .66)}" ry="8.4" fill="${FUR_L}" opacity=".9"/>
+      <g class="dx-outfit" clip-path="url(#${u}bc)"></g></g>`;
+    const legs = `<g class="dx-hindl">${leg(-1)}</g><g class="dx-pawl">${limb(armD(-1), tk, FUR)}${hand(-1)}</g><g class="dx-pawr">${limb(armD(1), tk, FUR)}${hand(1)}</g>`;
+    return { back, body, legs, head: "translate(60 79.5) scale(.8) translate(-60 -86)", shadow: 20 * w, clip: `${u}bc`, outfitMap: `translate(${f1(60 - hw - 2)} 77) scale(${f1((2 * hw + 4) / 38 * 100) / 100} ${f1(27 / 32 * 100) / 100}) translate(-41 -76)`,
+      tail: tail ? { d: tail, base: [60 + hw - 2, 100], tip: [92 + hw, 88] } : null };
+  }
+  function primateStand(o, w, u) {
+    const S = SHAPE; if (S.upright) return primateUpright(o, w, u);
+    const sl = S.slope || 0, T = 73.5 - 3 * (w - 1), Ts = f1(T - sl), Tr = f1(T + sl * .55), Bm = f1(97.5 + 8 * (w - 1)), Rr = f1(98 + 2 * (w - 1)), tk = 6.2 * (.8 + .2 * w), G = S.leg || 1;
+    const st = S.tailStyle;
+    const tail = st === "up" ? `M96 ${f1(+Tr + 9)} C106 ${f1(+Tr + 2)} 102 60 106 46 C108 39 114 40 112 47` : st === "curl" ? `M96 ${f1(+Tr + 9)} C110 ${f1(+Tr + 10)} 115 72 109 63 C105 57 98 60 100 66 C102 70 107 68 105 64`
+      : st === "short" ? `M96 ${f1(+Tr + 8)} q8 -2 9 -9` : `M96 ${f1(+Tr + 9)} C107 ${f1(+Tr + 6)} 112 70 107 58 C105 53 100 54 101 59`;
+    const tip = (tail.match(/(-?[\d.]+) (-?[\d.]+)$/) || [0, 101, 59]).slice(1).map(Number);
+    const bodyPath = `M47 85 C47 ${Ts} 60 ${Ts} 72 ${f1((+Ts + +Tr) / 2)} C86 ${Tr} ${Rr} ${f1(+Tr + 3)} ${Rr} 87 C${Rr} ${Bm} 90 ${Bm} 74 ${Bm} C58 ${Bm} 47 97 47 85Z`;
+    // forelimbs come straight down from the shoulder; hindlimbs are bent at the knee
+    const fore = (x, far) => limb(`M${x + 1} 89 L${x} ${S.knuckle ? 102.6 : 103.6}`, tk, far ? FUR_D : FUR) + (S.knuckle ? pKnuckle(x - 1.4, 105.4) : pHand(x - 2.4, 106.4, -1));
+    const hind = (x, far) => limb(`M${x + 1} 91 Q${f1(x + 6 + 3 * (G - 1) * 4)} ${f1(97 - 6 * (G - 1))} ${x} 103.6`, tk + .8, far ? FUR_D : SADDLE && !far ? FUR : FUR) + pFoot(x - 2, 106.4, -1);
+    const back = `<g class="dx-pawr">${fore(61, true)}</g><g class="dx-hindr">${hind(85, true)}</g><g class="dx-tail">${pTail(tail, 5.4)}</g>`;
+    const body = `<g class="dx-torso"><defs><clipPath id="${u}bc"><path d="${bodyPath}"/></clipPath></defs><path d="${bodyPath}" fill="${FUR}" ${ln}/>
+      <g clip-path="url(#${u}bc)">${SADDLE ? `<ellipse cx="80" cy="${f1(+Tr + 3)}" rx="19" ry="11" fill="${SADDLE}"/>` : ""}<path d="M52 ${f1(+Bm - 3)} Q70 ${f1(+Bm + 2)} 90 ${f1(+Bm - 5)}" stroke="${S.chest === "bare" ? PINK : FUR_L}" stroke-width="6" fill="none" opacity=".75" stroke-linecap="round"/></g>
+      ${pShag([[60, +Bm - 2], [68, +Bm - 1], [76, +Bm - 1], [84, +Bm - 3]])}
+      ${S.callos ? `<ellipse cx="${f1(+Rr - 1.6)}" cy="${f1(+Tr + 14)}" rx="2.8" ry="4.4" fill="#f08a9a" stroke="${OL}" stroke-width="1.2"/>` : ""}
+      <g class="dx-outfit" clip-path="url(#${u}bc)"></g></g>`;
+    const legs = `<g class="dx-pawl">${fore(53, false)}</g><g class="dx-hindl">${hind(92, false)}</g>`;
+    return { tail: { d: tail, base: [96, +Tr + 9], tip }, back, body, legs, head: `translate(47 ${f1(87 - sl * .55)}) scale(.82) translate(-60 -86)`, shadow: 30 * w, clip: `${u}bc`,
+      outfitMap: `translate(48 ${Ts}) scale(${f1(50 / 38 * 100) / 100} ${f1((+Bm - +Ts) / 32 * 100) / 100}) translate(-41 -76)` };
+  }
+  function primateLie(o, w, u) {   // on the belly, head resting on folded arms, one foot showing behind
+    const P = lieBody(o, w, u), S = SHAPE, rx = 34 * (.85 + .15 * w), tk = 5.6;
+    const st = S.tailStyle, tx = f1(66 + rx - 2);
+    const tail = S.notail ? "" : st === "short" ? `M${tx} 104 q7 0 9 -5` : st === "up" ? `M${tx} 105 C${f1(66 + rx + 10)} 106 ${f1(66 + rx + 12)} 94 ${f1(66 + rx + 6)} 86` : `M${tx} 106 C${f1(66 + rx + 4)} 112 60 112.4 40 110`;
+    P.body = P.body.replace(/<g class="dx-tail">[\s\S]*?<\/g>/, `<g class="dx-tail">${tail ? pTail(tail, 5) : ""}</g>`)
+      + (SADDLE ? "" : "") + `<g class="dx-hindl">${limb(`M${f1(66 + rx - 12)} 100 Q${f1(66 + rx - 2)} 97 ${f1(66 + rx - 5)} 105`, tk, FUR)}${pFoot(66 + rx - 3, 107, 1)}</g>`;
+    P.legs = `<g class="dx-pawl">${limb("M56 101 Q46 99 40 104.6", tk, FUR)}${S.knuckle ? pKnuckle(38.6, 106.4) : pHand(38.6, 106.6, -1)}</g><g class="dx-pawr">${limb("M62 103 Q56 103 52 106", tk, FUR)}${pHand(50.4, 107.4, -1)}</g>`;
+    P.tail = tail ? { d: tail, base: [+tx, 105], tip: (tail.match(/(-?[\d.]+) (-?[\d.]+)$/) || [0, 40, 110]).slice(1).map(Number) } : null;
+    return P;
+  }
   function drawHead(u, o) {
+    if (SHAPE.primate) { const hx = SHAPE.hx || 1; const h = primateHead(u, o); return hx !== 1 ? `<g transform="translate(60 84) scale(${hx} 1) translate(-60 -84)">${h}</g>` : h }
     const S = SHAPE, ex = (S.ex || 1) * (o.baby ? .82 : 1), ey = (S.ey || 1) * (o.baby ? .76 : 1);
     const earT = (x, y) => ex !== 1 || ey !== 1 ? ` transform="translate(${x} ${y}) scale(${ex} ${ey}) translate(${-x} ${-y})"` : "";
     const ruff = S.ruff ? `<path d="M30 70 Q24 80 33 84 Q34 92 44 90 Q48 97 56 93 Q60 99 64 93 Q72 97 76 90 Q86 92 87 84 Q96 80 90 70Z" fill="${FUR_L}" ${ln}/>` : "";
@@ -368,7 +545,8 @@
   // The kitten at full size, standing on y=108. o: { sc, eyes, tail, glasses, pose, w, outfit, neck, front, over, back }
   function kitty(u, o) {
     const w = Math.min(1.75, Math.max(.65, (+o.w || 1) * (SHAPE.wb || 1))), pose = o.pose || "sit";
-    const P = pose === "stand" ? standBody(o, w, u) : pose === "lie" ? lieBody(o, w, u) : sitBody(o, w);
+    const P = SHAPE.primate ? (pose === "stand" ? primateStand(o, w, u) : pose === "lie" ? primateLie(o, w, u) : primateSit(o, w)) : pose === "stand" ? standBody(o, w, u) : pose === "lie" ? lieBody(o, w, u) : sitBody(o, w);
+    if (SHAPE.notail && !SHAPE.primate) { const cut = s => s.replace(/<g class="dx-tail">[\s\S]*?<\/g>/, '<g class="dx-tail"></g>'); P.back = cut(P.back); P.body = cut(P.body); P.tail = null }   // apes have no tail
     const glasses = o.glasses ? `<circle cx="48.5" cy="60" r="10" fill="#bfe6ff" fill-opacity=".18" stroke="${OL}" stroke-width="2"/><circle cx="71.5" cy="60" r="10" fill="#bfe6ff" fill-opacity=".18" stroke="${OL}" stroke-width="2"/><path d="M58.5 58.5 Q60 56.5 61.5 58.5" stroke="${OL}" stroke-width="2" fill="none"/><path d="M41 54.5 l3 -2" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/><path d="M64 54.5 l3 -2" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/>` : "";
     const sc = o.sc, chonk = 1 + (w - 1) * .08;
     // outfits are drawn for the sitting torso; on the standing/lying body they're mapped onto its side and clipped to it
@@ -392,6 +570,13 @@
   const BASE_COLLAR = [43, 80.5, 60, 89, 77, 80.5];
   const collar = (hex = "#26365e") => `<path d="M43 80.5 Q60 89 77 80.5" stroke="${OL}" stroke-width="6.4" fill="none" stroke-linecap="round"/><path d="M43 80.5 Q60 89 77 80.5" stroke="${hex}" stroke-width="3.6" fill="none" stroke-linecap="round"/>
     <path d="M60 85 v1.6" stroke="${OL}" stroke-width="1.2"/><rect x="56.4" y="86.4" width="7.2" height="9" rx="2.6" fill="#c9d1db" stroke="${OL}" stroke-width="1.3"/><path d="M58.4 89.6 h3.2 M58.4 92.2 h3.2" stroke="#7d8794" stroke-width=".9"/><path d="M57.6 88 l1.4 -.6" stroke="#fff" stroke-width=".9" stroke-linecap="round"/>`;
+  // primates wear a bead necklace instead of a collar: a cord along the same curve, beads in the chosen color and a pendant
+  const necklace = (hex = "#26365e") => {
+    const pt = u2 => [(1 - u2) * (1 - u2) * 43 + 2 * (1 - u2) * u2 * 60 + u2 * u2 * 77, (1 - u2) * (1 - u2) * 80.5 + 2 * (1 - u2) * u2 * 89 + u2 * u2 * 80.5];
+    const beads = [.1, .22, .34, .66, .78, .9].map((u2, i) => { const [x, y] = pt(u2); return `<circle cx="${f1(x)}" cy="${f1(y)}" r="${i % 2 ? 1.9 : 2.3}" fill="${i % 2 ? "#f4e1c1" : hex}" stroke="${OL}" stroke-width="1.1"/>` }).join("");
+    return `<path d="M43 80.5 Q60 89 77 80.5" stroke="${OL}" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M43 80.5 Q60 89 77 80.5" stroke="#b98a55" stroke-width="1.1" fill="none" stroke-linecap="round"/>${beads}
+      <path d="M60 85 L56.6 90.6 Q60 96.4 63.4 90.6Z" fill="${hex}" stroke="${OL}" stroke-width="1.3" stroke-linejoin="round"/><path d="M59 88.4 l1 -1.6" stroke="#fff" stroke-width=".9" stroke-linecap="round" opacity=".8"/><circle cx="60" cy="85" r="1.5" fill="#f4e1c1" stroke="${OL}" stroke-width="1"/>`;
+  };
   const scarf = `<path d="M41 79 Q60 91 79 79 L80 85 Q60 96 40 85Z" fill="#4f8dff" ${ln}/><path d="M70 88 L76 103 L68 101 L65 90Z" fill="#4f8dff" ${ln}/><path d="M45 84 Q60 92 75 84" stroke="#a9c8ff" stroke-width="1.4" fill="none"/>`;
   const headband = `<path d="M33.5 49 Q60 41 86.5 49 L86 55 Q60 47 34 55Z" fill="#c0392b" ${ln}/><path d="M85 50 Q95 47 101 53 Q94 54 91 52 Q97 58 99 64 Q91 59 85 54Z" fill="#c0392b" ${ln}/><circle cx="60" cy="47.6" r="3" fill="#fff" stroke="${OL}" stroke-width="1.2"/>`;
   const bandage = `<g transform="rotate(-20 79 73)"><rect x="73" y="70.6" width="12" height="5" rx="2" fill="#f4e1c1" stroke="${OL}" stroke-width="1.2"/><path d="M78 71.4 v3.4 M80 71.4 v3.4" stroke="#c9a77a" stroke-width=".9"/></g>`;
@@ -417,7 +602,7 @@
   const pinnedList = E => { const W = window.BioWardrobe; const l = Array.isArray(E.badges) ? E.badges : E.badge && E.badge !== "none" ? [E.badge] : []; return W ? l.filter(id => W.byId[id]) : [] };
   function neckLayer(E, collarKey) {
     const W = window.BioWardrobe, it = W && E.neck && E.neck !== "none" && W.byId[E.neck], band = it && it.collar ? it.collar : BASE_COLLAR;
-    let out = (it && it.collar ? "" : collar(collarHex(collarKey))) + (it ? it.svg : "");
+    let out = (it && it.collar ? "" : (SHAPE.primate ? necklace : collar)(collarHex(collarKey))) + (it ? it.svg : "");
     const ids = pinnedList(E); if (!ids.length || !W || !W.badgeArt) return out;
     // spread the badges along the band (a quadratic curve); a bow tie, medal etc. in the middle pushes them to the sides
     const n = ids.length, r = n <= 3 ? 3.7 : n <= 5 ? 3.2 : 2.7, mid = it && !it.collar;
@@ -916,7 +1101,7 @@ html:not(.bb-showlv) .bb-pal .bb-lv,html:not(.bb-showlv) .bb-dock .bb-lv,html:no
     return `<div class="pal-prog">
       <div class="bb-big">${art(k)}</div>
       <h3 id="bbName">${esc(name(s))}</h3>
-      <p class="bb-sub">Level ${L} of ${MAX_LV} · ${esc(st.form)} · ${esc(stageName(k, s))} · ${esc(breedName(s.breed, s.color))}</p>
+      <p class="bb-sub">Level ${L} of ${MAX_LV} · ${esc(formOf(k, s.breed))} · ${esc(stageName(k, s))} · ${esc(breedName(s.breed, s.color))}</p>
       <div class="bb-stats">
         <div><b>${fmt(s.pts)}</b><span>total XP</span></div>
         <div><b>${s.streak}${s.streak >= 3 ? `<i class="fl">${FLAME}</i>` : ""}</b><span>in a row · ×${mult}</span></div>
@@ -1146,7 +1331,7 @@ html:not(.bb-showlv) .bb-pal .bb-lv,html:not(.bb-showlv) .bb-dock .bb-lv,html:no
         <p class="ct-h">Your cats · ${n}/${MAX_CATS}<small>The cat in training earns XP from your answers. Any of your other cats can come along on screen too. Tick <b>Co-train</b> to train several at once: each answer's XP is split evenly between them.</small></p>
         <div class="ct-list">${list.map(c => { const k2 = stageOf(c.pts | 0); return `<div class="ct-cat${c.active ? " on" : ""}">
           ${art(k2, c.equip || { badges: [] }, { breed: c.breed, color: c.color, collar: c.collar, w: c.weight, eyes: "happy", plain: true })}
-          <span><b>${esc(c.nick || "Dexter")}</b><small>${esc(breedName(c.breed, c.color))} · Lv ${level(c.pts | 0)} · ${esc(STAGES[k2].form)}</small></span>
+          <span><b>${esc(c.nick || "Dexter")}</b><small>${esc(breedName(c.breed, c.color))} · Lv ${level(c.pts | 0)} · ${esc(formOf(k2, c.breed))}</small></span>
           <span class="ct-btns"><button type="button" class="ct-dress" data-dressgo="${c.id}" aria-label="Dress ${esc(c.nick || "Dexter")}">👗 Dress</button>${c.active ? `<span class="ct-tag">✓ Training</span>${H.co.length ? `<span class="ct-split">XP split ${H.co.length + 1} ways</span>` : ""}` : `<button type="button" class="sh-act" data-train="${c.id}">Train</button>
             <label class="ct-along"><input type="checkbox" data-along="${c.id}"${c.along ? " checked" : ""}${!c.along && H.along.length >= MAX_ALONG ? " disabled" : ""}> On screen</label>
             <label class="ct-along ct-co"><input type="checkbox" data-co="${c.id}"${c.co ? " checked" : ""}${c.along ? "" : " disabled"}> 📚 Co-train</label>${c.along && H.spots && H.spots[c.id] ? `<button type="button" class="ct-unpin" data-unpin="${c.id}">↺ Back beside him</button>` : ""}<button type="button" class="ct-unpin" data-return="${c.id}">↩ Return to café</button>`}</span></div>` }).join("")}</div>`;
@@ -1415,7 +1600,8 @@ html:not(.bb-showlv) .bb-pal .bb-lv,html:not(.bb-showlv) .bb-dock .bb-lv,html:no
   function cafeResidents(max) {
     const { list } = catList(), chill = list.filter(c => !c.active && !c.along).slice(0, 3);
     const day = Math.floor(Date.now() / 864e5);
-    const guests = [0, 1, 2].flatMap(n => Object.keys(BREEDS).map((b, i) => { const cs = Object.keys(BREEDS[b].colors); return { guest: true, breed: b, color: cs[(day + i + n) % cs.length], nick: "", pts: n ? 150 + i * 90 : 0 } }));
+    const want = window.COURSE && window.COURSE.guests, kinds = Object.keys(BREEDS).filter(b => want === "primate" ? true : BREEDS[b].kind !== "primate").sort((a, b) => want === "primate" ? (BREEDS[b].kind === "primate") - (BREEDS[a].kind === "primate") : 0);
+    const guests = [0, 1, 2].flatMap(n => kinds.map((b, i) => { const cs = Object.keys(BREEDS[b].colors); return { guest: true, breed: b, color: cs[(day + i + n) % cs.length], nick: "", pts: n ? 150 + i * 90 : 0 } }));
     const back = Object.entries(household().alumni).sort((a, b) => (b[1].returnedAt || 0) - (a[1].returnedAt || 0)).slice(0, 4).map(([id, c]) => Object.assign({ mine: true, alumni: true, id }, c));
     return back.concat(chill.map(c => Object.assign({ mine: true }, c))).concat(guests).slice(0, max);
   }
@@ -1429,7 +1615,7 @@ html:not(.bb-showlv) .bb-pal .bb-lv,html:not(.bb-showlv) .bb-dock .bb-lv,html:no
     const order = tree.sort(() => Math.random() - .5).slice(0, 3).concat(rest.sort(() => Math.random() - .5), tree.slice(3));
     R.forEach((r, i) => { r.spot = order[i] });
     cafe = document.createElement("div"); cafe.className = "cf-veil"; cafe.setAttribute("role", "dialog"); cafe.setAttribute("aria-modal", "true"); cafe.setAttribute("aria-label", "The Cat Café");
-    cafe.innerHTML = `<div class="cf-room"><div class="cf-top"><span><b>☕ The Cat Café</b><small>Tap a cat to meet them${wide ? " · tap the toys, the wheel and the treat jar" : ""}</small></span><button type="button" class="cf-x" aria-label="Leave the café">✕</button></div>
+    cafe.innerHTML = `<div class="cf-room"><div class="cf-top"><span><b>☕ The Cat Café</b><small>Tap a ${window.COURSE && window.COURSE.guests === "primate" ? "cat or a primate" : "cat"} to meet them${wide ? " · tap the toys, the wheel and the treat jar" : ""}</small></span><button type="button" class="cf-x" aria-label="Leave the café">✕</button></div>
       <svg class="cf-scene" viewBox="${wide ? `${VX.toFixed(1)} 0 ${VW.toFixed(1)} 640` : "0 0 360 640"}" preserveAspectRatio="${wide ? "xMidYMax meet" : "xMidYMax slice"}">${CAFE_SCENE}${wide ? CAFE_SIDES : ""}<g transform="translate(246 462) scale(.56)">${TREE_SVG.replace(/^<svg[^>]*>/, "").replace(/<\/svg>$/, "")}</g>${CAFE_WALL}${CAFE_TOYS}<defs><clipPath id="cfHole"><circle cx="277.9" cy="572.9" r="10.4"/></clipPath></defs><g class="cf-cats"></g><g class="cf-fx"></g></svg>
       <div class="cf-sheet" hidden></div></div>`;
     document.body.appendChild(cafe);
@@ -1502,8 +1688,8 @@ html:not(.bb-showlv) .bb-pal .bb-lv,html:not(.bb-showlv) .bb-dock .bb-lv,html:no
         const k = r.mine ? stageOf(r.pts | 0) : 0;
         sheet.innerHTML = `<button type="button" class="cf-close" aria-label="Back to the café">✕</button>
           <div class="cf-meet">${art(k, r.equip || { badges: [] }, { breed: r.breed, color, collar: r.collar || "navy", w: r.weight || 1, eyes: "happy", plain: !r.mine })}
-          <div><p class="cf-kicker">${r.alumni ? "Used to live with you" : r.mine ? "Your cat" : "Looking for a study buddy"}</p><h3>${r.mine ? esc(r.nick || "Dexter") : esc(B.name)}</h3><p class="cf-desc">${esc(B.desc)}.</p>
-          ${r.mine ? `<p class="cf-desc">${esc(breedName(r.breed, r.color))} · Lv ${level(r.pts | 0)} · ${esc(STAGES[stageOf(r.pts | 0)].form)}</p>` : ""}</div></div>
+          <div><p class="cf-kicker">${r.alumni ? "Used to live with you" : r.mine ? "Your cat" : "Looking for a study buddy"}</p><h3>${r.mine ? esc(r.nick || "Dexter") : esc(B.name)}</h3>${B.taxon ? `<p class="cf-kicker" style="margin-top:2px">${esc(B.taxon)}</p>` : ""}<p class="cf-desc">${esc(B.desc)}.</p>
+          ${r.mine ? `<p class="cf-desc">${esc(breedName(r.breed, r.color))} · Lv ${level(r.pts | 0)} · ${esc(formOf(stageOf(r.pts | 0), r.breed))}</p>` : ""}</div></div>
           ${r.alumni ? (full ? `<p class="cf-desc">Your home is full (${MAX_CATS} cats). Return a cat to the café to make room, and ${esc(r.nick || "this cat")} can come home with all their progress.</p>`
             : `<p class="cf-desc">Still has all their XP, outfits and badges.</p><div class="cf-acts"><button type="button" class="cf-go" data-do="home-train">📚 Come home &amp; study</button><button type="button" class="cf-go alt" data-do="home">🏠 Come home</button><button type="button" class="cf-go ghost" data-do="stay">Not now</button></div>`)
           : r.mine ? `<div class="cf-acts"><button type="button" class="cf-go" data-do="train">📚 Study with me</button><button type="button" class="cf-go alt" data-do="along">🎒 Come along</button><button type="button" class="cf-go ghost" data-do="stay">Keep chilling</button>${r.active ? "" : `<button type="button" class="cf-go ghost" data-do="return">↩ Live at the café</button>`}</div>`
