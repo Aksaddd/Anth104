@@ -148,3 +148,9 @@ Every page loads Vercel Web Analytics with the plain-HTML snippet (`/_vercel/ins
 - **Exam date & time**: the home page countdown and exam title use it (`anthro-exam-date`, default 2026-11-10 10:45).
 - **Reading font** and **Text size**: the same `anthro-reading` setting as the drills' Options menu.
 - **Layout**: Simple (default) or Detailed (`anthro-simple`). Simple opens drills straight on a question in the Mixed set, with the subject tabs, question map (`anthro-showmap`) and reminder banners tucked away, trims the drill header, hides the home page's link guide, and folds "How it works" and the sources table into one collapsed section. Detailed shows everything up front.
+
+## Read & Learn and the Archive (added on the MeowStudy platform)
+
+- `read/` is Read & Learn: 8 reading chapters (42 passages), four for each exam. `read/chapters.js` holds the passages; each lists check-yourself questions by id (`1TH0` = Exam 1, question TH0; `2PR13` = Exam 2, question PR13). Answers are recorded in the right exam drill and earn XP, and finishing a chapter earns a badge. After changing `chapters.js` or either exam's `questions.js`, run `node tools/build-read.js`.
+- The passages were written from the question banks, because the original class files aren't in this repository. Check them against the slides once those are added.
+- `archive/` lists the original course files in `materials/` (none yet) and the 30 figures the drills use. Drop the original slides, worksheets and study guides into `materials/` and run `node tools/build-archive.js`.

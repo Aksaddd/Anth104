@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Archive · ANTH 102</title>
+<meta name="description" content="The original ANTH 102 course materials: lecture slides, worksheets and the figures the drills are built from.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#f5f5f7">
+<link rel="stylesheet" href="../../shared/drill.css">
+<script src="../../shared/platform.js"></script>
+<script src="../course.js"></script>
+<script src="../../shared/settings.js"></script>
+<style>
+/* Layout: header → "Original course files" (one card per group, a row per file; or an empty note) → "Figures" (a grid per exam). */
+.wk{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px 18px;display:flex;flex-direction:column;gap:4px}
+.wk h2{margin:0 0 6px;font:700 13px var(--body);color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.it{display:grid;grid-template-columns:40px 1fr auto;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.wk h2+.it{border-top:0}
+.ic{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;font:700 10px var(--body);color:#fff;background:#8e8e93;text-transform:uppercase}
+.ic.pdf{background:#ff375f}.ic.pptx,.ic.ppt,.ic.key{background:#ff9f0a}.ic.docx,.ic.doc{background:#0a84ff}.ic.link{background:#30b0c7}.ic.zip{background:#af52de}
+.it b{display:block;font-weight:600;font-size:15px;line-height:1.35}.it small{display:block;color:var(--muted);font-size:13px}
+.open{font:600 14px var(--body);color:var(--accent);background:var(--accent-soft);border-radius:980px;padding:7px 14px;text-decoration:none;white-space:nowrap}
+.open:hover{background:var(--accent);color:var(--accent-ink)}
+.none{background:var(--paper);border:1.5px dashed var(--line);border-radius:var(--radius);padding:18px;color:var(--muted);font-size:14.5px;line-height:1.5}
+.none b{color:var(--ink)}
+.figs{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-top:6px}
+.fg{margin:0;background:var(--bg);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+.fg a{display:block;background:#fff}.fg img{display:block;width:100%;height:130px;object-fit:contain}
+.fg figcaption{padding:8px 10px;font-size:13px;line-height:1.35}
+.sec{margin:14px 0 0;font:700 20px var(--display,var(--body));letter-spacing:-.01em}
+.wk .sub2{margin:0 0 4px;color:var(--muted);font-size:13.5px}
+.wk .sub2 a{color:var(--accent);font-weight:600;text-decoration:none}
+</style>
+<script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</head><body>
+<div class="wrap">
+  <header>
+    <a class="back" href="../index.html">← ANTH 102</a>
+    <div class="titlerow"><h1>Archive</h1></div>
+    <p class="sub"><b>The original course material</b> that the ANTH 102 drills and readings are built from: lecture slides, worksheets, Top Hat questions, Brightspace activities and the films' question sheets. The practice questions and the Read &amp; Learn chapters are derived from these.</p>
+  </header>
+  <h2 class="sec">Original course files</h2>
+  <div id="files" style="display:flex;flex-direction:column;gap:12px"></div>
+  <h2 class="sec">Figures from the course materials</h2>
+  <p class="sub" style="margin:0">Cropped from the course slides and activities. The drills use them in their picture questions. Tap one to see it full size.</p>
+  <div id="figs" style="display:flex;flex-direction:column;gap:12px"></div>
+  <p class="foot">These are class materials shared for students enrolled in ANTH 102. Please don't redistribute them.</p>
+</div>
+<script src="files.js"></script>
+<script>
+(() => {
+  const A = window.ARCHIVE || { groups: [], figures: [] }, $ = id => document.getElementById(id);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const mb = n => n ? (n / 1048576 < 1 ? Math.max(1, Math.round(n / 1024)) + " KB" : (n / 1048576).toFixed(1) + " MB") : "";
+  $("files").innerHTML = A.groups.length ? A.groups.map(g => `<section class="wk"><h2>${esc(g.name)}</h2>${g.items.map(i => {
+    const ext = /^https?:/.test(i.href);
+    return `<div class="it"><span class="ic ${esc(i.type)}" aria-hidden="true">${ext ? "↗" : esc(i.type.slice(0, 4))}</span><span><b>${esc(i.title)}</b><small>${ext ? esc(i.href.replace(/^https?:\/\/(www\.)?/, "").split("/")[0]) : esc(i.type.toUpperCase()) + (i.size ? " · " + mb(i.size) : "")}</small></span><a class="open" href="${ext ? esc(i.href) : "../" + esc(i.href)}" target="_blank" rel="noopener">Open</a></div>`;
+  }).join("")}</section>`).join("")
+    : `<div class="none"><b>The original files haven't been added yet.</b> The slides, worksheets and other class files for ANTH 102 will be listed here once they're uploaded to the site. Until then, the figures below and the source label on every drill question ("Top Hat", "Activity 5", "Life in the Trees" …) show where each piece came from.</div>`;
+  $("figs").innerHTML = A.figures.map(g => `<section class="wk"><h2>${esc(g.name)}</h2><p class="sub2">${g.items.length} figures · <a href="../${esc(g.drill)}">Practice them in the drill →</a></p><div class="figs">${g.items.map(i => `<figure class="fg"><a href="../${esc(i.src)}" target="_blank" rel="noopener"><img src="../${esc(i.src)}" alt="${esc(i.title)}" loading="lazy"></a><figcaption>${esc(i.title)}</figcaption></figure>`).join("")}</div></section>`).join("");
+})();
+</script>
+</body></html>

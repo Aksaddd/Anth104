@@ -19,8 +19,8 @@
       stats: "Read & Learn · drill · Bio-pardy · mock exam" },
     { id: "a102", path: "anth102/", code: "04d54e00cac73576f630324b220f965184bd1838897ffbed5ba3a89c973972e8",
       name: "ANTH 102", title: "Biology & Evolution of Human Species", school: "Anthropology", color: "#ff9f0a",
-      blurb: "Exam 1 and Exam 2 drills, primate classification with a drag-and-drop chart, two review games, word roots and a mock exam.",
-      stats: "717 questions · 3 drills · 2 review games" }
+      blurb: "Read & Learn chapters, Exam 1 and Exam 2 drills, primate classification with a drag-and-drop chart, two review games, word roots, a mock exam and the Primate Safari Café.",
+      stats: "717 questions · 8 reading chapters · 3 drills" }
   ];
   const KEY = "a104-classes";   // the classes this browser has unlocked (synced with the account like other progress)
   const norm = s => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
