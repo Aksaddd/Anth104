@@ -65,15 +65,21 @@
     H.alumni = H.alumni || {};   // cats returned to the café: they keep their XP, outfits and name, and can come home again
     return H;
   }
-  const saveHouse = H => { try { localStorage.setItem(CATS_KEY, JSON.stringify(H)) } catch (e) { } };
-  // Primates belong to ANTH 102. Outside that class they are not listed, shown or trained; cats and primates each have
-  // their own limit of MAX_CATS.
+  // Each class keeps its own choice of who studies with you there: H.per[class id] = { active, along, co }. It is
+  // recorded on every save and restored when you open that class again (see the restore step further down).
+  const CID = (window.COURSE && window.COURSE.id) || "";
+  const saveHouse = H => {
+    if (CID && CID !== "hub" && H.active) { H.per = H.per || {}; H.per[CID] = { active: H.active, along: (H.along || []).slice(), co: (H.co || []).slice() } }
+    try { localStorage.setItem(CATS_KEY, JSON.stringify(H)) } catch (e) { }
+  };
+  // Two separate worlds: ANTH 102 has primates only (the safari), every other class has cats only (the Cat Café).
+  // The other kind is not listed, shown or trained on this side; each kind has its own limit of MAX_CATS.
   const IN_A102 = !!(window.COURSE && window.COURSE.id === "a102");
   const kindCount = (H, prim) => Object.values(H.cats).filter(c => isPrimate(c.breed) === !!prim).length;
   function catList() {   // every cat, the one in training with its live state
     const H = household(), s = load();
     H.cats[H.active] = Object.assign({}, H.cats[H.active], pickCat(s));
-    return { H, list: Object.entries(H.cats).filter(([, c]) => IN_A102 || !isPrimate(c.breed)).map(([id, c]) => Object.assign({ id, active: id === H.active, along: H.along.includes(id), co: H.co.includes(id) }, c)) };
+    return { H, list: Object.entries(H.cats).filter(([, c]) => isPrimate(c.breed) === IN_A102).map(([id, c]) => Object.assign({ id, active: id === H.active, along: H.along.includes(id), co: H.co.includes(id) }, c)) };
   }
   function trainCat(id) {
     const H = household(); if (!H.cats[id] || id === H.active) return;
@@ -100,13 +106,37 @@
     saveHouse(H); return id;
   }
   function adoptCat(breed, nick, color) {
+    if (!hasPet()) {   // the first pet: it becomes the student's buddy (no stand-in Dexter beside it)
+      const s = load(); Object.assign(s, { breed, color, nick, born: Date.now() }); save(s);
+      saveHouse({ active: "c1", cats: { c1: Object.assign(pickCat(s), { breed, color, nick }) }, along: [], co: [], alumni: {} });
+      try { localStorage.setItem(PET_KEY, "1") } catch (e) { }
+      return "c1";
+    }
     const H = household(); if (kindCount(H, isPrimate(breed)) >= MAX_CATS) return null;
     const id = "c" + Date.now().toString(36);
     H.cats[id] = { pts: 0, correct: 0, streak: 0, best: 0, last: 0, nick, equip: { badges: [] }, collar: "navy", weight: 1, breed, color, born: Date.now() };
-    if (H.along.length < MAX_ALONG) H.along.push(id);
-    saveHouse(H); return id;
+    const first = isPrimate(breed) === IN_A102 && isPrimate((H.cats[H.active] || {}).breed) !== IN_A102;   // the first pet of this side's kind
+    if (!first && H.along.length < MAX_ALONG) H.along.push(id);
+    if (first) { const was = H.active; try { localStorage.setItem(CATS_KEY, JSON.stringify(H)) } catch (e) { } trainCat(id); const H2 = household(); H2.along = H2.along.filter(x => x !== was); H2.co = []; saveHouse(H2) }
+    else saveHouse(H);
+    return id;
   }
-  const off = () => { try { return localStorage.getItem(OFF_KEY) === "1" } catch (e) { return false } };
+  const hiddenOff = () => { try { return localStorage.getItem(OFF_KEY) === "1" } catch (e) { return false } };
+  // Nobody starts with a pet: a new student is asked to adopt one (from the Cat Café; in ANTH 102, the safari too), and the
+  // first one they pick is theirs. Students who already had a buddy before this keep it.
+  const PET_KEY = KEY.replace(/-v1$/, "") + "-pet";
+  function hasPet() {
+    try {
+      if (localStorage.getItem(PET_KEY) === "1") return true;
+      const raw = JSON.parse(localStorage.getItem(KEY) || "null");
+      const had = !!localStorage.getItem(CATS_KEY) || !!(raw && ((raw.pts | 0) > 0 || (raw.xp | 0) > 0 || raw.nick || raw.breed || (raw.owned && raw.owned.length)));
+      if (had) localStorage.setItem(PET_KEY, "1");
+      return had;
+    } catch (e) { return true }
+  }
+  // a student needs a pet of this side's kind: a primate in ANTH 102, a cat everywhere else
+  const hasPetHere = () => hasPet() && Object.values(household().cats).some(c => isPrimate(c.breed) === IN_A102);
+  const off = () => hiddenOff() || !hasPetHere();
   const stageOf = pts => { let k = 0; STAGES.forEach((s, i) => { if (pts >= s.at) k = i }); return k };
   const nextAt = k => STAGES[k + 1] ? STAGES[k + 1].at : null;
   // Levels 1–100. Reaching level L takes A·(L−1)^1.5 XP, with Level 100 at 20,000 XP: quick early levels,
@@ -239,16 +269,15 @@
   // form names for a primate (the cats keep "Tiny kitten" … from STAGES)
   const PRIMATE_FORMS = ["Clinging infant", "Curious juvenile", "Playful juvenile", "Bold adolescent", "Skilled adult", "Wise elder"];
   const formOf = (k, breed) => isPrimate(breed) ? PRIMATE_FORMS[k] : STAGES[k].form;
-  (() => {
-    const H = household(), act = H.cats[H.active]; if (!act) return;
-    if (!IN_A102 && isPrimate(act.breed)) {
-      const cat = Object.keys(H.cats).find(id => !isPrimate(H.cats[id].breed)); if (!cat) return;
-      const was = H.active; trainCat(H.catWas && H.cats[H.catWas] && !isPrimate(H.cats[H.catWas].breed) ? H.catWas : cat);
-      const H2 = household(); H2.primateWas = was; H2.along = H2.along.filter(x => x !== was); saveHouse(H2);
-    } else if (IN_A102 && H.primateWas) {
-      const id = H.primateWas, back = H.cats[id] && isPrimate(H.cats[id].breed); const cur = H.active;
-      delete H.primateWas; H.catWas = cur; saveHouse(H); if (back) trainCat(id);
-    }
+  (() => {   // restore this class's own choice: who is in training here and who comes along
+    if (!hasPet()) return;
+    const H = household(), me = H.per && H.per[CID], right = id => !!H.cats[id] && isPrimate(H.cats[id].breed) === IN_A102;
+    const want = me && right(me.active) ? me.active : right(H.active) ? H.active : Object.keys(H.cats).find(right);
+    if (!want) return;   // no pet of this side's kind yet: the student is asked to adopt one
+    const along0 = me ? me.along : H.along, co0 = me ? me.co || [] : H.co;
+    if (want !== H.active) trainCat(want);
+    const H2 = household(); H2.along = (along0 || []).filter(id => right(id) && id !== H2.active).slice(0, MAX_ALONG); H2.co = (co0 || []).filter(id => H2.along.includes(id));
+    delete H2.primateWas; delete H2.catWas; saveHouse(H2);
   })();
   let SHAPE = {}, FACE = "#f0d3b3", RING = "", LID = null, SKIN = "#f0d3b3", SADDLE = "", CAPE = "";
   function setCoat(breed, color) {
@@ -662,6 +691,11 @@
 
   // ===== Styles
   const CSS = `
+.bb-adopt{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));z-index:45;display:flex;flex-direction:column;align-items:stretch;gap:6px;max-width:min(300px,calc(100vw - 32px));font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif;animation:bbUp .35s cubic-bezier(.2,.8,.2,1)}
+.bb-adopt .go{display:flex;align-items:center;gap:10px;text-align:left;border:0;border-radius:18px;padding:12px 38px 12px 14px;cursor:pointer;color:#fff;background:linear-gradient(135deg,#ff9f0a,#ff6b00);box-shadow:0 8px 24px rgba(255,107,0,.35);font:inherit}
+.bb-adopt .go>span:first-child{font-size:26px}.bb-adopt .go b{display:block;font-size:15.5px}.bb-adopt .go small{display:block;font-size:12px;opacity:.92}
+.bb-adopt .alt{border:0;border-radius:980px;padding:8px 14px;cursor:pointer;font:600 13.5px inherit;font-family:inherit;color:#1d5a2a;background:linear-gradient(135deg,#c9f0c4,#ffe7a8);box-shadow:0 4px 14px rgba(0,0,0,.12)}
+.bb-adopt .x{position:absolute;top:6px;right:6px;width:24px;height:24px;border-radius:50%;border:0;background:rgba(255,255,255,.3);color:#fff;font-size:12px;cursor:pointer}
 .bb-dock{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));z-index:45;width:64px;height:64px;border-radius:50%;border:0;padding:0;cursor:pointer;background:var(--paper,#fff);box-shadow:0 6px 22px rgba(0,0,0,.18);display:grid;place-items:center;-webkit-tap-highlight-color:transparent}
 .bb-dock:hover{transform:scale(1.05)} .bb-dock{transition:transform .2s}
 .bb-dock .bb-ring{position:absolute;inset:0;transform:rotate(-90deg)}
@@ -1118,6 +1152,16 @@ html:not(.bb-showlv) .bb-pal .bb-lv,html:not(.bb-showlv) .bb-dock .bb-lv,html:no
   function paintDock() { paintDock0(); checkPal(); paintPal() }
   function paintDock0() {
     let d = $("bbDock");
+    let ad = $("bbAdopt");
+    if (!hiddenOff() && !hasPetHere()) {
+      if (!ad) { ad = document.createElement("div"); ad.id = "bbAdopt"; ad.className = "bb-adopt";
+        ad.innerHTML = `<button type="button" class="go" data-go="cafe"><span aria-hidden="true">${IN_A102 ? "🌴" : "🐾"}</span><span><b>Adopt a study ${IN_A102 ? "primate" : "pet"}</b><small>${IN_A102 ? "Pick a primate from the safari to study with you" : "Pick a cat to study with you and earn XP"}</small></span></button><button type="button" class="x" aria-label="No pet for now">✕</button>`;
+        document.body.appendChild(ad);
+        ad.querySelector('[data-go="cafe"]').onclick = () => openCafe();
+        if (ad.querySelector('[data-go="safari"]')) ad.querySelector('[data-go="safari"]').onclick = () => openCafe("safari");
+        ad.querySelector(".x").onclick = () => { setEnabled(false) };
+      }
+    } else if (ad) ad.remove();
     if (off()) { if (d) d.remove(); document.body.classList.remove("bb-on"); return }
     const s = load(), k = stageOf(s.pts), C = 2 * Math.PI * 30, mult = XP() ? XP().multiplier(s.streak) : 1;
     if (!d) { d = document.createElement("button"); d.id = "bbDock"; d.type = "button"; d.className = "bb-dock"; d.onclick = () => openPal("cats"); document.body.appendChild(d); makeMovable(d, () => 64, (x, y) => { d.style.left = x + "px"; d.style.top = y + "px"; d.style.right = d.style.bottom = "auto" }) }
@@ -1178,7 +1222,7 @@ html:not(.bb-showlv) .bb-pal .bb-lv,html:not(.bb-showlv) .bb-dock .bb-lv,html:no
   // ===== Dexter's reactions: an excited "Meow!" (bubble + a little synthesized meow) or a dropped yarn ball
   // Levels on screen: hidden by default (tap a cat to see its level and stats); this setting shows them on the cats
   const LV_KEY = "a104-dexter-showlv";
-  const showLv = () => { try { return localStorage.getItem(LV_KEY) === "1" } catch (e) { return false } };
+  const showLv = () => { try { return localStorage.getItem(LV_KEY) !== "0" } catch (e) { return true } };
   function setSize(v) {
     v = Math.min(1.8, Math.max(.6, +v || 1));
     try { Math.abs(v - 1) < .01 ? localStorage.removeItem(SCALE_KEY) : localStorage.setItem(SCALE_KEY, String(v)) } catch (e) { }
@@ -1188,7 +1232,7 @@ html:not(.bb-showlv) .bb-pal .bb-lv,html:not(.bb-showlv) .bb-dock .bb-lv,html:no
     try { on ? localStorage.setItem(ANCHOR_KEY, "1") : localStorage.removeItem(ANCHOR_KEY) } catch (e) { }
     if (on && !getSpot()) { const S = palSize(), at = palAt || wantHome(); setSpot(xySpot(at.x, at.y, S)) } else settle();
   }
-  function setShowLv(on) { try { on ? localStorage.setItem(LV_KEY, "1") : localStorage.removeItem(LV_KEY) } catch (e) { } document.documentElement.classList.toggle("bb-showlv", on) }
+  function setShowLv(on) { try { localStorage.setItem(LV_KEY, on ? "1" : "0") } catch (e) { } document.documentElement.classList.toggle("bb-showlv", on) }
   document.documentElement.classList.toggle("bb-showlv", showLv());
   const SOUND_KEY = "a104-dexter-sound";
   const soundOn = () => { try { return localStorage.getItem(SOUND_KEY) !== "0" } catch (e) { return true } };
@@ -1243,6 +1287,7 @@ html:not(.bb-showlv) .bb-pal .bb-lv,html:not(.bb-showlv) .bb-dock .bb-lv,html:no
   }
 
   function gain(e) {
+    if (off()) return;
     const X = XP(), detail = (e && e.detail) || {};
     const r = X ? X.rate(detail) : { xp: 10, tier: { key: "easy", name: "Easy" } };
     const s = load(), before = stageOf(s.pts), lvBefore = level(s.pts);
@@ -1275,6 +1320,7 @@ html:not(.bb-showlv) .bb-pal .bb-lv,html:not(.bb-showlv) .bb-dock .bb-lv,html:no
     if (after > before) setTimeout(() => evolve(before, after), 900);
   }
   function miss() {
+    if (off()) return;
     const s = load(), had = s.streak | 0; s.streak = 0; s.last = Date.now(); save(s);
     if (off()) return;
     paintDock(); visit(); if (palOn) setMood("sad", 1900);
@@ -1364,10 +1410,10 @@ html:not(.bb-showlv) .bb-pal .bb-lv,html:not(.bb-showlv) .bb-dock .bb-lv,html:no
     // Closet: every slot lets you pick one of your items, Dexter's own gear for this form, or nothing at all
     // Cats: the household. Pick who to train, who comes along on screen, and adopt new breeds.
     function catsHTML() {
-      const { H, list } = catList(), n = kindCount(H, false), nP = IN_A102 ? kindCount(H, true) : 0, full = n >= MAX_CATS;
-      return `<button type="button" class="ct-cafe" id="ctCafe"><span class="ic" aria-hidden="true">☕</span><span><b>Visit the Cat Café</b><small>${full ? `Your home is full (${MAX_CATS} cats). Return a cat to the café to make room for a new one.` : Object.keys(H.alumni).length ? `Meet new cats, or bring back ${Object.keys(H.alumni).length > 1 ? `one of the ${Object.keys(H.alumni).length} cats who live there now` : "the cat who lives there now"}.` : "Meet cats of every breed, pick a coat color, and bring one home to study."}</small></span><i aria-hidden="true">›</i></button>
+      const { H, list } = catList(), n = kindCount(H, IN_A102), full = n >= MAX_CATS;
+      return `${IN_A102 ? "" : `<button type="button" class="ct-cafe" id="ctCafe"><span class="ic" aria-hidden="true">☕</span><span><b>Visit the Cat Café</b><small>${full ? `Your home is full (${MAX_CATS} cats). Return a cat to the café to make room for a new one.` : Object.keys(H.alumni).length ? `Meet new cats, or bring back ${Object.keys(H.alumni).length > 1 ? `one of the ${Object.keys(H.alumni).length} cats who live there now` : "the cat who lives there now"}.` : "Meet cats of every breed, pick a coat color, and bring one home to study."}</small></span><i aria-hidden="true">›</i></button>`}
         ${safariOpen() ? `<button type="button" class="ct-cafe ct-safari" id="ctSafari"><span class="ic" aria-hidden="true">🌴</span><span><b>Visit the Primate Safari Café</b><small>ANTH 102: lemurs, monkeys and apes, each in its own habitat. Adopt one to study with you.</small></span><i aria-hidden="true">›</i></button>` : ""}
-        <p class="ct-h">Your cats · ${n}/${MAX_CATS}${nP ? ` · primates ${nP}/${MAX_CATS}` : ""}<small>The cat in training earns XP from your answers. Any of your other cats can come along on screen too. Tick <b>Co-train</b> to train several at once: each answer's XP is split evenly between them.</small></p>
+        <p class="ct-h">Your ${IN_A102 ? "primates" : "cats"} in ${esc((window.COURSE && window.COURSE.name) || "this class")} · ${n}/${MAX_CATS}<small>Each class remembers its own choice. The ${IN_A102 ? "primate" : "cat"} in training here earns XP from your answers in this class. Any of your other ${IN_A102 ? "primates" : "cats"} can come along on screen too. Tick <b>Co-train</b> to train several at once: each answer's XP is split evenly between them.</small></p>
         <div class="ct-list">${list.map(c => { const k2 = stageOf(c.pts | 0); return `<div class="ct-cat${c.active ? " on" : ""}">
           ${art(k2, c.equip || { badges: [] }, { breed: c.breed, color: c.color, collar: c.collar, w: c.weight, eyes: "happy", plain: true })}
           <span><b>${esc(c.nick || "Dexter")}</b><small>${esc(breedName(c.breed, c.color))} · Lv ${level(c.pts | 0)} · ${esc(formOf(k2, c.breed))}</small></span>
@@ -1455,7 +1501,7 @@ html:not(.bb-showlv) .bb-pal .bb-lv,html:not(.bb-showlv) .bb-dock .bb-lv,html:no
       const body = st.tab === "settings" ? settingsHTML(s) : st.tab === "cats" ? catsHTML() : st.tab === "progress" || !W ? progressHTML(s) : st.tab === "shop" ? shopHTML(s) : st.tab === "badges" ? badgesHTML(load()) : closetHTML(d, stageOf(d.pts));
       shop.innerHTML = `<div class="bb-card bb-shop${st.opened ? " still" : ""}" role="dialog" aria-modal="true" aria-labelledby="shTitle">
         <div class="sh-head"><h3 id="shTitle">${esc(name(d || s))}</h3><span class="sh-gold" aria-label="${s.gold} gold">${COIN}${fmt(s.gold)}</span><button type="button" class="sh-done" id="shDone">Done</button></div>
-        <div class="sh-tabs pal" role="tablist">${[["cats", "Cats"], ["closet", "Closet"], ["shop", "Shop"], ["badges", "Badges"], ["progress", "Progress"], ["settings", "⚙"]].map(([key, label]) => `<button type="button" role="tab" aria-selected="${st.tab === key}" data-tab="${key}"${key === "settings" ? ` aria-label="Cat settings" title="Cat settings" class="sh-gear"` : ""}>${label}</button>`).join("")}</div>
+        <div class="sh-tabs pal" role="tablist">${[["cats", IN_A102 ? "Primates" : "Cats"], ["closet", "Closet"], ["shop", "Shop"], ["badges", "Badges"], ["progress", "Progress"], ["settings", "⚙"]].map(([key, label]) => `<button type="button" role="tab" aria-selected="${st.tab === key}" data-tab="${key}"${key === "settings" ? ` aria-label="Cat settings" title="Cat settings" class="sh-gear"` : ""}>${label}</button>`).join("")}</div>
         ${d ? `${dressPicker()}<div class="sh-stage cl-stage" style="--dz:${sizeFor(d.pts).toFixed(2)}">${many ? `<button type="button" class="cl-arrow l" data-step="-1" aria-label="Previous cat">‹</button>` : ""}<span class="cl-who">${dressArt(d, "wide")}</span>${many ? `<span class="cl-name">Dressing <b>${esc(name(d))}</b></span><button type="button" class="cl-arrow r" data-step="1" aria-label="Next cat">›</button>` : ""}</div>`
           : st.tab === "progress" || st.tab === "cats" || st.tab === "settings" ? "" : `<div class="sh-stage" style="--dz:${sizeFor(s.pts).toFixed(2)}">${art(k, st.tab === "shop" ? st.tryEq : s.equip, { eyes: "wide" })}</div>`}
         ${d ? statsHTML(d) + `<p class="sh-cap pf-acc">Accessories &amp; looks</p>` : ""}
@@ -1485,7 +1531,7 @@ html:not(.bb-showlv) .bb-pal .bb-lv,html:not(.bb-showlv) .bb-dock .bb-lv,html:no
           if (!confirm(`Return ${nm} to the café? ${nm} keeps all their XP, outfits and badges, and you can bring them home again from the café any time.`)) return;
           keepScroll(() => { returnCat(c.id); paint(); refreshMates(); settle() }); pop(`<b>${esc(nm)} moved into the café</b><small>Visit to adopt someone new or bring ${esc(nm)} back</small>`, "buy");
         });
-        $("ctCafe").onclick = () => { closeShop(); openCafe() };
+        if ($("ctCafe")) $("ctCafe").onclick = () => { closeShop(); openCafe() };
         if ($("ctSafari")) $("ctSafari").onclick = () => { closeShop(); openCafe("safari") };
         return;
       }
@@ -1668,7 +1714,7 @@ html:not(.bb-showlv) .bb-pal .bb-lv,html:not(.bb-showlv) .bb-dock .bb-lv,html:no
   let cafe = null;
   function openCafe(mode) {
     if (cafe) cafe.remove();
-    const saf = mode === "safari" && safariOpen(), SP = saf ? SAFARI_SPOTS : CAFE_SPOTS; if (saf) mode = "safari"; else mode = "";
+    const saf = IN_A102 && safariOpen(), SP = saf ? SAFARI_SPOTS : CAFE_SPOTS; mode = saf ? "safari" : "";   // ANTH 102 opens the safari; every other class opens the Cat Café
     // wide screens: the viewBox widens to the screen's shape, so the room spreads out instead of a phone-width strip
     const wide = innerWidth >= 900, asp = innerWidth / Math.max(1, innerHeight), VW = wide ? Math.max(360, Math.min(2400, Math.max(640 * asp, Math.min(1160, 640 * asp * 1.4)))) : 360, VX = 180 - VW / 2;
     const spots = SP.map((_, i) => i).filter(i => { const s = SP[i]; return saf ? true : wide ? s.x > VX + 24 && s.x < VX + VW - 24 : !s.side });
@@ -1688,9 +1734,9 @@ html:not(.bb-showlv) .bb-pal .bb-lv,html:not(.bb-showlv) .bb-dock .bb-lv,html:no
       R.forEach((r, i) => { r.spot = order[i] });
     }
     cafe = document.createElement("div"); cafe.className = "cf-veil"; cafe.setAttribute("role", "dialog"); cafe.setAttribute("aria-modal", "true"); cafe.setAttribute("aria-label", "The Cat Café");
-    cafe.innerHTML = saf ? `<div class="cf-room cf-safari"><div class="cf-top"><span><b>🌴 The Primate Safari Café</b><small>Tap a primate to meet them · tap the bananas and the termite mound${innerWidth < 900 ? " · swipe sideways to explore" : ""}</small></span><button type="button" class="cf-x" aria-label="Leave the safari">✕</button></div>
+    cafe.innerHTML = saf ? `<div class="cf-room cf-safari"><div class="cf-top"><span><b>🌴 The Primate Safari Café</b><small>${hasPetHere() ? "Tap a primate to meet them" : "Pick your study primate: tap one to meet them"} · tap the bananas and the termite mound${innerWidth < 900 ? " · swipe sideways to explore" : ""}</small></span><button type="button" class="cf-x" aria-label="Leave the safari">✕</button></div>
       <div class="cf-pan${innerWidth >= 900 ? " cf-fit" : ""}"><svg class="cf-scene" viewBox="0 0 1160 640" preserveAspectRatio="${innerWidth >= 900 ? "xMidYMax meet" : "xMidYMax slice"}">${SAFARI_SCENE}<g class="cf-cats"></g><g style="pointer-events:none">${SAFARI_FRONT}</g><g class="cf-fx"></g></svg></div>
-      <div class="cf-sheet" hidden></div></div>` : `<div class="cf-room"><div class="cf-top"><span><b>☕ The Cat Café</b><small>Tap a ${window.COURSE && window.COURSE.guests === "primate" ? "cat or a primate" : "cat"} to meet them${wide ? " · tap the toys, the wheel and the treat jar" : ""}</small></span><button type="button" class="cf-x" aria-label="Leave the café">✕</button></div>
+      <div class="cf-sheet" hidden></div></div>` : `<div class="cf-room"><div class="cf-top"><span><b>☕ The Cat Café</b><small>${hasPetHere() ? "Tap a cat to meet them" : "Pick your study pet: tap a cat to meet them"}${wide ? " · tap the toys, the wheel and the treat jar" : ""}</small></span><button type="button" class="cf-x" aria-label="Leave the café">✕</button></div>
       <svg class="cf-scene" viewBox="${wide ? `${VX.toFixed(1)} 0 ${VW.toFixed(1)} 640` : "0 0 360 640"}" preserveAspectRatio="${wide ? "xMidYMax meet" : "xMidYMax slice"}">${CAFE_SCENE}${wide ? CAFE_SIDES : ""}<g transform="translate(246 462) scale(.56)">${TREE_SVG.replace(/^<svg[^>]*>/, "").replace(/<\/svg>$/, "")}</g>${CAFE_WALL}${CAFE_TOYS}<defs><clipPath id="cfHole"><circle cx="277.9" cy="572.9" r="10.4"/></clipPath></defs><g class="cf-cats"></g><g class="cf-fx"></g></svg>
       <div class="cf-sheet" hidden></div></div>`;
     document.body.appendChild(cafe);
@@ -2048,7 +2094,7 @@ html:not(.bb-showlv) .bb-pal .bb-lv,html:not(.bb-showlv) .bb-dock .bb-lv,html:no
     const { H, list } = catList();
     H.along.forEach((id, i) => {
       const c = list.find(x => x.id === id); if (!c) return;
-      if (isPrimate(c.breed) && !(window.COURSE && window.COURSE.id === "a102")) return;   // primates are ANTH 102's: they wait at the safari in other classes
+      if (isPrimate(c.breed) !== IN_A102) return;   // primates are ANTH 102's: they wait at the safari in other classes
       const el = document.createElement("button"); el.type = "button"; el.className = "bb-mate"; el.setAttribute("aria-label", `${c.nick || "Dexter"} is here too. Open your cats`);
       el.onclick = () => openPal("closet", null, id); document.body.appendChild(el);
       const me = { id }; el.title = `${c.nick || "Dexter"} · drag to move`;

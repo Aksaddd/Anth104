@@ -37,6 +37,13 @@ Two things to know:
 - Students who already had ANTH 104 progress in their browser before class codes existed keep their access without a code.
 - The codes are a courtesy gate, not security. The site is static, so the study files are public to anyone who knows their address. Real access control would need sign-in checked by a server.
 
+## Study pets
+
+- **Nobody starts with a pet.** A new student sees an "Adopt a study pet" button and picks one; that one is theirs. Answers before adopting earn nothing. Students who already had a buddy keep it.
+- **Two separate sides.** ANTH 102 has primates only (adopted from the Primate Safari Café); every other class has cats only (from the Cat Café). The other kind is never listed, shown or trained on the wrong side, and each kind has its own limit of six.
+- **Each class remembers its own choice.** Which pet is in training and which ones come along is saved per class (`per` inside `a104-dexter-cats-v1`) and restored when the student opens that class again. The pets themselves, with their XP, gold and outfits, are shared.
+- Every pet on screen shows its level unless the student switches levels off.
+
 ## How a class plugs in
 
 Every page of a class loads `shared/platform.js`, then the class's own `course.js`, then the shared engine. `course.js` tells the engine what is specific to the class: its storage prefix (`a104-`, `bio-`), the name of its review game, its XP bonuses, Dexter's facts and which Read & Learn badges belong to it.
@@ -47,7 +54,7 @@ To add a class: make a folder with its pages and a `course.js`, add it to `COURS
 
 ## Primates and the Primate Safari Café (ANTH 102 only)
 
-`shared/buddy.js` has ten primate species in taxonomic order: ring-tailed lemur, tarsier, golden lion tamarin, capuchin, macaque, gibbon, orangutan, gorilla, chimpanzee and bonobo. They belong to ANTH 102: the **Primate Safari Café** opens only inside that class (its front page and the Cats tab), for students who have its class code, and outside that class primates are not listed, shown or trained. If a primate is the buddy in training, a cat takes over in the other classes and the primate takes over again back in ANTH 102. Cats and primates each have their own limit of six. The Cat Café holds cats in every class.
+`shared/buddy.js` has ten primate species in taxonomic order: ring-tailed lemur, tarsier, golden lion tamarin, capuchin, macaque, gibbon, orangutan, gorilla, chimpanzee and bonobo. They belong to ANTH 102: the **Primate Safari Café** opens only inside that class (its front page and the Cats tab), for students who have its class code, and outside that class primates are not listed, shown or trained, and inside it cats aren't (see Study pets above).
 
 The safari is one continuous landscape of six habitats, left to right in taxonomic order, separated the way real ones are (limestone pinnacles, a river with a log across it, foothills and a snowy mountain range, a waterfall and stream, tall grass and boulders): Madagascar's spiny forest (lemurs), a Southeast Asian night forest (tarsiers), the Amazon canopy (tamarins, capuchins), the Jigokudani hot spring in Japan (macaques), the Borneo rainforest (gibbons, orangutans) and an African forest (gorillas, chimpanzees, bonobos). Each primate sits and wanders only in its own habitat. On a laptop the whole scene fits; on a phone you swipe sideways.
 
