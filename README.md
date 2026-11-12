@@ -1,6 +1,8 @@
-# MeowStudy
+# Eureka
 
-One study platform for several classes. Each class has its own study guide (reading chapters, drills, mock exams, review games), and one study buddy (Dexter and the other cats, gold, outfits, the Cat Café) follows the student across all of them.
+One study platform for several classes. Each class has its own study guide: reading chapters, drills, mock exams and review games. The front page is the course directory; an **Eureka** button on every class's dashboard goes back to it.
+
+Study pets (cats, and primates in ANTH 102) are still here, but they are not advertised: the front page has none, and inside a class a small paw button in the corner is how students come across them.
 
 It combines three repositories that used to be separate sites: [Anth104](https://github.com/Aksaddd/Anth104), [bio-drills](https://github.com/Aksaddd/bio-drills) and [anthro-drills](https://github.com/Aksaddd/anthro-drills). Everything is plain static HTML, CSS and JavaScript, with no build step.
 
@@ -39,7 +41,7 @@ Two things to know:
 
 ## Study pets
 
-- **Nobody starts with a pet.** A new student sees an "Adopt a study pet" button and picks one; that one is theirs. Answers before adopting earn nothing. Students who already had a buddy keep it.
+- **Nobody starts with a pet.** A new student sees a small paw button in the corner of a class page; it opens the café, and the pet they pick is theirs. Answers before adopting earn nothing. Students who already had a buddy keep it.
 - **Two separate sides.** ANTH 102 has primates only (adopted from the Primate Safari Café); every other class has cats only (from the Cat Café). The other kind is never listed, shown or trained on the wrong side, and each kind has its own limit of six.
 - **Each class remembers its own choice.** Which pet is in training and which ones come along is saved per class (`per` inside `a104-dexter-cats-v1`) and restored when the student opens that class again. The pets themselves, with their XP, gold and outfits, are shared.
 - **Nothing is locked in.** Any pet, the first one included, can study with you, take a break ("💤 Take a break": nobody studies with you in that class until you pick someone), or go back to the café or safari. Returned pets keep their XP and outfits and can come home again. Returning your last pet brings back the adopt prompt.

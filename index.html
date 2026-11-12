@@ -2,17 +2,14 @@
 <html lang="en"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MeowStudy · Study drills for your classes</title>
-<meta name="description" content="MeowStudy: study drills, reading guides, mock exams and review games for your classes, with one study buddy across all of them. Enter your class code to open your class.">
+<title>Eureka · Study guides for your classes</title>
+<meta name="description" content="Eureka: reading guides, practice drills, mock exams and review games for your classes. Enter your class code to open your class.">
 <meta name="theme-color" content="#f5f5f7">
 <script src="shared/platform.js"></script>
-<script>window.COURSE = { id: "hub", prefix: "a104-", name: "MeowStudy", base: "" };</script>
+<script>window.COURSE = { id: "hub", prefix: "a104-", name: "Eureka", base: "" };</script>
 <script src="shared/settings.js"></script>
-<script src="shared/xp.js"></script>
-<script src="shared/wardrobe.js"></script>
-<script src="shared/buddy.js"></script>
 <style>
-/* Layout: nav → hero with the class-code box → "Your classes" cards (unlocked) → "More classes" (locked) → Cat Café and how it works. */
+/* Layout: nav → hero with the class-code box → "Your classes" cards (unlocked) → "More classes" (locked) → how it works. */
 :root{--bg:#f5f5f7;--paper:#fff;--ink:#1d1d1f;--muted:#6e6e73;--line:rgba(0,0,0,.1);--accent:#0071e3;--fill:#e8e8ed;
   --body:-apple-system,BlinkMacSystemFont,"SF Pro Text","Inter","Segoe UI",Roboto,sans-serif;--display:-apple-system,BlinkMacSystemFont,"SF Pro Display","Inter","Segoe UI",Roboto,sans-serif}
 :root[data-theme="dark"]{--bg:#000;--paper:#1c1c1e;--ink:#f5f5f7;--muted:#a1a1a6;--line:rgba(255,255,255,.14);--accent:#0a84ff;--fill:#2c2c2e}
@@ -70,14 +67,14 @@ a.cc:hover,button.cc:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgb
 <script defer src="/_vercel/insights/script.js"></script>
 </head><body>
 <header class="gnav"><div class="inner">
-  <a class="brand" href="index.html">Meow<span>Study</span></a>
+  <a class="brand" href="index.html">Eureka<span>.</span></a>
   <button type="button" class="setbtn" id="settingsBtn" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Settings</button>
 </div></header>
 
 <section class="hero"><div class="inner">
-  <p class="eyebrow">One place for every class</p>
-  <h1>Study smarter, <span class="grad">with a cat.</span></h1>
-  <p class="lede">Reading guides, drills, mock exams and review games for your classes. Your study buddy, gold and outfits come with you into every one.</p>
+  <p class="eyebrow">Eureka</p>
+  <h1>Every class, <span class="grad">one place.</span></h1>
+  <p class="lede">Reading guides, practice drills, mock exams and review games for your classes. Enter a class code to open yours.</p>
   <form class="join" id="join" autocomplete="off">
     <label for="code" id="joinLabel">Enter your class code</label>
     <div class="row"><input id="code" name="code" placeholder="e.g. the code from your class" autocapitalize="characters" spellcheck="false" aria-describedby="joinHelp"><button class="btn" id="joinBtn">Open class</button></div>
@@ -89,8 +86,7 @@ a.cc:hover,button.cc:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgb
 <main class="inner">
   <div id="mine"></div>
   <div id="more"></div>
-  <button type="button" class="cafe" id="cafeBtn"><span class="ic" aria-hidden="true">☕</span><span><b>The Cat Café</b><span>Meet the cats, adopt one, and bring it along to study in any class.</span></span></button>
-  <p class="how"><b>How it works.</b> Each class has its own study guide: reading chapters, practice questions, a mock exam and games. Enter a class code to open it. Your progress is saved in this browser for each class separately, and your cats, gold and outfits are shared across all of them.</p>
+  <p class="how"><b>How it works.</b> Each class has its own study guide: reading chapters, practice questions, a mock exam and games. Enter a class code to open it. Your progress is saved in this browser, separately for each class.</p>
 </main>
 
 <script>
@@ -106,7 +102,7 @@ a.cc:hover,button.cc:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgb
   function paint() {
     const mine = P.COURSES.filter(c => P.has(c.id)), more = P.COURSES.filter(c => !P.has(c.id));
     $("mine").innerHTML = `<h2 class="sec">Your classes</h2>` + (mine.length ? `<div class="cards">${mine.map(c => card(c, true)).join("")}</div>` : `<div class="empty">No classes yet. Enter a class code above to open your first one.</div>`);
-    $("more").innerHTML = more.length ? `<h2 class="sec">${mine.length ? "More classes" : "Classes on MeowStudy"}</h2><div class="cards">${more.map(c => card(c, false)).join("")}</div>` : "";
+    $("more").innerHTML = more.length ? `<h2 class="sec">${mine.length ? "More classes" : "Classes on Eureka"}</h2><div class="cards">${more.map(c => card(c, false)).join("")}</div>` : "";
     document.querySelectorAll("[data-lock]").forEach(b => b.onclick = () => ask(P.course(b.dataset.lock)));
   }
   function say(text, ok) { const m = $("msg"); m.hidden = false; m.className = "msg " + (ok ? "ok" : "no"); m.textContent = text }
@@ -118,7 +114,6 @@ a.cc:hover,button.cc:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgb
     $("code").value = ""; say(`${c.name} is open. Taking you there…`, true); paint();
     setTimeout(() => { location.href = c.path + "index.html" }, 700);
   };
-  $("cafeBtn").onclick = () => window.BioBuddy && window.BioBuddy.openCafe();
   paint();
   if (want && P.course(want) && !P.has(want)) { ask(P.course(want)); say(`${P.course(want).name} needs its class code. Enter it to open the class.`, false) }
 })();

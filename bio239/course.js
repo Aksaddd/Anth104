@@ -1,4 +1,4 @@
-// Bi 239 on the MeowStudy platform: what the shared engine (../shared/) needs to know about this class.
+// Bi 239 on the Eureka platform: what the shared engine (../shared/) needs to know about this class.
 // Loaded on every page of the class, right after shared/platform.js.
 window.COURSE = {
   id: "bio", prefix: "bio-", name: "Bi 239",

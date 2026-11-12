@@ -721,12 +721,9 @@
 
   // ===== Styles
   const CSS = `
-.bb-adopt{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));z-index:45;display:flex;flex-direction:column;align-items:stretch;gap:6px;max-width:min(300px,calc(100vw - 32px));font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif;animation:bbUp .35s cubic-bezier(.2,.8,.2,1)}
-.bb-adopt .go{display:flex;align-items:center;gap:10px;text-align:left;border:0;border-radius:18px;padding:12px 38px 12px 14px;cursor:pointer;color:#fff;background:linear-gradient(135deg,#ff9f0a,#ff6b00);box-shadow:0 8px 24px rgba(255,107,0,.35);font:inherit}
-.bb-adopt .go.rest{background:linear-gradient(135deg,#5e5ce6,#0a84ff);box-shadow:0 8px 24px rgba(10,132,255,.35)}
-.bb-adopt .go>span:first-child{font-size:26px}.bb-adopt .go b{display:block;font-size:15.5px}.bb-adopt .go small{display:block;font-size:12px;opacity:.92}
-.bb-adopt .alt{border:0;border-radius:980px;padding:8px 14px;cursor:pointer;font:600 13.5px inherit;font-family:inherit;color:#1d5a2a;background:linear-gradient(135deg,#c9f0c4,#ffe7a8);box-shadow:0 4px 14px rgba(0,0,0,.12)}
-.bb-adopt .x{position:absolute;top:6px;right:6px;width:24px;height:24px;border-radius:50%;border:0;background:rgba(255,255,255,.3);color:#fff;font-size:12px;cursor:pointer}
+.bb-adopt{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));z-index:45;animation:bbFade .4s ease}
+.bb-adopt .go{width:46px;height:46px;border-radius:50%;border:0;cursor:pointer;display:grid;place-items:center;font-size:21px;background:var(--paper,#fff);box-shadow:0 4px 16px rgba(0,0,0,.16);opacity:.82;transition:opacity .15s,transform .15s}
+.bb-adopt .go:hover,.bb-adopt .go:focus-visible{opacity:1;transform:scale(1.08)}
 .bb-dock{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));z-index:45;width:64px;height:64px;border-radius:50%;border:0;padding:0;cursor:pointer;background:var(--paper,#fff);box-shadow:0 6px 22px rgba(0,0,0,.18);display:grid;place-items:center;-webkit-tap-highlight-color:transparent}
 .bb-dock:hover{transform:scale(1.05)} .bb-dock{transition:transform .2s}
 .bb-dock .bb-ring{position:absolute;inset:0;transform:rotate(-90deg)}
@@ -1188,12 +1185,12 @@ html:not(.bb-showlv) .bb-pal .bb-lv,html:not(.bb-showlv) .bb-dock .bb-lv,html:no
     if (ad && ad.dataset.kind !== want) { ad.remove(); ad = null }
     if (want && !ad) {
       ad = document.createElement("div"); ad.id = "bbAdopt"; ad.className = "bb-adopt"; ad.dataset.kind = want;
+      // a small, quiet button: pets are something students come across, not something the site pushes
       ad.innerHTML = want === "adopt"
-        ? `<button type="button" class="go"><span aria-hidden="true">${IN_A102 ? "🌴" : "🐾"}</span><span><b>Adopt a study ${IN_A102 ? "primate" : "pet"}</b><small>${IN_A102 ? "Pick a primate from the safari to study with you" : "Pick a cat to study with you and earn XP"}</small></span></button><button type="button" class="x" aria-label="No pet for now">✕</button>`
-        : `<button type="button" class="go rest"><span aria-hidden="true">💤</span><span><b>Choose who studies with you</b><small>Your ${IN_A102 ? "primates" : "cats"} are taking a break in this class</small></span></button><button type="button" class="x" aria-label="No pet for now">✕</button>`;
+        ? `<button type="button" class="go" aria-label="${IN_A102 ? "Meet the primates: adopt one to study with you" : "Meet the cats: adopt one to study with you"}" title="${IN_A102 ? "Someone at the safari wants to study with you" : "Someone at the café wants to study with you"}"><span aria-hidden="true">${IN_A102 ? "🌴" : "🐾"}</span></button>`
+        : `<button type="button" class="go rest" aria-label="Choose who studies with you" title="Your ${IN_A102 ? "primates" : "cats"} are taking a break. Tap to choose who studies with you"><span aria-hidden="true">💤</span></button>`;
       document.body.appendChild(ad);
       ad.querySelector(".go").onclick = () => want === "adopt" ? openCafe() : openPal("cats");
-      ad.querySelector(".x").onclick = () => { setEnabled(false) };
     }
     if (off()) { if (d) d.remove(); document.body.classList.remove("bb-on"); return }
     const s = load(), k = stageOf(s.pts), C = 2 * Math.PI * 30, mult = XP() ? XP().multiplier(s.streak) : 1;

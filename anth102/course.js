@@ -1,4 +1,4 @@
-// ANTH 102 on the MeowStudy platform. The drills here run on this class's own drill engine (assets/), with the
+// ANTH 102 on the Eureka platform. The drills here run on this class's own drill engine (assets/), with the
 // platform's study buddy on top. Loaded on every page, right after shared/platform.js.
 window.COURSE = {
   id: "a102", prefix: "anthro-", name: "ANTH 102",

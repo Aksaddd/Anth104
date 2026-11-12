@@ -1,4 +1,4 @@
-// ANTH 104 on the MeowStudy platform: what the shared engine (../shared/) needs to know about this class.
+// ANTH 104 on the Eureka platform: what the shared engine (../shared/) needs to know about this class.
 // Loaded on every page of the class, right after shared/platform.js.
 window.COURSE = {
   id: "a104", prefix: "a104-", name: "ANTH 104",

@@ -1,4 +1,4 @@
-// MeowStudy platform · the classes on this site and the class codes that unlock them.
+// Eureka platform · the classes on this site and the class codes that unlock them.
 // Loaded first on every page (before a course's course.js).
 //
 // CLASS CODES. Each class opens with a code its students are given. The codes are not written here: only their
@@ -19,7 +19,7 @@
       stats: "Read & Learn · drill · Bio-pardy · mock exam" },
     { id: "a102", path: "anth102/", code: "04d54e00cac73576f630324b220f965184bd1838897ffbed5ba3a89c973972e8",
       name: "ANTH 102", title: "Biology & Evolution of Human Species", school: "Anthropology", color: "#ff9f0a",
-      blurb: "Read & Learn chapters, Exam 1 and Exam 2 drills, primate classification with a drag-and-drop chart, two review games, word roots, a mock exam and the Primate Safari Café.",
+      blurb: "Read & Learn chapters, Exam 1 and Exam 2 drills, primate classification with a drag-and-drop chart, two review games, word roots and a mock exam.",
       stats: "717 questions · 8 reading chapters · 3 drills" }
   ];
   const KEY = "a104-classes";   // the classes this browser has unlocked (synced with the account like other progress)
