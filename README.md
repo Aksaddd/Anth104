@@ -47,9 +47,9 @@ To add a class: make a folder with its pages and a `course.js`, add it to `COURS
 
 ## Primates and the Primate Safari Café (ANTH 102 only)
 
-`shared/buddy.js` has ten primate species in taxonomic order: ring-tailed lemur, tarsier, golden lion tamarin, capuchin, macaque, gibbon, orangutan, gorilla, chimpanzee and bonobo. They belong to ANTH 102: the **Primate Safari Café** opens only inside that class (its front page and the Cats tab), for students who have its class code, and an adopted primate keeps you company on ANTH 102 pages only. The Cat Café holds cats in every class.
+`shared/buddy.js` has ten primate species in taxonomic order: ring-tailed lemur, tarsier, golden lion tamarin, capuchin, macaque, gibbon, orangutan, gorilla, chimpanzee and bonobo. They belong to ANTH 102: the **Primate Safari Café** opens only inside that class (its front page and the Cats tab), for students who have its class code, and outside that class primates are not listed, shown or trained. If a primate is the buddy in training, a cat takes over in the other classes and the primate takes over again back in ANTH 102. Cats and primates each have their own limit of six. The Cat Café holds cats in every class.
 
-The safari is one wide scene of six habitats, left to right in taxonomic order: Madagascar's spiny forest (lemurs), a Southeast Asian night forest (tarsiers), the Amazon canopy (tamarins, capuchins), the Jigokudani hot spring in Japan (macaques), the Borneo rainforest (gibbons, orangutans) and an African forest (gorillas, chimpanzees, bonobos). Each primate sits and wanders only in its own habitat. On a laptop the whole scene fits; on a phone you swipe sideways.
+The safari is one continuous landscape of six habitats, left to right in taxonomic order, separated the way real ones are (limestone pinnacles, a river with a log across it, foothills and a snowy mountain range, a waterfall and stream, tall grass and boulders): Madagascar's spiny forest (lemurs), a Southeast Asian night forest (tarsiers), the Amazon canopy (tamarins, capuchins), the Jigokudani hot spring in Japan (macaques), the Borneo rainforest (gibbons, orangutans) and an African forest (gorillas, chimpanzees, bonobos). Each primate sits and wanders only in its own habitat. On a laptop the whole scene fits; on a phone you swipe sideways.
 
 What the models show:
 
