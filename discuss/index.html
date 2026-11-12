@@ -44,6 +44,10 @@ textarea.sm{min-height:60px}
 .chip.on{background:#ffe4ec;border-color:#ff375f;color:#c2185b}
 .reps{margin-left:18px;border-left:2px solid var(--line);padding-left:12px;display:flex;flex-direction:column;gap:8px}
 .rep{font-size:14px}.rep .rt{font-size:calc(14px * var(--rs))}
+.beta-tag{font:700 12px var(--body);letter-spacing:.06em;text-transform:uppercase;color:#fff;background:linear-gradient(180deg,#ff9f0a,#ff7a00);border-radius:7px;padding:3px 9px;align-self:center}
+.titlerow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.beta-box{margin-top:10px;background:rgba(255,159,10,.14);border:1px solid rgba(255,159,10,.45);border-radius:var(--radius);padding:12px 14px;font-size:14.5px;line-height:1.5}
+.beta-box b{color:#c25e00}[data-theme="dark"] .beta-box b{color:#ffb340}
 .gate{background:var(--accent-soft);border-radius:var(--radius);padding:14px 16px;font-size:14.5px;line-height:1.5}
 .note{font-size:13px;color:var(--muted);margin:0}
 .err{background:#fff2f2;color:#a10000;border-radius:12px;padding:12px 14px;font-size:14px;line-height:1.5}
@@ -57,7 +61,8 @@ textarea.sm{min-height:60px}
 <div class="wrap">
   <header>
     <a class="back" id="back" href="../index.html">← All drills</a>
-    <div class="titlerow"><h1 id="title">Discussion Board</h1></div>
+    <div class="titlerow"><h1 id="title">Discussion Board</h1><span class="beta-tag">Beta</span></div>
+    <div class="beta-box" role="note"><b>🧪 Testing mode.</b> We're just trying the discussion board out right now. Anyone in the class, including our professor, is welcome to sign in with Google and use it like a regular student: post, like and reply. Posts made during testing may be cleared, and features may change.</div>
     <p class="sub" id="lead">Post your response to a discussion question and read how your classmates answered. Pick one of the starter questions or add the exact question your professor asked. Everyone signs in with Google, and each person gets one response per question (you can edit it any time).</p>
   </header>
   <div class="acct" id="acct"></div>

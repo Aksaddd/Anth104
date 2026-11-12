@@ -198,6 +198,23 @@ footer.site .inner{display:flex;flex-direction:column;gap:6px}
 .cafe-door .plink{pointer-events:none}
 @media (max-width:640px){.cafe-door .plink{flex:1 1 100%;text-align:center;padding:12px 17px;font-weight:600;font-size:16px}}
 @media (prefers-reduced-motion:reduce){.cafe-door *{animation:none!important;transition:none!important}}
+.beta-chip{display:inline-block;font:700 9.5px var(--body);letter-spacing:.06em;text-transform:uppercase;color:#fff;background:linear-gradient(180deg,#ff9f0a,#ff7a00);border-radius:5px;padding:2px 5px;margin-left:3px;vertical-align:1px}
+.beta-chip.big{font-size:11px;padding:3px 8px;border-radius:7px;margin:0}
+.disc-feature{display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;margin:0 0 18px;padding:18px 20px;border-radius:18px;text-decoration:none;color:inherit;
+  background:linear-gradient(135deg,rgba(255,45,120,.10),rgba(255,159,10,.10));border:1.5px solid rgba(255,45,120,.35);box-shadow:0 6px 22px rgba(255,45,120,.10);transition:transform .15s,box-shadow .15s}
+.disc-feature:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(255,45,120,.18)}
+.df-ico{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(180deg,#ff6ea8,#ff2d78)}
+.df-ico svg{width:28px;height:28px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.df-body{display:flex;flex-direction:column;gap:5px;min-width:0}
+.df-top{display:flex;flex-wrap:wrap;align-items:center;gap:8px}.df-top b{font:700 21px var(--display,var(--body));letter-spacing:-.01em}
+.df-new{font:700 11px var(--body);color:#ff2d78;border:1.5px solid #ff2d78;border-radius:7px;padding:1px 7px}
+.df-txt{font-size:15px;line-height:1.45}
+.df-note{font-size:13px;line-height:1.45;color:var(--muted,#6e6e73);background:rgba(255,159,10,.14);border-radius:9px;padding:6px 10px}
+.df-note b{color:#c25e00}[data-theme="dark"] .df-note b{color:#ffb340}
+.df-go{font:600 15px var(--body);color:#fff;background:#ff2d78;border-radius:980px;padding:10px 18px;white-space:nowrap}
+.df-go i{font-style:normal}
+@media (max-width:640px){.disc-feature{grid-template-columns:auto 1fr;padding:16px}.df-ico{width:44px;height:44px}.df-go{grid-column:1/-1;text-align:center}}
+@media (prefers-reduced-motion:reduce){.disc-feature{transition:none}.disc-feature:hover{transform:none}}
 .i-gray{background:#8e8e93} .i-pink{background:linear-gradient(180deg,#ff6ea8,#ff2d78)}
 </style>
 <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
@@ -206,7 +223,7 @@ footer.site .inner{display:flex;flex-direction:column;gap:6px}
 <header class="gnav"><div class="inner">
   <a class="brand" href="index.html">ANTH 104</a>
   <nav aria-label="Modules">
-    <a href="read/index.html">Read</a><a href="drill/index.html">Drill</a><a href="board/index.html">Anthro-pardy</a><a href="roots/index.html">Word Roots</a><a href="readings/index.html">Readings</a><a href="mock/index.html">Mock Exam</a><a href="review/index.html">Review List</a><a href="discuss/index.html">Discuss</a><a href="archive/index.html">Archive</a>
+    <a href="read/index.html">Read</a><a href="drill/index.html">Drill</a><a href="board/index.html">Anthro-pardy</a><a href="roots/index.html">Word Roots</a><a href="readings/index.html">Readings</a><a href="mock/index.html">Mock Exam</a><a href="review/index.html">Review List</a><a href="discuss/index.html" class="nav-disc">Discuss <span class="beta-chip">Beta</span></a><a href="archive/index.html">Archive</a>
   </nav>
   <button type="button" class="setbtn" id="settingsBtn" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span>Settings</span></button>
 </div></header>
@@ -239,11 +256,20 @@ footer.site .inner{display:flex;flex-direction:column;gap:6px}
   <li><a href="readings/index.html"><span class="ico t i-green">R</span>Readings</a></li>
   <li><a href="mock/index.html"><span class="ico i-red"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="7"/><path d="M12 9v4l2.5 2M10 3h4"/></svg></span>Mock Exam</a></li>
   <li><a href="review/index.html"><span class="ico i-yellow"><svg viewBox="0 0 24 24"><path d="M6 21V4M6 4h11l-2.5 4L17 12H6"/></svg></span>Review List</a></li>
-  <li><a href="discuss/index.html"><span class="ico i-pink"><svg viewBox="0 0 24 24"><path d="M4 5h11a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H9l-4 3v-3H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/><path d="M19 9h1a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-1v2l-3-2h-4"/></svg></span>Discuss</a></li>
+  <li><a href="discuss/index.html"><span class="ico i-pink"><svg viewBox="0 0 24 24"><path d="M4 5h11a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H9l-4 3v-3H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/><path d="M19 9h1a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-1v2l-3-2h-4"/></svg></span>Discuss <span class="beta-chip">Beta</span></a></li>
   <li><a href="archive/index.html"><span class="ico i-gray"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="5" rx="1.5"/><path d="M5 9v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9M10 13h4"/></svg></span>Archive</a></li>
 </ul></nav>
 
 <main class="inner">
+  <a class="disc-feature" href="discuss/index.html" aria-label="Open the Discussion Board (beta, testing mode)">
+    <span class="df-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h11a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H9l-4 3v-3H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/><path d="M19 9h1a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-1v2l-3-2h-4"/></svg></span>
+    <span class="df-body">
+      <span class="df-top"><b>Discussion Board</b><span class="beta-chip big">Beta · testing mode</span><span class="df-new">New</span></span>
+      <span class="df-txt">Post your response to this week's discussion questions, then read, like and reply to your classmates. Sign in with Google to join.</span>
+      <span class="df-note"><b>We're trying this out.</b> Professors and classmates are welcome to sign in and use it like any student. Posts made during testing may be cleared, and things may change.</span>
+    </span>
+    <span class="df-go">Open the board <i aria-hidden="true">›</i></span>
+  </a>
   <button type="button" class="card cafe-door" id="cafeDoor" aria-label="Enter the Cat Café to meet the cats" hidden>
     <div class="front"><svg viewBox="0 0 600 230" aria-hidden="true">
       <defs><linearGradient id="cdIn" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#ffe6b8"/><stop offset="1" stop-color="#f7c58b"/></linearGradient>
@@ -325,12 +351,6 @@ footer.site .inner{display:flex;flex-direction:column;gap:6px}
           <div><h3><a href="review/index.html">Review List</a></h3>
           <p>Every question you've marked for review, from both drills and your mock exams. Quiz yourself on them.</p></div></div>
         <div class="prow"><span class="ptext" id="reviewCount">Nothing marked yet</span><a class="plink ghost" href="review/index.html">Open</a></div>
-      </article>
-      <article class="card">
-        <div class="chead"><span class="ico i-pink"><svg viewBox="0 0 24 24"><path d="M4 5h11a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H9l-4 3v-3H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/><path d="M19 9h1a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-1v2l-3-2h-4"/></svg></span>
-          <div><h3><a href="discuss/index.html">Discussion Board</a></h3>
-          <p>Post your answer to discussion questions, two per week, or add the exact question your professor asked. Read, like and reply to classmates' responses. Sign in with Google to join.</p></div></div>
-        <div class="prow"><span class="ptext">32 starter questions · one response per person</span><a class="plink ghost" href="discuss/index.html">Open</a></div>
       </article>
       <article class="card">
         <div class="chead"><span class="ico i-gray"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="5" rx="1.5"/><path d="M5 9v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9M10 13h4"/></svg></span>
