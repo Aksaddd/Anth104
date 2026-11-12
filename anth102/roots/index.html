@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Word Roots · ANTH 102</title>
+<meta name="description" content="The Greek and Latin word parts behind ANTH 102 terms, organized by exam, with a quick quiz.">
+<meta name="theme-color" content="#2a46cf">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="../assets/drill.css">
+<style>
+/* Layout: header → exam switch (Exam 1 / Exam 2) → search + Quiz me → roots grouped by theme.
+   Quiz mode replaces the list with one question card at a time (10 per round). */
+.xtabs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.xtab{border:1.5px solid var(--line);background:var(--paper);border-radius:14px;padding:12px 14px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:2px}
+.xtab b{font:800 18px var(--display)}
+.xtab span{font:500 12.5px var(--mono);color:var(--muted)}
+.xtab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.xtab[aria-selected="true"] span{color:var(--accent-ink);opacity:.85}
+.tools{display:flex;gap:8px;align-items:center}
+.search{flex:1;min-width:0;font:calc(15px * var(--rs)) var(--read);padding:11px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink)}
+.search:focus{outline:none;border-color:var(--accent)}
+.jump{display:flex;flex-wrap:wrap;gap:6px}
+.jump a{font:500 12.5px var(--body);color:var(--accent);background:var(--accent-soft);padding:4px 10px;border-radius:999px;text-decoration:none}
+.grp h2{font:800 20px var(--display);margin:10px 0 8px;scroll-margin-top:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.root{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px}
+.rt{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
+.rt b{font:600 calc(19px * var(--rs)) var(--mono);color:var(--accent)}
+.rt .mean{font:600 calc(16px * var(--rs)) var(--read)}
+.orig{font-size:12.5px;color:var(--muted);font-style:italic}
+.ex{margin:2px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:5px;font-size:calc(14.5px * var(--rs))}
+.ex li{border-top:1px dashed var(--line);padding-top:5px}
+.ex .term{font-weight:600}
+mark{background:var(--gold-soft);color:inherit;border-radius:3px;padding:0 1px;box-shadow:inset 0 -2px 0 var(--gold)}
+.none{text-align:center;color:var(--muted);padding:24px 0}
+.tip{background:var(--gold-soft);border:1px solid #ecd9ae;border-radius:14px;padding:12px 16px;font-size:calc(14.5px * var(--rs))}
+.qtop{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13.5px;color:var(--muted)}
+.qbig{font:600 calc(19px * var(--rs))/1.4 var(--read);margin:0}
+.qbig code{font:600 1.05em var(--mono);color:var(--accent)}
+.fb{font-size:calc(14.5px * var(--rs));color:var(--muted)}
+.score{font:800 44px var(--display);margin:0}
+.row{display:flex;flex-wrap:wrap;gap:8px}
+a.btn{text-decoration:none;display:inline-flex;align-items:center}
+.startcard{background:linear-gradient(135deg,var(--accent) 0%,color-mix(in srgb,var(--accent) 70%,#7c5cff) 100%);color:#fff;border:0;gap:12px;padding:20px 20px 18px}
+.startcard .pstats,.startcard .pstats b{color:rgba(255,255,255,.88)}
+.startcard .pbar{background:rgba(255,255,255,.25)}.startcard .pbar i{background:#fff}
+.sc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.sc-eyebrow{margin:0;font:600 12.5px var(--body);letter-spacing:.04em;text-transform:uppercase;opacity:.85}
+.sc-title{margin:2px 0 0;font:800 clamp(22px,5.5vw,28px)/1.15 var(--display);letter-spacing:-.02em}
+.sc-pct{font:700 15px var(--mono);background:rgba(255,255,255,.18);padding:4px 10px;border-radius:999px}
+.bigstart{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:58px;border:0;border-radius:16px;background:#fff;color:var(--accent);font:800 19px var(--body);cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.18);transition:transform .15s}
+.bigstart:hover{transform:translateY(-1px)}
+.bigstart:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.startcard .btn.ghost{color:#fff;border-color:rgba(255,255,255,.5);background:transparent}
+.startcard .alldone{color:#fff}
+.ghead{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:8px 12px;margin:12px 0 8px}
+.ghead h2{margin:0}
+.gnote{margin:3px 0 0;font-size:calc(13.5px * var(--rs));color:var(--muted);max-width:52ch}
+.gdrill{min-height:40px;padding:8px 14px;font-size:14px}
+.gdone{font:600 13.5px var(--body);color:var(--good)}
+.rtabs{margin-top:2px}
+.rtabs .tab-all b::before{content:"▦ ";opacity:.7}
+.rtabs .tab-missed b{color:var(--bad)}
+.rtabs .tab-missed[aria-selected="true"] b{color:var(--accent-ink)}
+.missstart{background:linear-gradient(135deg,#d9480f,#e8590c)}
+.missstart .mc-list code{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.35);color:#fff}
+.missstart .bigstart{color:#c2410c}
+.freq{font:600 11.5px var(--body);color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:2px 9px;align-self:flex-start}
+.badge.x{background:var(--bad-soft);color:var(--bad)}
+.misscard{gap:10px;border-color:color-mix(in srgb,var(--bad) 35%,var(--line));background:color-mix(in srgb,var(--bad-soft) 60%,var(--paper))}
+.misscard.empty{background:var(--paper);border-color:var(--line);padding:14px 18px}
+.misscard.empty .mc-title{color:var(--muted)}
+.mc-title{margin:0;font:800 18px var(--display);color:var(--bad);display:flex;align-items:center;gap:8px}
+.mc-n{font:700 13px var(--mono);background:var(--bad);color:#fff;border-radius:999px;padding:2px 9px}
+.mc-list,.missbox{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.mc-list code,.missbox code{font:600 14px var(--mono);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:3px 8px;color:var(--ink)}
+.misscard .btn{align-self:flex-start}
+.missbox{background:var(--bad-soft);border-radius:12px;padding:12px 14px;font-size:calc(14.5px * var(--rs))}
+.missbox .btn{flex-basis:100%;margin-top:4px}
+.pool{gap:10px;padding:16px 18px}
+.pbar{height:10px;border-radius:999px;background:var(--line);overflow:hidden}
+.pbar i{display:block;height:100%;background:var(--good);transition:width .3s}
+.pstats{margin:0;font-size:calc(14.5px * var(--rs));color:var(--muted)}
+.pstats b{color:var(--ink)}
+.alldone{font-weight:600;color:var(--good);align-self:center}
+.badge{font:600 11.5px var(--body);padding:3px 8px;border-radius:999px;margin-left:auto}
+.badge.m{background:var(--good-soft);color:var(--good)}
+.badge.r{background:var(--gold-soft);color:var(--gold)}
+.root.done{opacity:.6}
+.marks{align-items:center}
+.mk{font:600 14px var(--body);border:1.5px solid var(--line);background:var(--paper);border-radius:12px;padding:10px 14px;min-height:46px;cursor:pointer}
+.mk.m[aria-pressed="true"]{background:var(--good-soft);border-color:var(--good);color:var(--good)}
+.mk.r[aria-pressed="true"]{background:var(--gold-soft);border-color:var(--gold);color:var(--gold)}
+.marks .btn{margin-left:auto}
+</style>
+<link rel="stylesheet" href="../assets/shell.css">
+<script src="../../shared/platform.js"></script>
+<script src="../course.js"></script>
+<script src="../assets/shell.js"></script>
+<!-- Vercel Web Analytics: anonymous page views, no cookies (enable Analytics for the project in the Vercel dashboard) -->
+<script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</head><body>
+<div class="wrap">
+  <header style="display:flex;flex-direction:column;gap:6px">
+    <a class="back" href="../index.html">← All drills</a>
+    <h1>Word Roots</h1>
+    <p class="sub"><b>Optional, but recommended.</b> Most course terms are built from a few Greek and Latin parts. Pick a subject to drill just its roots, or <b>All roots</b> for one big drill. Mark the ones you know as <b>mastered</b> and they leave the pool; roots you miss collect under <b>Missed</b>.</p>
+  </header>
+  <div class="xtabs" role="tablist" id="xtabs"></div>
+  <div class="timerrow" data-timer-slot></div>
+  <main id="app" style="display:flex;flex-direction:column;gap:12px"></main>
+  <p class="foot">Root meanings are standard Greek and Latin etymologies. The example terms all come from the course material for that exam.</p>
+</div>
+<script src="roots.js"></script>
+<script>
+(() => {
+  const R = window.ROOTS, EX = Object.keys(R), KEY = "anthro-roots-tab";
+  try { localStorage.setItem("anthro-roots-seen", "1") } catch (e) { }
+  const DRILL = { exam1: "../exam1/index.html#continue", exam2: "../exam2/index.html#continue" };
+  const nextStep = (cls = "btn ghost") => `<a class="${cls}" href="${DRILL[ex]}">Go to the ${esc(R[ex].name)} drill →</a>`;
+  // Saved per exam: m = mastered roots, r = roots marked for review. Only this page uses it.
+  const SKEY = "anthro-roots-v1";
+  let ST = {}; try { ST = JSON.parse(localStorage.getItem(SKEY) || "{}") || {} } catch (e) { }
+  const st = () => { const S = (ST[ex] = ST[ex] || { m: {}, r: {} }); S.x = S.x || {}; return S };
+  const saveST = () => { try { localStorage.setItem(SKEY, JSON.stringify(ST)) } catch (e) { } };
+  const isM = r => !!st().m[r.root], isR = r => !!st().r[r.root], isX = r => !!st().x[r.root];
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const shuffle = a => { a = a.slice(); for (let k = a.length - 1; k > 0; k--) { const j = Math.random() * (k + 1) | 0; [a[k], a[j]] = [a[j], a[k]] } return a };
+  const fromHash = location.hash.slice(1);   // the home page links straight to an exam: roots/index.html#exam1
+  let ex = EX.includes(fromHash) ? fromHash : EX.includes(localStorage.getItem(KEY)) ? localStorage.getItem(KEY) : "exam2", query = "", quiz = null;
+  if (EX.includes(fromHash)) try { localStorage.setItem(KEY, ex) } catch (e) { }
+
+  // Reading settings from the drills apply here too
+  try {
+    const r = JSON.parse(localStorage.getItem("anthro-reading") || "null");
+    const stacks = { atkinson: ['"Atkinson Hyperlegible Next",system-ui,sans-serif', "https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;600;700&display=swap"], literata: ['Literata,Georgia,serif', "https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;600;700&display=swap"], system: ['system-ui,-apple-system,"Segoe UI",Roboto,sans-serif'] };
+    if (r && stacks[r.font]) { const [st, href] = stacks[r.font]; if (href) { const l = document.createElement("link"); l.rel = "stylesheet"; l.href = href; document.head.appendChild(l) } document.documentElement.style.setProperty("--read", st) }
+    if (r && [.9, 1, 1.12, 1.25][r.size]) document.documentElement.style.setProperty("--rs", [.9, 1, 1.12, 1.25][r.size]);
+  } catch (e) { }
+
+  const all = e => R[e].groups.flatMap(([g, rows]) => rows.map(([root, mean, orig, exs, freq]) => ({ g, root, mean, orig, exs, freq })));
+  const noteOf = g => (R[ex].groups.find(x => x[0] === g) || [])[2] || "";
+  // The letters of a root to highlight inside a term: "rhin- / -rrhine" → ["rrhin", "rhin"]
+  const keys = root => root.split(/[/ ]/).map(s => s.replace(/[^a-zA-Z]/g, "").toLowerCase()).filter(s => s.length > 1).sort((a, b) => b.length - a.length);
+  function mark(term, root) {
+    const low = term.toLowerCase();
+    for (let k of keys(root)) {
+      // try the full root, then drop a final vowel (chromo- → chrom in "chromatid")
+      for (const t of [k, k.replace(/[aeiouy]$/, "")]) {
+        const i = t.length > 1 ? low.indexOf(t) : -1;
+        if (i >= 0) return esc(term.slice(0, i)) + "<mark>" + esc(term.slice(i, i + t.length)) + "</mark>" + esc(term.slice(i + t.length));
+      }
+    }
+    return esc(term);
+  }
+
+  function tabs() {
+    $("xtabs").innerHTML = EX.map(e => `<button class="xtab" role="tab" aria-selected="${e === ex}" data-e="${e}"><b>${esc(R[e].name)}</b><span>${all(e).length} roots</span></button>`).join("");
+    $("xtabs").querySelectorAll(".xtab").forEach(b => b.onclick = () => { ex = b.dataset.e; localStorage.setItem(KEY, ex); quiz = null; query = ""; tab = null; tabs(); list() });
+  }
+
+  // ===== Subject tabs, like the multiple-choice drills: one tab per subject, plus "All roots" (one big drill) and "Missed"
+  const TAB_KEY = () => "anthro-roots-subject-" + ex;
+  const subjects = () => R[ex].groups.map(g => g[0]);
+  let tab = null;
+  function curTab() { let v = tab; if (!v) try { v = localStorage.getItem(TAB_KEY()) } catch (e) { } return v === "ALL" || v === "MISSED" || subjects().includes(v) ? v : subjects()[0] }
+  const missedRoots = () => all(ex).filter(r => isX(r) && !isM(r)).map(r => r.root);
+  const scope = t => t === "ALL" ? all(ex) : t === "MISSED" ? all(ex).filter(r => isX(r) && !isM(r)) : all(ex).filter(r => r.g === t);
+  function seg(rows) {
+    const n = rows.length || 1, m = rows.filter(isM).length, rv = rows.filter(r => !isM(r) && isR(r)).length, x = rows.filter(r => !isM(r) && !isR(r) && isX(r)).length;
+    return [["mastered", m], ["review", rv], ["wrong", x]].map(([c, k]) => k ? `<i class="lv-c-${c}" style="width:${k / n * 100}%"></i>` : "").join("");
+  }
+  function subjectTabs(t) {
+    const nm = missedRoots().length;
+    const list = [...subjects().map(g => { const rs = scope(g), m = rs.filter(isM).length; return [g, g, seg(rs), m ? `${rs.length - m} left · ${m} mastered` : `${rs.length} roots`, ""] }),
+      ["ALL", "All roots", seg(all(ex)), `all ${all(ex).length} in one drill`, " tab-all"],
+      ["MISSED", "Missed", nm ? `<i class="lv-c-wrong" style="width:100%"></i>` : "", nm ? `${nm} to retry` : "none right now", " tab-missed"]];
+    return `<div class="tabs rtabs" role="tablist" aria-label="${esc(R[ex].name)} root subjects">${list.map(([k, l, bar, sub, cls]) => `<button class="tab${cls}" type="button" role="tab" data-t="${esc(k)}" aria-selected="${k === t}"><b>${esc(l)}</b><span class="mini">${bar}</span><span class="tcount">${esc(sub)}</span></button>`).join("")}</div>`;
+  }
+
+  function list() {
+    const t = curTab(), q = query.trim().toLowerCase();
+    const hit = r => !q || [r.root, r.mean, r.orig, ...r.exs.flat()].join(" ").toLowerCase().includes(q);
+    const rows = scope(t).filter(hit);
+    let body;
+    if (!rows.length) body = q ? `<p class="none">No roots match “${esc(query)}” here.</p>` : t === "MISSED" ? `<p class="none">No missed roots. Roots you get wrong in a drill collect here so you can try them again.</p>` : "";
+    else if (t === "ALL") body = R[ex].groups.map(([g]) => [g, rows.filter(r => r.g === g)]).filter(([, rs]) => rs.length)
+      .map(([g, rs]) => `<section class="grp"><div class="ghead"><div><h2>${esc(g)}</h2><p class="gnote">${rs.length} roots</p></div><button class="btn ghost gdrill" type="button" data-g="${esc(g)}">Open this subject →</button></div><div class="grid">${rs.map(card).join("")}</div></section>`).join("");
+    else body = `<div class="grid">${rows.map(card).join("")}</div>`;
+    const lede = t === "ALL" ? `Every ${esc(R[ex].name)} root, pooled into one big drill. Each one sits under the subject whose questions use its terms most often.`
+      : t === "MISSED" ? "Roots you got wrong last time, from every subject. Answer one right and it leaves this list."
+      : esc(noteOf(t));
+    $("app").innerHTML = `${subjectTabs(t)}
+      ${panel(t)}
+      ${lede ? `<p class="sub">${lede}</p>` : ""}
+      ${t === "ALL" ? `<div class="tip"><b>How to use it:</b> split a new word into its parts. <i>Platy-</i> (flat) + <i>-rrhine</i> (nose) = flat-nosed. <i>Allo-</i> (other) + <i>patr-</i> (homeland) = speciation in another place.</div>` : ""}
+      ${scope(t).length ? `<div class="tools"><input class="search" id="search" type="search" placeholder="Search ${t === "ALL" ? "all roots" : t === "MISSED" ? "missed roots" : esc(t) + " roots"}…" value="${esc(query)}" aria-label="Search roots"></div>` : ""}
+      ${body}
+      ${q ? "" : `<div class="row" style="justify-content:center;padding-top:6px">${nextStep()}</div>`}`;
+    $("app").querySelectorAll(".rtabs .tab").forEach(b => b.onclick = () => openTab(b.dataset.t));
+    $("app").querySelectorAll(".gdrill").forEach(b => b.onclick = () => openTab(b.dataset.g));
+    wirePanel(t);
+    const s = $("search");
+    if (s) s.oninput = () => { query = s.value; const pos = s.selectionStart; list(); const n = $("search"); n.focus(); n.setSelectionRange(pos, pos) };
+  }
+  function openTab(t) { tab = t; try { localStorage.setItem(TAB_KEY(), t) } catch (e) { } query = ""; quiz = null; list(); window.scrollTo({ top: 0, behavior: "smooth" }) }
+  const card = r => `<article class="root${isM(r) ? " done" : ""}"><div class="rt"><b>${esc(r.root)}</b><span class="mean">${esc(r.mean)}</span>${isM(r) ? `<span class="badge m">✓ Mastered</span>` : isR(r) ? `<span class="badge r">⚑ Review</span>` : isX(r) ? `<span class="badge x">✗ Missed</span>` : ""}</div><span class="orig">${esc(r.orig)}</span>${r.freq ? `<span class="freq">Most common in ${esc(r.freq.s)} questions (${r.freq.n}×)</span>` : ""}<ul class="ex">${r.exs.map(([t, m]) => `<li><span class="term">${mark(t, r.root)}</span>: ${esc(m)}</li>`).join("")}</ul></article>`;
+
+  // ===== Start card for the open tab: progress and one big button
+  function counts() { const a = all(ex), m = a.filter(isM).length, r = a.filter(x => !isM(x) && isR(x)).length; return { total: a.length, m, r, left: a.length - m } }
+  function panel(t) {
+    if (t === "MISSED") {
+      const ms = missedRoots();
+      return `<section class="card pool startcard missstart"><div class="sc-top"><div><p class="sc-eyebrow">${esc(R[ex].name)} word roots · missed</p><h2 class="sc-title">${ms.length ? `${ms.length} ${ms.length === 1 ? "root" : "roots"} to try again` : "Nothing to retry"}</h2></div></div>
+        ${ms.length ? `<div class="mc-list">${ms.map(x => `<code>${esc(x)}</code>`).join("")}</div><button class="bigstart" id="drillBtn" type="button"><span aria-hidden="true">↻</span> Try the missed ${ms.length === 1 ? "root" : "roots"} again</button>` : `<p class="pstats">Roots you get wrong in any subject show up here.</p>`}</section>`;
+    }
+    const rows = scope(t), total = rows.length, m = rows.filter(isM).length, rv = rows.filter(x => !isM(x) && isR(x)).length, left = total - m, pct = total ? Math.round(m / total * 100) : 0;
+    const what = t === "ALL" ? `All ${total} roots` : `${esc(t)} · ${total} roots`;
+    return `<section class="card pool startcard">
+      <div class="sc-top"><div><p class="sc-eyebrow">${esc(R[ex].name)} word roots${t === "ALL" ? " · every subject" : ""}</p><h2 class="sc-title">${what}</h2></div><span class="sc-pct">${pct}%</span></div>
+      <div class="pbar" role="img" aria-label="${m} of ${total} mastered"><i style="width:${pct}%"></i></div>
+      <p class="pstats"><b>${m}</b> of ${total} mastered · <b>${rv}</b> marked for review · <b>${left}</b> left in the pool</p>
+      ${left ? `<button class="bigstart" id="drillBtn" type="button"><span aria-hidden="true">▶</span> ${m ? `Continue drilling (${left} left)` : t === "ALL" ? "Start the big drill: every root" : `Start the ${esc(t)} drill`}</button>` : `<span class="alldone">Every root here is mastered.</span>`}
+      ${m ? `<div class="row"><button class="btn ghost" id="resetBtn" type="button">Put mastered roots back</button></div>` : ""}
+    </section>`;
+  }
+  function wirePanel(t) {
+    if ($("drillBtn")) $("drillBtn").onclick = () => t === "MISSED" ? startDrill(null, missedRoots()) : t === "ALL" ? startDrill() : startDrill(t);
+    if ($("resetBtn")) $("resetBtn").onclick = () => {
+      const rows = scope(t).filter(isM); if (!confirm(`Put ${rows.length} mastered ${t === "ALL" ? R[ex].name : t} roots back in the pool?`)) return;
+      const S = st(); rows.forEach(r => delete S.m[r.root]); saveST(); list();
+    };
+  }
+
+  // ===== Drill: every root left in the pool, review-marked ones first. Mastered roots leave the pool.
+  const STOP = new Set(["a", "an", "the", "of", "to", "on", "and", "or", "by", "for", "from", "it", "its", "ending", "latin", "greek"]);
+  const words = m => new Set(m.toLowerCase().split(/[^a-z]+/).filter(w => w && !STOP.has(w)));
+  const clash = (a, b) => { const A = words(a.mean); return [...words(b.mean)].some(w => A.has(w)) };   // e.g. allo- and altru- both mean "other"
+  function item(r) {
+    const others = shuffle(all(ex).filter(o => o !== r && !clash(o, r))), picks = [];
+    for (const o of others) { if (picks.length === 3) break; if (!picks.some(p => clash(p, o))) picks.push(o) }
+    return { r, dir: Math.random() < .5 ? 1 : 0, opts: shuffle([r, ...picks]) };
+  }
+  function startDrill(g, only) {
+    const left = all(ex).filter(r => !isM(r) && (!g || r.g === g) && (!only || only.includes(r.root)));
+    if (!left.length) return list();
+    quiz = { g, only, label: only ? "Missed roots" : g || "", missed: [], i: 0, right: 0, done: 0, items: [...shuffle(left.filter(isR)), ...shuffle(left.filter(r => !isR(r)))].map(item) };
+    ask();
+  }
+  function ask() {
+    const it = quiz.items[quiz.i], { r, dir } = it, ex1 = r.exs[0];
+    $("app").innerHTML = `<article class="card">
+      <div class="qtop"><span>${esc(R[ex].name)} roots${quiz.label ? " · " + esc(quiz.label) : ""} · ${quiz.i + 1} of ${quiz.items.length} this round · <b id="leftN">${counts().left}</b> left in the pool</span><button class="chip" id="quit" type="button">Back to the list</button></div>
+      <p class="qbig">${dir ? `Which root means “${esc(r.mean)}”?` : `What does <code>${esc(r.root)}</code> mean?`}</p>
+      <div class="opts">${it.opts.map((o, k) => `<button class="opt" data-k="${k}" type="button"><span class="bub">${"ABCD"[k]}</span><span>${esc(dir ? o.root : o.mean)}</span></button>`).join("")}</div>
+      <p class="fb" id="fb" hidden><b>${esc(r.root)}</b> = ${esc(r.mean)}. As in <b>${mark(ex1[0], r.root)}</b>: ${esc(ex1[1])}.</p>
+      <div class="row marks"><button class="mk m" id="mkM" type="button" aria-pressed="${isM(r)}">✓ Mastered</button><button class="mk r" id="mkR" type="button" aria-pressed="${isR(r)}">⚑ Review</button>
+        <button class="btn" id="next" type="button" hidden>${quiz.i + 1 < quiz.items.length ? "Next →" : "Finish round"}</button></div>
+    </article>`;
+    $("quit").onclick = () => { quiz = null; list() };
+    const paint = () => { $("mkM").setAttribute("aria-pressed", isM(r)); $("mkR").setAttribute("aria-pressed", isR(r)); $("leftN").textContent = counts().left };
+    $("mkM").onclick = () => { const S = st(); if (S.m[r.root]) delete S.m[r.root]; else { S.m[r.root] = 1; delete S.r[r.root] } saveST(); paint() };
+    $("mkR").onclick = () => { const S = st(); if (S.r[r.root]) delete S.r[r.root]; else { S.r[r.root] = 1; delete S.m[r.root] } saveST(); paint() };
+    document.querySelectorAll(".opt").forEach(b => b.onclick = () => {
+      const ok = it.opts[+b.dataset.k] === r;
+      if (ok) quiz.right++; quiz.done++;
+      const S = st(); if (ok) delete S.x[r.root]; else { S.x[r.root] = 1; quiz.missed.push(r.root) } saveST();
+      document.querySelectorAll(".opt").forEach(x => { x.disabled = true; const o = it.opts[+x.dataset.k]; if (o === r) x.classList.add("right"); else if (x === b) x.classList.add("wrong") });
+      $("fb").hidden = false; $("next").hidden = false; $("next").focus();
+    });
+    $("next").onclick = () => { quiz.i++; quiz.i < quiz.items.length ? ask() : done() };
+  }
+  function done() {
+    const { right, done: n } = quiz, c = counts();
+    $("app").innerHTML = `<article class="card" style="align-items:flex-start">
+      <p class="sub">${esc(R[ex].name)} roots${quiz.label ? " · " + esc(quiz.label) : ""} · round finished</p><p class="score">${right} / ${n}</p>
+      <p class="fb">${c.left ? `<b>${c.m}</b> of ${c.total} mastered. <b>${c.left}</b> roots are still in the pool${c.r ? `, and the ${c.r} marked for review come first next round` : ""}.` : `You've mastered every ${esc(R[ex].name)} root.`}</p>
+      ${quiz.missed.length ? `<div class="missbox"><b>You missed ${new Set(quiz.missed).size} this round:</b> ${[...new Set(quiz.missed)].map(x => `<code>${esc(x)}</code>`).join(" ")}<button class="btn" id="retryMissed" type="button">↻ Try the ${new Set(quiz.missed).size} you missed again</button></div>` : ""}
+      <div class="row">${c.left && !(quiz.only && !missedRoots().length) ? `<button class="btn${quiz.missed.length ? " ghost" : ""}" id="again" type="button">${quiz.only ? `Missed roots again (${missedRoots().length})` : `Next round${quiz.g ? "" : ` (${c.left})`}`}</button>` : ""}<button class="btn ghost" id="back" type="button">Back to the list</button>${nextStep()}</div></article>`;
+    if ($("again")) $("again").onclick = () => quiz.only ? startDrill(null, missedRoots()) : startDrill(quiz.g);
+    if ($("retryMissed")) { const ms = [...new Set(quiz.missed)]; $("retryMissed").onclick = () => startDrill(null, ms) }
+    $("back").onclick = () => { quiz = null; list() };
+  }
+
+  tabs(); list();
+})();
+</script>
+</body></html>

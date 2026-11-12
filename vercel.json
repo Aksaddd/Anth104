@@ -3,7 +3,40 @@
   "cleanUrls": false,
   "trailingSlash": false,
   "headers": [
-    { "source": "/(.*)\\.(jpg|png|webp)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800" }] },
-    { "source": "/(.*)\\.(js|css)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }] }
+    {
+      "source": "/(.*)\\.(jpg|png|webp)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)\\.(js|css)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/:dir(read|drill|board|roots|readings|mock|review|discuss|archive)",
+      "destination": "/anth104/:dir/index.html",
+      "permanent": false
+    },
+    {
+      "source": "/:dir(read|drill|board|roots|readings|mock|review|discuss|archive)/:path*",
+      "destination": "/anth104/:dir/:path*",
+      "permanent": false
+    },
+    {
+      "source": "/:wk(Week_\\d+|week_\\d+|weeek_\\d+)/:path*",
+      "destination": "/anth104/:wk/:path*",
+      "permanent": false
+    }
   ]
 }

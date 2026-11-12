@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ANTH 102 Study Drills</title>
+<meta name="description" content="Practice drills for ANTH 102: Biology & Evolution of Human Species (Fall 2026).">
+<meta name="theme-color" content="#0c1410">
+<link rel="preload" as="image" href="assets/hero-primates.jpg">
+<style>
+/* Layout: full-bleed hero (primate illustration under a forest-green wash; course name, countdown, Continue),
+   then one study column: exam cards, how it works, credits. */
+:root{
+  --bg:#eef1f6; --paper:#fff; --ink:#151b2b; --muted:#5b6478; --line:#d6dbe6; --sunk:#f5f7fb;
+  --accent:#2a46cf; --accent-soft:#e3e8fb;
+  --gold:#b7791f; --gold-soft:#fbf1dc; --forest:#14281d; --forest-2:#1f3b2b; --leaf:#b9e48f; --cream:#f7f5ec;
+  --st-right:#16a34a; --st-wrong:#e2572b; --st-review:#d4a017; --lv-new:#d6dbe6;
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --shadow:0 1px 2px rgba(21,27,43,.06),0 6px 24px rgba(21,27,43,.06);
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 var(--body)}
+:is(a,button):focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.inner{max-width:720px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+
+/* ===== Hero */
+.hero{position:relative;color:var(--cream);background:var(--forest);overflow:hidden;isolation:isolate}
+.hero::before{content:"";position:absolute;inset:0;z-index:-2;background:url("assets/hero-primates.jpg") center 40%/cover no-repeat}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(100deg,rgba(14,32,22,.94) 0%,rgba(14,32,22,.86) 42%,rgba(14,32,22,.45) 78%,rgba(14,32,22,.3) 100%),
+             linear-gradient(0deg,rgba(14,32,22,.55),rgba(14,32,22,0) 40%)}
+.hero .inner{padding-block:max(44px,env(safe-area-inset-top,0px)) 40px;display:flex;flex-direction:column;gap:14px}
+.eyebrow{margin:0;font:600 12.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--leaf)}
+.hero h1{margin:0;font:800 clamp(30px,6.4vw,50px)/1.03 var(--display);letter-spacing:-.02em;max-width:15ch;text-wrap:balance}
+.hero h1 span{display:block;font:600 clamp(15px,2.6vw,18px)/1.3 var(--body);letter-spacing:0;color:rgba(247,245,236,.82);margin-top:10px;max-width:none}
+.countdown{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:12px;padding:14px 16px;border-radius:16px;background:rgba(247,245,236,.1);border:1px solid rgba(247,245,236,.18);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);max-width:680px}
+.clock{display:flex;align-items:flex-start;gap:6px}
+.unit{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:54px}
+.unit b{display:block;width:100%;text-align:center;font:800 34px/1 var(--display);color:var(--leaf);font-variant-numeric:tabular-nums;background:rgba(14,32,22,.45);border:1px solid rgba(185,228,143,.25);border-radius:10px;padding:8px 6px 7px}
+.unit span{font:600 10.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:rgba(247,245,236,.8)}
+.sep{font:800 28px/1 var(--display);color:rgba(185,228,143,.6);padding-top:9px}
+.unit b.tick{animation:tick .35s ease}
+@keyframes tick{0%{transform:translateY(-3px);opacity:.55}100%{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.unit b.tick{animation:none}}
+.exam{flex:1;min-width:180px;font-size:14.5px;line-height:1.4}
+.exam strong{display:block;font:700 16px var(--body)}
+.actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin-top:6px}
+.go{display:inline-flex;align-items:center;gap:8px;background:var(--cream);color:var(--forest);font:700 16px var(--body);text-decoration:none;padding:14px 22px;border-radius:14px;box-shadow:0 6px 20px rgba(0,0,0,.25);transition:transform .15s}
+.go:hover{transform:translateY(-1px)}
+.go:focus-visible{outline-color:var(--leaf)}
+.guide{margin:6px 0 0;max-width:600px;display:flex;flex-direction:column;gap:6px;padding:12px 16px;border-radius:14px;background:rgba(14,32,22,.4);border:1px solid rgba(247,245,236,.18);font:500 14.5px/1.4 var(--body);color:var(--cream)}
+.guide div{display:flex;gap:12px;align-items:baseline}
+.guide b{flex:none;width:56px;font:700 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--leaf)}
+.guide a{color:var(--cream);text-decoration:underline;text-decoration-color:rgba(247,245,236,.35);text-underline-offset:3px}
+.guide a:hover{text-decoration-color:var(--cream)}
+.today{font:500 13.5px var(--body);color:rgba(247,245,236,.85);font-variant-numeric:tabular-nums}
+
+/* ===== Body */
+main.inner{padding-block:28px 48px;display:flex;flex-direction:column;gap:18px}
+.h2{font:700 13px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:4px 0 -6px}
+.cards{display:grid;gap:12px}
+.card{position:relative;display:flex;flex-direction:column;gap:12px;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:18px 20px;box-shadow:var(--shadow);transition:border-color .15s,transform .15s}
+.card:hover{border-color:var(--accent);transform:translateY(-1px)}
+.chead{display:flex;gap:14px;align-items:center}
+.num{flex:none;width:48px;height:48px;border-radius:12px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font:800 22px var(--display)}
+.card h3{font:700 19px/1.2 var(--display);margin:0}
+.card h3 a{color:inherit;text-decoration:none}
+.card h3 a::after{content:"";position:absolute;inset:0;border-radius:16px}
+.card p{margin:2px 0 0;color:var(--muted);font-size:14px}
+.prow{display:grid;grid-template-columns:1fr auto;gap:6px 12px;align-items:center}
+.stack{display:flex;height:9px;border-radius:5px;overflow:hidden;background:var(--lv-new);grid-column:1/-1}
+.stack i{display:block;height:100%}
+.ptext{font:500 12px var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.plink{position:relative;z-index:1;font:600 13px var(--body);color:var(--accent);text-decoration:none;padding:4px 2px}
+.plink:hover{text-decoration:underline}
+.c-right{background:var(--st-right)} .c-wrong{background:var(--st-wrong)} .c-review{background:var(--st-review)}
+.how{font-size:14px;color:var(--muted);background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:16px 20px}
+.how b{color:var(--ink)}
+.how ul{margin:6px 0 0;padding-left:18px}
+.how li{margin-top:4px}
+.legend{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:10px;font-size:12px}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.legend .c-new{background:var(--lv-new)}
+.sources p{margin:6px 0 0}
+.tablewrap{overflow-x:auto;margin-top:12px}
+.srctable{width:100%;border-collapse:collapse;font-size:14px;color:var(--ink)}
+.srctable th,.srctable td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.srctable thead th{font:700 12px var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.srctable tr.grp th{font:800 15px var(--display);padding-top:16px;border-bottom:2px solid var(--ink)}
+.srctable tbody td:first-child{padding-left:14px}
+.srctable .n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.srctable tr.tot td{font-weight:700;border-bottom:0}
+.ctas{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px}
+.ddcta{position:relative;z-index:1;display:flex;align-items:center;gap:14px;padding:10px 14px 10px 10px;border-radius:12px;background:linear-gradient(135deg,var(--accent) 0%,#4f6bed 100%);color:#fff;text-decoration:none;transition:transform .15s}
+.ddcta:hover{transform:translateY(-1px)}
+.ddcta:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.ddcta strong{display:block;font:700 15px var(--body)}
+.ddcta small{display:block;font-size:12.5px;opacity:.88}
+.ddcta>span:nth-child(2){flex:1;min-width:0}
+.ddgo{flex:none;background:#fff;color:var(--accent);font:700 13.5px var(--body);padding:8px 12px;border-radius:10px}
+.dd-illu.sm{width:88px;height:56px;flex:none;background:rgba(255,255,255,.12);border-radius:9px;padding:4px}
+
+
+.dd-box{fill:rgba(255,255,255,.18);stroke:rgba(255,255,255,.55);stroke-width:1;stroke-dasharray:3 2}
+.dd-target{animation:ddTarget 3.2s ease-in-out infinite}
+.dd-chip rect:first-child{fill:#fff}
+.dd-line{fill:var(--accent)}
+.dd-chip{animation:ddMove 3.2s ease-in-out infinite}
+.dd-hand{fill:#fff;stroke:#151b2b;stroke-width:.8;animation:ddHand 3.2s ease-in-out infinite}
+@keyframes ddMove{0%,12%{transform:translate(4px,64px)}55%,100%{transform:translate(76px,32px)}}
+@keyframes ddHand{0%,12%{transform:translate(30px,70px)}55%,100%{transform:translate(102px,38px)}}
+@keyframes ddTarget{0%,45%{fill:rgba(255,255,255,.18)}55%,90%{fill:rgba(134,239,172,.55);stroke:#fff;stroke-dasharray:0}100%{fill:rgba(255,255,255,.18)}}
+@media (max-width:520px){.ddpromo{grid-template-columns:1fr}.ddpromo .dd-illu{grid-row:auto;width:110px;height:70px}.ddpromo .ddbtn{grid-column:1}}
+@media (prefers-reduced-motion:reduce){.dd-chip,.dd-hand,.dd-target{animation:none}.dd-chip{transform:translate(76px,32px)}.dd-hand{transform:translate(102px,38px)}}
+
+.mc-q{fill:rgba(255,255,255,.85)} .mc-opt{fill:rgba(255,255,255,.16);stroke:rgba(255,255,255,.5);stroke-width:.8}
+.mc-b{fill:none;stroke:#fff;stroke-width:1.2} .mc-t{fill:rgba(255,255,255,.7)}
+footer{font-size:12.5px;color:var(--muted);display:flex;flex-direction:column;gap:4px}
+footer a{color:inherit}
+@media (max-width:560px){
+  .hero::after{background:linear-gradient(180deg,rgba(14,32,22,.66),rgba(14,32,22,.9))}
+  .hero .inner{padding-block:max(32px,env(safe-area-inset-top,0px)) 28px}
+  .unit{min-width:44px}.unit b{font-size:26px;padding:7px 4px 6px}.sep{font-size:22px;padding-top:8px}
+}
+@media (prefers-reduced-motion:reduce){.card,.go{transition:none}.card:hover,.go:hover{transform:none}}
+
+/* ===== Apple-style layer: system San Francisco type, pill buttons, borderless white tiles on #f5f5f7 */
+:root{
+  --bg:#f5f5f7; --paper:#fff; --ink:#1d1d1f; --muted:#6e6e73; --line:#d2d2d7; --sunk:#f5f5f7;
+  --accent:#0071e3; --accent-soft:#e8f2fd; --link:#0066cc; --link-dark:#2997ff;
+  --display:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --body:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --mono:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --shadow:0 2px 12px rgba(0,0,0,.04);
+}
+body{font:17px/1.47 var(--body);letter-spacing:-.022em;-webkit-font-smoothing:antialiased}
+.hero::after{background:linear-gradient(100deg,rgba(8,14,10,.92) 0%,rgba(8,14,10,.82) 45%,rgba(8,14,10,.42) 80%,rgba(8,14,10,.3) 100%),linear-gradient(0deg,rgba(8,14,10,.6),rgba(8,14,10,0) 45%)}
+.hero .inner{gap:16px;padding-block:max(56px,env(safe-area-inset-top,0px)) 48px}
+.eyebrow{font:600 14px var(--body);letter-spacing:-.01em;text-transform:none;color:#f5a623}
+.hero h1{font:700 clamp(34px,7vw,56px)/1.07 var(--display);letter-spacing:-.035em;color:#f5f5f7}
+.hero h1 span{font:400 clamp(17px,2.6vw,21px)/1.38 var(--body);letter-spacing:-.02em;color:rgba(245,245,247,.75)}
+.countdown{border-radius:22px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);padding:16px 18px}
+.unit b{font:600 34px/1 var(--display);letter-spacing:-.02em;color:#fff;background:rgba(255,255,255,.1);border:0;border-radius:12px;padding:9px 6px 8px}
+.unit span{font:500 11px var(--body);letter-spacing:.02em;text-transform:none;color:rgba(245,245,247,.7)}
+.sep{font:600 26px/1 var(--display);color:rgba(255,255,255,.4)}
+.exam strong{font:600 17px var(--body);letter-spacing:-.02em}
+.exam span{color:rgba(245,245,247,.75)}
+.go{background:var(--accent);color:#fff;font:400 17px/1.18 var(--body);letter-spacing:-.022em;padding:12px 24px;border-radius:980px;box-shadow:none;transition:background .2s}
+.go:hover{background:#0077ed;transform:none}
+.go:focus-visible{outline:2px solid var(--link-dark);outline-offset:3px}
+.today{font:400 14px var(--body);color:rgba(245,245,247,.7)}
+.guide{border-radius:18px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);font:400 15px/1.45 var(--body);color:#f5f5f7;padding:14px 18px;gap:8px}
+.guide b{font:600 13px var(--body);letter-spacing:-.01em;text-transform:none;color:rgba(245,245,247,.6);width:58px}
+.guide a{color:var(--link-dark);text-decoration:none}
+.guide a:hover{text-decoration:underline}
+main.inner{padding-block:44px 64px;gap:22px}
+.h2{font:600 clamp(26px,4.4vw,34px)/1.12 var(--display);letter-spacing:-.03em;text-transform:none;color:var(--ink);margin:18px 0 0}
+.h2:first-child{margin-top:0}
+.cards{gap:16px}
+.card{border:0;border-radius:22px;padding:24px 26px;box-shadow:var(--shadow);transition:transform .3s cubic-bezier(.25,.1,.25,1),box-shadow .3s}
+.card:hover{border-color:transparent;transform:scale(1.008);box-shadow:0 8px 30px rgba(0,0,0,.08)}
+.card h3 a::after{border-radius:22px}
+.num{width:50px;height:50px;border-radius:14px;background:var(--accent-soft);color:var(--accent);font:600 22px var(--display)}
+.card h3{font:600 21px/1.19 var(--display);letter-spacing:-.025em}
+.card p{font-size:15px;line-height:1.45;color:var(--muted);letter-spacing:-.016em}
+.stack{height:6px;border-radius:3px;background:#e8e8ed}
+.ptext{font:400 13px var(--body);letter-spacing:-.01em}
+.plink{font:400 15px/1 var(--body);letter-spacing:-.016em;color:#fff;background:var(--accent);padding:9px 18px;border-radius:980px;transition:background .2s}
+.plink:hover{background:#0077ed;text-decoration:none}
+.ctas{gap:12px}
+.ddcta{background:#f5f5f7;color:var(--ink);border-radius:18px;padding:12px 14px 12px 12px;transition:background .2s}
+.ddcta:hover{background:#ebebef;transform:none}
+.ddcta strong{font:600 16px var(--body);letter-spacing:-.02em}
+.ddcta small{color:var(--muted);opacity:1}
+.ddgo{background:transparent;color:var(--link);font:400 15px var(--body);padding:0;border-radius:0}
+.ddgo::after{content:" ›"}
+.dd-illu.sm{background:var(--accent);border-radius:12px}
+.how{border:0;border-radius:22px;padding:22px 26px;font-size:15px;box-shadow:var(--shadow)}
+.how>b{display:block;font:600 21px/1.2 var(--display);letter-spacing:-.025em;color:var(--ink);margin-bottom:4px}
+.how a{color:var(--link)}
+.srctable{font-size:15px}
+.srctable thead th{font:600 13px var(--body);letter-spacing:-.01em;text-transform:none}
+.srctable tr.grp th{font:600 17px var(--display);border-bottom:1px solid var(--ink)}
+.srctable th,.srctable td{border-bottom-color:#e8e8ed}
+footer a{color:var(--link)}
+.pstar{color:#c77700;font-size:.95em}
+.pstar.based-star{color:#b39a63}
+.exampanel{border-radius:30px;padding:0;transition:box-shadow .3s}
+.exampanel[open]{padding-bottom:18px}
+.exampanel>.cards{padding:0 18px}
+.exampanel .ephead{list-style:none;cursor:pointer;display:flex;align-items:center;gap:16px;padding:26px 26px;border-radius:30px}
+.exampanel .ephead::-webkit-details-marker{display:none}
+.exampanel .ephead:hover{background:rgba(255,255,255,.35)}
+.exampanel .ephead:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.eptext{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.eptools{font-size:14px;color:var(--muted);margin-top:6px}
+.exampanel[open] .eptools{display:none}
+.epgo{flex:none;display:inline-flex;align-items:center;gap:6px;font:400 17px var(--body);color:#fff;background:var(--accent);border-radius:980px;padding:10px 20px}
+.epgo::after{content:"";width:8px;height:8px;border:solid currentColor;border-width:0 2px 2px 0;transform:translateY(-2px) rotate(45deg);transition:transform .25s}
+.exampanel[open] .epgo{background:rgba(0,0,0,.08);color:var(--ink)}
+.exampanel[open] .epgo::after{transform:translateY(2px) rotate(-135deg)}
+.ep-close,.exampanel[open] .ep-open{display:none}
+.exampanel[open] .ep-close{display:inline}
+.exampanel+.exampanel{margin-top:4px}
+.ep1{background:linear-gradient(180deg,#e7efff,#f1f5ff 60%)}
+.ep2{background:linear-gradient(180deg,#e3f4e8,#f0f8f2 60%)}
+.epb{background:#ebebef;padding-top:18px}
+.ephead{padding:0 6px}
+.ephead h2{margin:0;font:700 clamp(30px,5vw,40px)/1.08 var(--display);letter-spacing:-.035em;color:var(--ink)}
+.epb .ephead h2{font-size:24px}
+.ephead p{margin:4px 0 0;color:var(--muted);font-size:16px}
+.ep1 .num{background:#d6e4ff} .ep2 .num{background:#d3eedd;color:#1c7a43}
+@media (max-width:560px){.exampanel{margin:0 -8px;border-radius:26px}.exampanel>.cards{padding:0 10px}.exampanel .ephead{padding:22px 18px;gap:12px}.epgo{padding:9px 16px;font-size:16px}}
+html,body{background:#0c1410}
+main.inner{background:var(--bg);box-shadow:0 0 0 100vmax var(--bg);clip-path:inset(0 -100vmax)}
+footer.site{background:#0c1410;color:rgba(245,245,247,.62);font-size:12.5px;padding:28px 0 calc(32px + env(safe-area-inset-bottom,0px))}
+footer.site .inner{display:flex;flex-direction:column;gap:4px}
+footer.site p{margin:0}
+footer.site a{color:var(--link-dark)}
+.hero{background:#0c1410}
+.hero .fadetop{position:absolute;inset:0 0 auto 0;height:110px;z-index:-1;background:linear-gradient(180deg,#0c1410 0%,rgba(12,20,16,.85) 35%,rgba(12,20,16,0) 100%);pointer-events:none}
+.golink{color:var(--link-dark);font:400 17px/1.3 var(--body);letter-spacing:-.02em;text-decoration:none;padding:6px 2px}
+.golink:hover{text-decoration:underline}
+html[data-layout="simple"] .guide{display:none}
+.about{display:flex;flex-direction:column;gap:14px}
+.about>summary{list-style:none;cursor:pointer;font:600 15px var(--body);color:var(--muted);padding:12px 4px;text-align:center}
+.about>summary::-webkit-details-marker{display:none}
+.about>summary::after{content:" ⌄";}
+.about[open]>summary::after{content:" ⌃"}
+.about>summary:hover{color:var(--ink)}
+@media (max-width:560px){.card{padding:20px}.how{padding:20px}.unit b{font-size:26px}}
+@media (prefers-reduced-motion:reduce){.card:hover{transform:none}}
+</style>
+<link rel="stylesheet" href="assets/shell.css">
+<script src="../shared/platform.js"></script>
+<script src="course.js"></script>
+<script src="assets/shell.js"></script>
+<!-- Vercel Web Analytics: anonymous page views, no cookies (enable Analytics for the project in the Vercel dashboard) -->
+<script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</head><body>
+<header class="hero" aria-labelledby="courseTitle"><div class="fadetop" aria-hidden="true"></div>
+  <div class="inner">
+    <p class="eyebrow"><a href="../index.html" style="color:inherit;text-decoration:underline;text-underline-offset:3px" title="All your classes on MeowStudy">MeowStudy</a> › ANTH 102 · Fall 2026 · Study drills</p>
+    <h1 id="courseTitle">Biology &amp; Evolution of Human Species<span>Practice by subject, mark what you still need to review, and spend your time on what you don't know yet.</span></h1>
+    <div class="countdown" id="countdown">
+      <div class="clock" id="clock" role="timer" aria-live="off" aria-label="Time until Exam 2">
+        <div class="unit"><b id="cD">–</b><span>days</span></div><span class="sep" aria-hidden="true">:</span>
+        <div class="unit"><b id="cH">–</b><span>hrs</span></div><span class="sep" aria-hidden="true">:</span>
+        <div class="unit"><b id="cM">–</b><span>min</span></div><span class="sep" aria-hidden="true">:</span>
+        <div class="unit"><b id="cS">–</b><span>sec</span></div>
+      </div>
+      <div class="exam"><strong id="examTitle">Exam 2 · Tue, Nov 10 · 10:45 am</strong><span id="examSub">50 multiple-choice questions (100 points), in class. Bring a No. 2 pencil. Not cumulative: macroevolution, primates, and primate sociality.</span></div>
+    </div>
+    <div class="actions">
+      <a class="go" id="goBtn" href="exam2/index.html#continue">Let’s begin</a>
+      <a class="golink" href="mock/index.html" title="50 questions, like the real exam">or take a mock exam ›</a>
+      <span class="today" id="todayTxt"></span>
+    </div>
+    <div class="guide" aria-label="Which modules go with which exam">
+      <div><b>Exam 1</b><span><a href="exam1/index.html">Multiple-Choice Drill</a> · <a href="anthropardy/index.html?board=exam1">Anthro-pardy</a> · <a href="roots/index.html#exam1">Word Roots</a> · <a href="review/index.html?exam=1">Review List</a></span></div>
+      <div><b>Exam 2</b><span><a href="exam2/index.html">Multiple-Choice Drill</a> · <a href="anthropardy/index.html?board=exam2">Anthro-pardy</a> · <a href="roots/index.html#exam2">Word Roots</a> · <a href="classification/index.html">Classification Chart</a> · <a href="mock/index.html">Mock Exam</a> · <a href="review/index.html?exam=2">Review List</a></span></div>
+    </div>
+  </div>
+</header>
+
+<main class="inner">
+  <details class="exampanel ep1" data-ep="1">
+    <summary class="ephead"><span class="eptext"><h2 id="ep1">Exam 1</h2><p>Science, natural selection, cells &amp; DNA, protein synthesis, genetics and the forces of evolution.</p><span class="eptools">Multiple-Choice Drill · Anthro-pardy · Word Roots · Review List</span></span><span class="epgo" aria-hidden="true"><span class="ep-open">Open</span><span class="ep-close">Close</span></span></summary>
+    <div class="cards">
+    <article class="card" data-key="ant1-progress-v2" data-total="192">
+      <div class="chead"><span class="num">1</span>
+        <div><h3><a href="exam1/index.html">Exam 1 Multiple&#8209;Choice Drill</a></h3>
+        <p>Science · Natural selection · Scientists · Cells &amp; DNA · Protein synthesis · Genetics · Forces of evolution</p></div></div>
+      <div class="prow"><div class="stack"></div><span class="ptext">192 questions · not started</span><a class="plink" href="exam1/index.html">Start</a></div>
+    </article>
+    <article class="card boardcard">
+      <div class="chead"><span class="num" aria-hidden="true">$</span>
+        <div><h3><a href="anthropardy/index.html?board=exam1">Exam 1 Anthro-pardy</a></h3>
+        <p>The in-class review game as a colorful board: 7 categories, 35 clues. Pick a category and a value, answer the multiple-choice question, earn the money.</p></div></div>
+      <div class="prow"><span class="ptext" id="boardTxt1">No games played yet</span><a class="plink" href="anthropardy/index.html?board=exam1">Play</a></div>
+    </article>
+    <article class="card rootcard">
+      <div class="chead"><span class="num" aria-hidden="true">Aa</span>
+        <div><h3><a href="roots/index.html#exam1">Exam 1 Word Roots</a></h3>
+        <p>Optional, but recommended if the terms feel unfamiliar. The Greek and Latin parts behind Exam 1's terms: <i>meio-</i> (less) + <i>-osis</i> (process) = meiosis, the division that halves the chromosomes. Mark roots as mastered and the pool shrinks until you know them all.</p></div></div>
+      <div class="prow"><span class="ptext" id="rootsTxt1">Not started</span><a class="plink" href="roots/index.html#exam1">Open</a></div>
+    </article>
+    <article class="card reviewcard">
+      <div class="chead"><span class="num" aria-hidden="true">⚑</span>
+        <div><h3><a href="review/index.html?exam=1">Exam 1 Review List</a></h3>
+        <p>Every Exam 1 question you've marked for review, in one place. Quiz yourself on them.</p></div></div>
+      <div class="prow"><span class="ptext" id="reviewCount1">Nothing marked yet</span><a class="plink" href="review/index.html?exam=1">Open</a></div>
+    </article>
+    </div>
+  </details>
+
+  <details class="exampanel ep2" data-ep="2">
+    <summary class="ephead"><span class="eptext"><h2 id="ep2">Exam 2</h2><p>Macroevolution, primates and primate sociality. <span id="ep2When">Tue, Nov 10, 10:45 am</span>.</p><span class="eptools">Multiple-Choice Drill · Anthro-pardy · Word Roots · Classification Chart · Mock Exam · Review List</span></span><span class="epgo" aria-hidden="true"><span class="ep-open">Open</span><span class="ep-close">Close</span></span></summary>
+    <div class="cards">
+    <article class="card" data-key="ant2-progress-v1" data-total="376" data-optional="ant2-progress-v1-include-AP:30">
+      <div class="chead"><span class="num">2</span>
+        <div><h3><a href="exam2/index.html">Exam 2 Multiple&#8209;Choice Drill</a></h3>
+        <p>Speciation · Phylogeny · Primate traits · Taxonomy · Picture ID · Sociality · Chimps &amp; bonobos · Putting it together</p></div></div>
+      <div class="prow"><div class="stack"></div><span class="ptext">376 questions · not started</span><a class="plink" href="exam2/index.html">Start</a></div>
+    </article>
+    <article class="card boardcard">
+      <div class="chead"><span class="num" aria-hidden="true">$</span>
+        <div><h3><a href="anthropardy/index.html?board=exam2">Exam 2 Anthro-pardy</a></h3>
+        <p>The in-class review game as a colorful board: 6 categories, 30 clues. Pick a category and a value, answer the multiple-choice question, earn the money.</p></div></div>
+      <div class="prow"><span class="ptext" id="boardTxt2">No games played yet</span><a class="plink" href="anthropardy/index.html?board=exam2">Play</a></div>
+    </article>
+    <article class="card rootcard">
+      <div class="chead"><span class="num" aria-hidden="true">Aa</span>
+        <div><h3><a href="roots/index.html#exam2">Exam 2 Word Roots</a></h3>
+        <p>Optional, but recommended if the terms feel unfamiliar. The Greek and Latin parts behind Exam 2's terms: <i>platy-</i> (flat) + <i>-rrhine</i> (nose) = flat-nosed. Mark roots as mastered and the pool shrinks until you know them all.</p></div></div>
+      <div class="prow"><span class="ptext" id="rootsTxt2">Not started</span><a class="plink" href="roots/index.html#exam2">Open</a></div>
+    </article>
+    <article class="card" data-key="anthro-class-v1" data-total="149">
+      <div class="chead"><span class="num" aria-hidden="true">⌗</span>
+        <div><h3><a href="classification/index.html">Classification Chart Drill</a></h3>
+        <p>The Primate Classification worksheet, on the Exam 2 study guide: 149 questions plus a drag-and-drop chart.</p></div></div>
+      <div class="prow"><div class="stack"></div><span class="ptext">149 questions · not started</span><a class="plink" href="classification/index.html">Start</a></div>
+      <div class="ctas">
+        <a class="ddcta mc" href="classification/index.html"><svg class="dd-illu sm" viewBox="0 0 132 84" aria-hidden="true">
+  <rect x="6" y="4" width="92" height="6" rx="3" class="mc-q"/><rect x="6" y="13" width="60" height="5" rx="2.5" class="mc-q"/>
+  <g class="mc-row"><rect x="4" y="24" width="124" height="12" rx="6" class="mc-opt"/><circle cx="12" cy="30" r="3.4" class="mc-b"/><rect x="20" y="28.5" width="54" height="3" rx="1.5" class="mc-t"/></g>
+  <g class="mc-row"><rect x="4" y="39" width="124" height="12" rx="6" class="mc-opt"/><circle cx="12" cy="45" r="3.4" class="mc-b"/><rect x="20" y="43.5" width="70" height="3" rx="1.5" class="mc-t"/></g>
+  <g class="mc-row"><rect x="4" y="54" width="124" height="12" rx="6" class="mc-opt"/><circle cx="12" cy="60" r="3.4" class="mc-b"/><rect x="20" y="58.5" width="46" height="3" rx="1.5" class="mc-t"/></g>
+  <g class="mc-row"><rect x="4" y="69" width="124" height="12" rx="6" class="mc-opt"/><circle cx="12" cy="75" r="3.4" class="mc-b"/><rect x="20" y="73.5" width="62" height="3" rx="1.5" class="mc-t"/></g>
+</svg><span><strong>Multiple choice</strong><small>149 questions on where each trait goes and how the chart fits together</small></span><span class="ddgo">Open</span></a>
+        <a class="ddcta" href="classification/chart.html"><svg class="dd-illu sm" viewBox="0 0 132 84" aria-hidden="true">
+  <rect x="2" y="2" width="128" height="18" rx="5" class="dd-box"/>
+  <rect x="2" y="26" width="62" height="24" rx="5" class="dd-box"/><rect x="68" y="26" width="62" height="24" rx="5" class="dd-box dd-target"/>
+  <rect x="2" y="56" width="38" height="26" rx="5" class="dd-box"/><rect x="47" y="56" width="38" height="26" rx="5" class="dd-box"/><rect x="92" y="56" width="38" height="26" rx="5" class="dd-box"/>
+  <g class="dd-chip"><rect x="0" y="0" width="46" height="13" rx="6.5"/><rect x="7" y="5" width="26" height="3" rx="1.5" class="dd-line"/></g>
+  <path class="dd-hand" d="M0 0 L0 13 L3.5 10 L6 15.5 L8.2 14.5 L5.8 9.2 L10.5 9 Z"/>
+</svg><span><strong>Drag-and-drop chart</strong><small>Build the whole chart from the worksheet's word bank</small></span><span class="ddgo">Open</span></a>
+      </div>
+    </article>
+    <article class="card mockcard">
+      <div class="chead"><span class="num" aria-hidden="true">✓</span>
+        <div><h3><a href="mock/index.html">Exam 2 Mock Exam</a></h3>
+        <p>50 or 100 random questions from the Exam 2 and Classification drills. Every exam is a brand-new set.</p></div></div>
+      <div class="prow"><span class="ptext" id="mockLast">No exams taken yet</span><a class="plink" href="mock/index.html">Start an exam</a></div>
+    </article>
+    <article class="card reviewcard">
+      <div class="chead"><span class="num" aria-hidden="true">⚑</span>
+        <div><h3><a href="review/index.html?exam=2">Exam 2 Review List</a></h3>
+        <p>Every Exam 2 question you've marked for review, from the drills and your mock exams. Quiz yourself on them.</p></div></div>
+      <div class="prow"><span class="ptext" id="reviewCount2">Nothing marked yet</span><a class="plink" href="review/index.html?exam=2">Open</a></div>
+    </article>
+    </div>
+  </details>
+
+  <details class="about" id="about">
+    <summary>About this site: how it works and where the questions come from</summary>
+  <div class="how">
+    <b>How it works</b>
+    <ul>
+      <li>Pick a subject and answer. Your weakest questions come first, and you can jump to any question with the squares at the top.</li>
+      <li>Tap <b>⚑ Mark for review</b> on any question you want to come back to. They all collect in your <a href="review/index.html">Review list</a>.</li>
+      <li>Every question shows its source: Top Hat, a Brightspace activity, a worksheet, or practice. Your progress and answers are saved only in this browser on this device. The site counts anonymous visits with Vercel Web Analytics (no cookies, nothing about you or your answers).</li>
+    </ul>
+    <div class="legend"><span><i class="c-right"></i>Got it right</span><span><i class="c-wrong"></i>Got it wrong</span><span><i class="c-review"></i>Marked for review</span><span><i class="c-new"></i>Not answered yet</span></div>
+  </div>
+
+  <section class="how sources" id="sources" aria-labelledby="srcTitle">
+    <b id="srcTitle">Where the questions come from</b>
+    <p>Every question was taken from ANTH 102 class materials or written to match them. Each question shows its source above it. <span class="pstar">★</span> marks questions that come straight from the professor: Top Hat, Brightspace activities, worksheets and the in-class game. In a drill they carry a <b>★ From the professor</b> badge, and <b>Group by: Source</b> can pick them all at once. <span class="pstar based-star">✎</span> marks practice questions written for this site from the professor's material (the study guide, lecture slides or worksheet); they carry a <b>✎ Based on …</b> badge that names which.</p>
+    <div class="tablewrap">
+      <table class="srctable">
+        <thead><tr><th scope="col">Source</th><th scope="col" class="n">Questions</th></tr></thead>
+        <tbody>
+          <tr class="grp"><th scope="colgroup" colspan="2">Exam 1</th></tr>
+          <tr class="pf"><td>Top Hat lecture questions <span class="pstar" title="Straight from the professor">★</span></td><td class="n">44</td></tr>
+          <tr class="pf"><td>Brightspace Review Activities 1–3 <span class="pstar" title="Straight from the professor">★</span></td><td class="n">67</td></tr>
+          <tr class="pf"><td>Anthro-pardy <span class="pstar" title="Straight from the professor">★</span></td><td class="n">35</td></tr>
+          <tr class="pb"><td>Practice: DNA sequences <span class="pstar based-star" title="Written for this site from the professor's material">✎</span></td><td class="n">30</td></tr>
+          <tr class="pb"><td>Practice: scientists and thinkers <span class="pstar based-star" title="Written for this site from the professor's material">✎</span></td><td class="n">16</td></tr>
+          <tr class="tot"><td>Total</td><td class="n">192</td></tr>
+          <tr class="grp"><th scope="colgroup" colspan="2">Classification</th></tr>
+          <tr class="pf"><td>Primate Classification worksheet <span class="pstar" title="Straight from the professor">★</span></td><td class="n">36</td></tr>
+          <tr class="pb"><td>Built from the worksheet's answer key <span class="pstar based-star" title="Written for this site from the professor's material">✎</span></td><td class="n">113</td></tr>
+          <tr class="tot"><td>Total</td><td class="n">149</td></tr>
+          <tr class="grp"><th scope="colgroup" colspan="2">Exam 2</th></tr>
+          <tr class="pf"><td>Top Hat lecture questions <span class="pstar" title="Straight from the professor">★</span></td><td class="n">29</td></tr>
+          <tr class="pf"><td>Anthro-pardy (Exam 2 review game) <span class="pstar" title="Straight from the professor">★</span></td><td class="n">30</td></tr>
+          <tr class="pf"><td>Brightspace Activity 4 <span class="pstar" title="Straight from the professor">★</span></td><td class="n">25</td></tr>
+          <tr class="pf"><td>Brightspace Activity 5 <span class="pstar" title="Straight from the professor">★</span></td><td class="n">10</td></tr>
+          <tr class="pf"><td>Primate Classification worksheet <span class="pstar" title="Straight from the professor">★</span></td><td class="n">36</td></tr>
+          <tr class="pf"><td>“Why Sex” film worksheet <span class="pstar" title="Straight from the professor">★</span></td><td class="n">10</td></tr>
+          <tr class="pb"><td>Practice from the lecture slides <span class="pstar based-star" title="Written for this site from the professor's material">✎</span></td><td class="n">60</td></tr>
+          <tr class="pb"><td>Practice from the study guide <span class="pstar based-star" title="Written for this site from the professor's material">✎</span></td><td class="n">18</td></tr>
+          <tr class="pb"><td>Practice: putting it together (connects lectures) <span class="pstar based-star" title="Written for this site from the professor's material">✎</span></td><td class="n">158</td></tr>
+          <tr class="tot"><td>Total</td><td class="n">376</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+  </details>
+
+</main>
+<footer class="site"><div class="inner">
+    <span>Made by a classmate as a study aid. Not official course material; check anything you're unsure of against the lecture slides.</span>
+    <span>Background illustration: “Most Iconic Monkeys &amp; Apes” by wikiHow, licensed <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="noopener">CC BY-NC-SA 3.0</a>; labels removed.</span>
+</div></footer>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const read = k => { try { return JSON.parse(localStorage.getItem(k) || "null") } catch (e) { return null } };
+  const dayKey = d => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  // Same statuses as the drills: right / wrong (last answer) or marked for review (takes priority).
+  function levels(s, total) {
+    const n = { right: 0, wrong: 0, review: 0 }; let a = 0, c = 0, seen = 0;
+    const st = (s && s.stats) || {}, hist = (s && s.hist) || {}, mark = (s && s.mark) || {};
+    for (const k in mark) if (mark[k] && mark[k].m === "review") n.review++;
+    for (const k in st) {
+      if (!st[k][0]) continue; seen++; a += st[k][0]; c += st[k][1];
+      if (!(mark[k] && mark[k].m === "review")) n[hist[k] === 1 ? "right" : "wrong"]++;
+    }
+    return { n, seen: Math.min(seen, total), acc: a ? Math.round(c / a * 100) : 0, total };
+  }
+  document.querySelectorAll(".card[data-key]").forEach(card => {
+    let total = +card.dataset.total;
+    if (card.dataset.optional) {   // the student switched an optional deck (Anthro-pardy) out of this drill
+      const [k, n] = card.dataset.optional.split(":");
+      try { if (localStorage.getItem(k) === "0") { total -= +n; card.querySelector(".ptext").textContent = `${total} questions · not started` } } catch (e) { }
+    }
+    const s = read(card.dataset.key), L = levels(s, total);
+    if (!L.seen && !L.n.review) return;
+    card.querySelector(".stack").innerHTML = ["right", "wrong", "review"].map(l => L.n[l] ? `<i class="c-${l}" style="width:${L.n[l] / L.total * 100}%"></i>` : "").join("");
+    card.querySelector(".ptext").textContent = `${L.seen} of ${L.total} answered · ${L.acc}% right`;
+    const go = card.querySelector(".prow .plink"); if (go && L.seen) go.textContent = "Resume";   // they've started this drill before
+  });
+
+  // Anthro-pardy: best finished game per exam
+  try { const g = JSON.parse(localStorage.getItem("anthro-board-v1") || "{}") || {}; for (const k of ["exam1", "exam2"]) if (g[k] && g[k].best != null) document.getElementById("boardTxt" + k.slice(-1)).textContent = "Best game: $" + g[k].best.toLocaleString("en-US") } catch (e) { }
+  // Mock exam: last score
+  try { const h = JSON.parse(localStorage.getItem("anthro-mock-history-v1") || "[]"); if (h.length) { const l = h[h.length - 1]; document.getElementById("mockLast").textContent = `Last exam: ${l.pct}% (${l.right}/${l.total}) · ${h.length} taken` } } catch (e) { }
+  // Word Roots: how many mastered
+  try {
+    const rs = JSON.parse(localStorage.getItem("anthro-roots-v1") || "{}") || {}, n = k => Object.keys((rs[k] || {}).m || {}).length;
+    for (const k of ["exam1", "exam2"]) if (n(k)) document.getElementById("rootsTxt" + k.slice(-1)).textContent = `${n(k)} mastered`;
+  } catch (e) { }
+  // Review List counts, per exam (Exam 2 = Exam 2 + Classification drills; a shared worksheet question counts once)
+  try {
+    const counts = { 1: ["ant1-progress-v2"], 2: ["ant2-progress-v1", "anthro-class-v1"] };
+    for (const e in counts) {
+      const seen = new Set();
+      for (const k of counts[e]) { const st = JSON.parse(localStorage.getItem(k) || "null"); if (st && st.mark) for (const id in st.mark) if (st.mark[id].m === "review") seen.add(k + id) }
+      const n = seen.size; if (n) document.getElementById("reviewCount" + e).textContent = n === 1 ? "1 question marked for review" : n + " questions marked for review";
+    }
+  } catch (e) { }
+  // Detailed layout: the About section starts open
+  if (document.documentElement.dataset.layout === "detailed") document.getElementById("about").open = true;
+  const openAbout = () => { if (location.hash === "#sources") { const d = document.getElementById("about"); d.open = true; setTimeout(() => document.getElementById("sources").scrollIntoView(), 0) } };
+  openAbout(); window.addEventListener("hashchange", openAbout);
+  // Exam panels: closed until clicked; remember which ones a student left open
+  document.querySelectorAll("details.exampanel").forEach(d => {
+    const k = "anthro-home-open-" + d.dataset.ep;
+    try { if (localStorage.getItem(k) === "1") d.open = true } catch (e) { }
+    d.addEventListener("toggle", () => { try { localStorage.setItem(k, d.open ? "1" : "0") } catch (e) { } });
+  });
+  // Countdown to Exam 2: the date comes from Settings (default Tue, Nov 10, 2026, 10:45 am)
+  let exam = window.ANTHRO ? window.ANTHRO.examDate() : new Date(2026, 10, 10, 10, 45);
+  const when = (d, sep) => d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }) + sep + d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }).replace("AM", "am").replace("PM", "pm");
+  function showExamDate() { $("examTitle").textContent = "Exam 2 · " + when(exam, " · "); $("ep2When").textContent = when(exam, ", ") }
+  showExamDate();
+  // A live clock: days : hours : minutes : seconds, updated every second.
+  const pad = n => String(n).padStart(2, "0");
+  function tickClock() {
+    const ms = exam - Date.now();
+    if (ms <= 0) { clearInterval(clockTimer); $("countdown").hidden = true; $("goBtn").textContent = "Keep practicing"; $("goBtn").href = "exam2/index.html#continue"; return }
+    const s = Math.floor(ms / 1000), v = { cD: Math.floor(s / 86400), cH: pad(Math.floor(s / 3600) % 24), cM: pad(Math.floor(s / 60) % 60), cS: pad(s % 60) };
+    for (const id in v) { const el = $(id), t = String(v[id]); if (el.textContent !== t) { el.textContent = t; el.classList.remove("tick"); void el.offsetWidth; el.classList.add("tick") } }
+    $("clock").setAttribute("aria-label", `${v.cD} days, ${+v.cH} hours, ${+v.cM} minutes until Exam 2`);
+  }
+  let clockTimer = setInterval(tickClock, 1000);
+  tickClock();
+  if (window.ANTHRO) window.ANTHRO.onChange(e => {
+    if (e.detail.what !== "exam") return;
+    exam = window.ANTHRO.examDate(); showExamDate();
+    clearInterval(clockTimer); $("countdown").hidden = false; clockTimer = setInterval(tickClock, 1000); tickClock();
+  });
+
+  // Continue button + today's activity, from Exam 2's saved progress
+  // New visitors begin in the Exam 2 drill. Returning visitors continue in the drill they used last.
+  const s2 = read("ant2-progress-v1");
+  const used = [["exam2", s2], ["exam1", read("ant1-progress-v2")], ["classification", read("anthro-class-v1")]]
+    .filter(([, s]) => s && s.stats && Object.keys(s.stats).length).sort((a, b) => (b[1].updatedAt || 0) - (a[1].updatedAt || 0));
+  if (!$("countdown").hidden && (used.length || localStorage.getItem("anthro-roots-seen"))) {
+    $("goBtn").textContent = "Continue";
+    $("goBtn").href = (used.length ? used[0][0] : "exam2") + "/index.html#continue";
+  }
+  const t = s2 && s2.days ? (s2.days[dayKey(new Date())] | 0) : 0;
+  let streak = 0; if (s2 && s2.days) { const d = new Date(); if (!s2.days[dayKey(d)]) d.setDate(d.getDate() - 1); while (s2.days[dayKey(d)]) { streak++; d.setDate(d.getDate() - 1) } }
+  $("todayTxt").textContent = t || streak ? `${t} answered today` + (streak ? ` · ${streak}-day streak` : "") : "";
+})();
+</script>
+</body></html>

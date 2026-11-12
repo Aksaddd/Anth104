@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Primate Classification Chart</title>
+<meta name="description" content="Drag each trait onto its place on the ANTH 102 Primate Classification chart.">
+<meta name="theme-color" content="#2a46cf">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="../assets/drill.css">
+<style>
+/* Layout: one screen. Word bank in a column on the left, the whole chart on the right laid out as a tree
+   (each row sits under its parent), so every possible spot is visible while choosing.
+   Below 600px wide (phones held upright) the word bank becomes a tray along the bottom. */
+html,body{height:100%}
+body{padding-block:max(12px,env(safe-area-inset-top,0px)) 12px}
+.wrap.wide{max-width:1400px;height:100%;gap:10px}
+.topbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 16px}
+.topbar .tl{display:flex;flex-direction:column;gap:2px;min-width:0}
+.topbar h1{font-size:clamp(20px,3vw,26px)}
+.topbar .back{font-size:12.5px}
+.cstats{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
+.cstats .nums{display:flex;flex-wrap:wrap;gap:4px 14px;font:500 13px var(--body);color:var(--muted);font-variant-numeric:tabular-nums}
+.cstats .nums b{color:var(--ink)}
+.cstats .acts{display:flex;gap:6px;flex-wrap:wrap}
+.cstats .chip{padding:6px 11px}
+
+.board{flex:1;min-height:0;user-select:none;-webkit-user-select:none;display:grid;grid-template-columns:clamp(210px,24vw,290px) minmax(0,1fr);gap:14px}
+.bank{min-height:0;overflow:auto;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:12px;display:flex;flex-direction:column;gap:8px;box-shadow:var(--shadow);overscroll-behavior:contain}
+.bank h2{font:700 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0;display:flex;justify-content:space-between}
+.bhelp{margin:0;font-size:12.5px;color:var(--muted)}
+.chips{display:flex;flex-direction:column;gap:5px}
+.wchip{display:flex;align-items:center;justify-content:space-between;gap:8px;font:500 calc(13.5px * var(--rs))/1.25 var(--read);border:1.5px solid var(--line);background:var(--paper);color:var(--ink);padding:8px 11px;border-radius:11px;cursor:grab;text-align:left;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;touch-action:pan-y;transition:transform .15s,border-color .15s,background .15s,opacity .2s}
+.wchip:hover{border-color:var(--accent)}
+.wchip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.wchip.lifted{opacity:.35}
+.wchip.gone{opacity:0;transform:scale(.9)}
+.wchip .x2{font:600 11px var(--mono);opacity:.75;flex:none}
+.status{min-height:18px;margin:0;font-size:13px;color:var(--muted)}
+.status.good{color:var(--good)} .status.bad{color:var(--bad)}
+
+/* The chart as a tree: 6 columns. Order spans all; strepsirrhines over lemurs + lorises;
+   haplorrhines over tarsiers, NWM and catarrhines; the two superfamilies sit under catarrhines. */
+.board:has(> .bank[hidden]){grid-template-columns:minmax(0,1fr)}   /* answers shown: the chart takes the full width */
+.chart{min-height:0;overflow:auto;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-auto-rows:min-content;gap:10px;align-content:start;padding:2px}
+.taxon[data-t="PRI"]{grid-column:1 / -1}
+.taxon[data-t="STR"]{grid-column:1 / 3} .taxon[data-t="HAP"]{grid-column:3 / 7}
+.taxon[data-t="LEM"]{grid-column:1} .taxon[data-t="LOR"]{grid-column:2} .taxon[data-t="TAR"]{grid-column:3} .taxon[data-t="PLA"]{grid-column:4} .taxon[data-t="CAT"]{grid-column:5 / 7}
+.taxon[data-t="CER"]{grid-column:5} .taxon[data-t="HOM"]{grid-column:6}
+.taxon{position:relative;display:flex;flex-direction:column;gap:5px;text-align:left;background:var(--paper);border:1.5px solid var(--line);border-radius:12px;padding:8px 9px 9px;cursor:pointer;min-width:0;transition:border-color .15s,box-shadow .15s,background .15s}
+.taxon .rk{font:800 13px/1.1 var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.taxon .thead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:2px 6px}
+.tname{font:700 14px/1.15 var(--display);min-width:0}
+.tcount{font:600 11px var(--mono);color:var(--muted);flex:none;font-variant-numeric:tabular-nums}
+.targeting .taxon:not(.full){border-style:dashed;border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
+.taxon.over{border-style:solid!important;border-color:var(--accent)!important;background:var(--accent-soft);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 25%,transparent)}
+.taxon.full{cursor:default;border-color:var(--good);border-style:solid}
+.taxon.full .tcount{color:var(--good)}
+.taxon.hint{box-shadow:0 0 0 4px var(--gold-soft);border-color:var(--gold);border-style:solid}
+.taxon.shake{animation:shake .4s ease}
+.slots{display:flex;flex-wrap:wrap;gap:4px}
+.slot{height:20px;min-width:30px;border:1px dashed var(--line);border-radius:999px}
+.slot.filled{height:auto;min-height:20px;min-width:0;border:0;border-radius:7px;background:var(--good-soft);color:var(--ink);padding:3px 7px;font:calc(12px * var(--rs))/1.25 var(--read)}
+.slot.new{animation:pop .35s ease}
+.slot.revealed{background:var(--sunk);box-shadow:inset 0 0 0 1px var(--line)}
+
+.dragghost{position:fixed;left:0;top:0;z-index:100;pointer-events:none;padding:8px 11px;border-radius:11px;background:var(--accent);color:var(--accent-ink);font:600 calc(13.5px * var(--rs))/1.25 var(--read);box-shadow:0 10px 30px rgba(21,27,43,.28);max-width:260px;will-change:transform}
+#doneBox:empty{display:none}
+.bank.finished>h2,.bank.finished>.bhelp,.bank.finished>.chips,.bank.finished>.status{display:none}
+.done-card{display:flex;flex-direction:column;gap:10px;align-items:stretch;text-align:center;padding:4px}
+.done-card .nav{flex-direction:column;align-items:stretch}
+.done-card .btn{justify-content:center;text-align:center}
+.bank .done-card h2{display:block;font:800 22px/1.2 var(--display);color:var(--ink);letter-spacing:-.01em;text-transform:none;margin:0}
+.board{position:relative}
+.pausecover{position:absolute;inset:0;z-index:30;display:grid;place-items:center;background:color-mix(in srgb,var(--bg) 70%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:var(--radius)}
+.pausecover>div{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:22px 26px;box-shadow:var(--shadow)}
+.pausecover strong{font:800 24px var(--display)}
+.pausecover>div>span{color:var(--muted);font-size:14px}
+#pauseBtn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+body.paused .bank{visibility:hidden}
+@media (max-width:599px){.pausecover{position:fixed;border-radius:0}}
+.tgl{display:inline-flex;align-items:center;gap:10px;cursor:pointer;font:500 14px var(--body);color:var(--ink);user-select:none}
+.tgl input{position:absolute;opacity:0;width:1px;height:1px}
+.tgl .sw{position:relative;width:38px;height:22px;border-radius:11px;background:var(--line);transition:background .15s;flex:none}
+.tgl .sw::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.2);transition:transform .15s}
+.tgl input:checked+.sw{background:var(--accent)}
+.tgl input:checked+.sw::after{transform:translateX(16px)}
+.tgl input:focus-visible+.sw{outline:2px solid var(--accent);outline-offset:2px}
+.tgl small{display:block;color:var(--muted);font-size:12.5px}
+.cstats .acts{align-items:center}
+.rotate{display:none}
+.foot{display:none}
+body.dragging,body.dragging *{cursor:grabbing!important}
+
+/* Narrower side-by-side (small laptops, iPad portrait): two-column chart, still beside the bank */
+@media (max-width:999px) and (min-width:600px){
+  .chart{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .taxon[data-t]{grid-column:auto}
+  .taxon[data-t="PRI"],.taxon[data-t="CAT"]{grid-column:1 / -1}
+}
+/* Phones held upright: bank becomes a bottom tray; drag up onto the chart */
+@media (max-width:599px){
+  html,body{height:auto}
+  .wrap.wide{height:auto}
+  .board{display:block}
+  .bank{position:fixed;left:0;right:0;bottom:0;z-index:20;border-radius:16px 16px 0 0;border-width:1px 0 0;
+    padding:10px max(12px,env(safe-area-inset-right,0px)) max(12px,env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px));
+    box-shadow:0 -8px 24px rgba(21,27,43,.12);gap:6px;overflow:visible}
+  .bhelp{display:none}
+  .chips{display:grid;grid-auto-flow:column;grid-template-rows:repeat(2,auto);grid-auto-columns:max-content;overflow-x:auto;gap:6px;padding-bottom:2px}
+  .wchip{touch-action:pan-x;max-width:220px;white-space:normal}
+  .chart{overflow:visible;grid-template-columns:repeat(2,minmax(0,1fr));padding-bottom:var(--tray,150px)}
+  .taxon[data-t]{grid-column:auto}
+  .taxon[data-t="PRI"],.taxon[data-t="CAT"]{grid-column:1 / -1}
+  .rotate{display:block;margin:0;font-size:12.5px;color:var(--muted)}
+}
+@media (prefers-reduced-motion:reduce){.wchip,.taxon{transition:none}}
+</style>
+<link rel="stylesheet" href="../assets/shell.css">
+<script src="../../shared/platform.js"></script>
+<script src="../course.js"></script>
+<script src="../assets/shell.js"></script>
+<!-- Vercel Web Analytics: anonymous page views, no cookies (enable Analytics for the project in the Vercel dashboard) -->
+<script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</head><body>
+<div class="wrap wide">
+  <header class="topbar">
+    <div class="tl">
+      <a class="back" href="index.html">← Back to the Classification drill</a>
+      <h1>Primate Classification Chart</h1>
+      <p class="sub" style="margin:0"><span class="origin">Source: Primate Classification worksheet</span> Drag each trait onto the chart, or tap a trait and then its box.</p>
+      <p class="rotate">Tip: turn your phone sideways to see the word bank and the chart side by side.</p>
+    </div>
+    <div class="cstats">
+      <div class="nums" id="nums"></div>
+      <div class="acts">
+        <label class="tpill" title="Off by default"><input type="checkbox" id="timerTgl"><span class="sw" aria-hidden="true"></span><span class="tl">⏱ Timer</span><span class="ts ts-off">Off</span><span class="ts ts-on">On</span></label>
+        <button class="chip" id="pauseBtn" aria-pressed="false" hidden>Pause</button>
+        <button class="chip" id="hintBtn">Hint</button>
+        <button class="chip" id="revealBtn">Show answers</button>
+        <button class="chip" id="resetBtn">Start over</button>
+      </div>
+    </div>
+  </header>
+  <div class="board">
+    <div class="pausecover" id="pauseCover" hidden><div><strong>Paused</strong><span>The timer is stopped and the chart is hidden.</span><button class="btn" id="resumeBtn"><span>Resume</span></button></div></div>
+    <aside class="bank" id="bank" aria-label="Word bank">
+      <h2><span>Word bank</span><span id="leftCount"></span></h2>
+      <p class="bhelp">Drag a trait onto the chart. You can also tap a trait, then tap a box.</p>
+      <div class="chips" id="chips"></div>
+      <p class="status" id="status" aria-live="polite"></p>
+      <div id="doneBox"></div>
+    </aside>
+    <section class="chart" id="chart" aria-label="Primate classification chart"></section>
+  </div>
+  <p class="foot">Answers follow the worksheet key. Your best result is saved in this browser on this device.</p>
+</div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<script>
+(() => {
+  const RANKS = [
+    { label: "Order", taxa: [["PRI", "Primates", "All primates"]] },
+    { label: "Suborder", taxa: [["STR", "Strepsirrhines", "Lemurs, lorises, galagos"], ["HAP", "Haplorrhines", "Tarsiers, monkeys, apes"]] },
+    { label: "Infraorder", taxa: [["LEM", "Lemuriformes", "Under strepsirrhines"], ["LOR", "Lorisiformes", "Under strepsirrhines: lorises & galagos"], ["TAR", "Tarsiiformes", "Under haplorrhines: tarsiers"], ["PLA", "Platyrrhines (NWM)", "Under haplorrhines"], ["CAT", "Catarrhines", "Under haplorrhines"]] },
+    { label: "Superfamily", taxa: [["CER", "Cercopithecoidea (OWM)", "Under catarrhines"], ["HOM", "Hominoidea (apes)", "Under catarrhines"]] }
+  ];
+  const KEY = [
+    ["Prehensile hands and feet", ["PRI"]], ["Opposable thumbs", ["PRI"]], ["Nails and dermatoglyphs", ["PRI"]], ["Binocular & stereoscopic vision", ["PRI"]],
+    ["“Wet-nose” primates", ["STR"]], ["Post-orbital bar", ["STR"]], ["Dental comb", ["STR"]], ["Tapetum lucidum", ["STR"]], ["2.1.3.3 dentition", ["STR"]],
+    ["Grooming claw", ["STR", "TAR"]],
+    ["“Dry-nose” primates", ["HAP"]], ["Post-orbital closure", ["HAP"]], ["Reduced olfaction compared to strepsirrhines", ["HAP"]],
+    ["Found only on Madagascar", ["LEM"]],
+    ["Small, nocturnal & arboreal", ["LOR", "TAR"]],
+    ["Formerly classified as prosimian", ["TAR"]], ["Huge eyes, each as large as the brain", ["TAR"]],
+    ["“Broad, sidewards facing nostrils”", ["PLA"]], ["Found in Central & South America", ["PLA"]], ["Prehensile tail in some species", ["PLA"]], ["2.1.3.3 dentition (with exceptions)", ["PLA"]],
+    ["“Downward facing nostrils”", ["CAT"]], ["2.1.2.3 dentition", ["CAT"]],
+    ["Bilophodont molars", ["CER"]], ["Ischial callosities", ["CER"]],
+    ["Y-5 (simple) molars", ["HOM"]], ["No tail", ["HOM"]], ["Modified clavicle/scapula for brachiating", ["HOM"]], ["Longest ontogeny of all primates", ["HOM"]]
+  ];
+  const ANS = Object.fromEntries(KEY);
+  const NAME = {}; RANKS.forEach(r => r.taxa.forEach(t => NAME[t[0]] = t[1]));
+  const CAP = {}; KEY.forEach(([, ts]) => ts.forEach(t => CAP[t] = (CAP[t] || 0) + 1));
+  const TOTAL = KEY.reduce((n, [, ts]) => n + ts.length, 0);
+  const BEST_KEY = "anthro-chart-best", TIMER_KEY = "anthro-timer";
+  let showTimer = false; try { showTimer = JSON.parse(localStorage.getItem(TIMER_KEY) || "false") === true } catch (e) { }
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const shuffle = a => { a = a.slice(); for (let k = a.length - 1; k > 0; k--) { const j = Math.random() * (k + 1) | 0; [a[k], a[j]] = [a[j], a[k]] } return a };
+  const mmss = s => Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
+  const reduceMotion = () => window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Reading settings chosen in the drills apply here too
+  try {
+    const r = JSON.parse(localStorage.getItem("anthro-reading") || "null");
+    const stacks = { atkinson: ['"Atkinson Hyperlegible Next",system-ui,sans-serif', "https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;600;700&display=swap"], literata: ['Literata,Georgia,serif', "https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;600;700&display=swap"], system: ['system-ui,-apple-system,"Segoe UI",Roboto,sans-serif'] };
+    if (r && stacks[r.font]) { const [st, href] = stacks[r.font]; if (href) { const l = document.createElement("link"); l.rel = "stylesheet"; l.href = href; document.head.appendChild(l) } document.documentElement.style.setProperty("--read", st) }
+    if (r && [.9, 1, 1.12, 1.25][r.size]) document.documentElement.style.setProperty("--rs", [.9, 1, 1.12, 1.25][r.size]);
+  } catch (e) { }
+
+  let placed, left, selected, mistakes, hints, startT, timer, revealed, elapsed = 0, paused = false, finished = false;
+  const secsNow = () => Math.round((elapsed + (startT && !paused ? Date.now() - startT : 0)) / 1000);
+  function startClock() { if (finished || paused || startT) return; startT = Date.now(); clearInterval(timer); timer = setInterval(nums, 1000); $("pauseBtn").hidden = !showTimer }
+  const placedCount = () => Object.values(placed).reduce((n, a) => n + a.length, 0);
+  function say(msg, tone = "") { const s = $("status"); s.textContent = msg; s.className = "status " + tone }
+  function toast(msg) { const t = document.createElement("div"); t.className = "toast"; t.innerHTML = `<i></i>${esc(msg)}`; $("toasts").appendChild(t); setTimeout(() => t.remove(), 2600) }
+  function nums() {
+    const secs = secsNow();
+    let best = null; try { best = JSON.parse(localStorage.getItem(BEST_KEY) || "null") } catch (e) { }
+    $("nums").innerHTML = `<span><b>${placedCount()}</b> of ${TOTAL} placed</span><span><b>${mistakes}</b> mistakes</span>${showTimer ? `<span>Time <b>${mmss(secs)}</b></span>` : ""}${best ? `<span>Best: ${best.m} mistake${best.m === 1 ? "" : "s"}${showTimer && best.s ? " in " + mmss(best.s) : ""}</span>` : ""}`;
+    $("leftCount").textContent = `${TOTAL - placedCount()} left`;
+  }
+
+  // ----- Build once; afterwards only the changed pieces update (no full re-render, no jumps)
+  function build() {
+    $("chips").innerHTML = shuffle(KEY.map(k => k[0])).map(w => `<button type="button" class="wchip" data-w="${esc(w)}" aria-pressed="false"><span>${esc(w)}</span>${ANS[w].length > 1 ? `<span class="x2">×${ANS[w].length}</span>` : ""}</button>`).join("");
+    $("chart").innerHTML = RANKS.flatMap(r => r.taxa.map(([k, name]) => `<button type="button" class="taxon" data-t="${k}" aria-label="${esc(r.label)} ${esc(name)}: 0 of ${CAP[k]} placed">
+        <span class="rk">${r.label}</span>
+        <span class="thead"><span class="tname">${esc(name)}</span><span class="tcount">0/${CAP[k]}</span></span>
+        <span class="slots">${Array.from({ length: CAP[k] }, () => `<span class="slot"></span>`).join("")}</span></button>`)).join("");
+    $("chips").querySelectorAll(".wchip").forEach(wireChip);
+    $("chart").querySelectorAll(".taxon").forEach(b => b.addEventListener("click", () => { if (selected && !paused) place(selected, b) }));
+  }
+  function reset() {
+    placed = {}; Object.keys(CAP).forEach(t => placed[t] = []);
+    left = {}; KEY.forEach(([w, ts]) => left[w] = ts.length);
+    selected = null; mistakes = 0; hints = 0; startT = 0; elapsed = 0; finished = false; revealed = false; clearInterval(timer); setPaused(false); $("pauseBtn").hidden = true;
+    $("doneBox").innerHTML = ""; $("bank").classList.remove("finished"); $("bank").hidden = false;
+    build(); nums(); say(""); measureTray();
+  }
+  function select(w) {
+    selected = selected === w ? null : w;
+    $("chips").querySelectorAll(".wchip").forEach(c => c.setAttribute("aria-pressed", c.dataset.w === selected));
+    $("chart").classList.toggle("targeting", !!selected);
+    if (selected) say(`Now tap where “${selected}” belongs.`); else say("");
+  }
+  function chipFor(w) { return [...$("chips").querySelectorAll(".wchip")].find(c => c.dataset.w === w) }
+  function updateChip(w) {
+    const c = chipFor(w); if (!c) return;
+    if (left[w] <= 0) { c.classList.add("gone"); setTimeout(() => { c.remove(); measureTray() }, 200) }
+    else { const x = c.querySelector(".x2"); if (x) x.textContent = "×" + left[w] }
+  }
+  function fillSlot(t, w) {
+    const box = $("chart").querySelector(`[data-t="${t}"]`), slot = [...box.querySelectorAll(".slot")].find(s => !s.classList.contains("filled"));
+    if (slot) { slot.textContent = w; slot.classList.add("filled", ...(revealed ? ["revealed"] : ["new"])) }
+    box.classList.toggle("full", placed[t].length >= CAP[t]);
+    box.setAttribute("aria-label", `${NAME[t]}: ${placed[t].length} of ${CAP[t]} placed`);
+    box.querySelector(".tcount").textContent = `${placed[t].length}/${CAP[t]}`;
+  }
+  function place(w, box) {
+    const t = box.dataset.t;
+    startClock();
+    if (ANS[w].includes(t) && !placed[t].includes(w) && placed[t].length < CAP[t]) {
+      placed[t].push(w); left[w]--;
+      fillSlot(t, w); updateChip(w);
+      if (left[w] > 0) { say(`Right: “${w}” goes under ${NAME[t]}. It goes in one more place too.`, "good"); if (selected !== w) select(w) }
+      else { selected = null; $("chart").classList.remove("targeting"); say(`Right: “${w}” goes under ${NAME[t]}.`, "good") }
+      nums();
+      if (placedCount() === TOTAL) finish();
+      return true;
+    }
+    if (ANS[w].includes(t) && placed[t].includes(w)) { say(`“${w}” is already under ${NAME[t]}. Its second place is somewhere else.`); return false }
+    mistakes++; nums();
+    box.classList.remove("shake"); void box.offsetWidth; box.classList.add("shake");
+    say(`Not ${NAME[t]}. Try another box, or tap Hint.`, "bad");
+    return false;
+  }
+
+  // ----- Drag with Pointer Events (mouse, finger and pen). Tap still selects, for accessibility.
+  let drag = null, raf = 0, suppressClick = false;
+  function wireChip(c) {
+    c.addEventListener("click", () => { if (suppressClick) { suppressClick = false; return } select(c.dataset.w) });
+    c.addEventListener("pointerdown", e => {
+      if (e.button > 0 || drag || paused) return;
+      if (e.pointerType === "mouse") e.preventDefault();   // stop the browser from selecting text while dragging
+      drag = { c, w: c.dataset.w, id: e.pointerId, x0: e.clientX, y0: e.clientY, x: e.clientX, y: e.clientY, on: false, over: null };
+    });
+  }
+  document.addEventListener("pointermove", e => {
+    if (!drag || e.pointerId !== drag.id) return;
+    drag.x = e.clientX; drag.y = e.clientY;
+    if (!drag.on) {
+      if (Math.hypot(drag.x - drag.x0, drag.y - drag.y0) < 8) return;
+      drag.on = true; try { drag.c.setPointerCapture(drag.id) } catch (err) { }
+      const g = document.createElement("div"); g.className = "dragghost"; g.textContent = drag.w; document.body.appendChild(g); drag.g = g;
+      drag.c.classList.add("lifted"); document.body.classList.add("dragging"); $("chart").classList.add("targeting");
+      startClock();
+      raf = requestAnimationFrame(tick);
+    }
+    e.preventDefault();
+  }, { passive: false });
+  function tick() {
+    if (!drag || !drag.on) return;
+    drag.g.style.transform = `translate(${drag.x - 24}px, ${drag.y - 26}px)`;
+    const el = document.elementFromPoint(drag.x, drag.y), box = el && el.closest && el.closest(".taxon");
+    if (box !== drag.over) { if (drag.over) drag.over.classList.remove("over"); drag.over = box; if (box) box.classList.add("over") }
+    // auto-scroll when dragging near the top or bottom edge (above the tray on phones)
+    const trayTop = window.innerWidth < 600 ? $("bank").getBoundingClientRect().top : window.innerHeight;
+    if (window.innerWidth < 600) {
+      if (drag.y < 90) window.scrollBy(0, -Math.ceil((90 - drag.y) / 6));
+      else if (drag.y > trayTop - 70 && drag.y < trayTop) window.scrollBy(0, Math.ceil((drag.y - (trayTop - 70)) / 6));
+    } else {
+      const ch = $("chart"), r = ch.getBoundingClientRect();
+      if (drag.x > r.left && drag.y < r.top + 40) ch.scrollBy(0, -8); else if (drag.x > r.left && drag.y > r.bottom - 40) ch.scrollBy(0, 8);
+    }
+    raf = requestAnimationFrame(tick);
+  }
+  function endDrag(drop) {
+    if (!drag) return;
+    const d = drag; drag = null; cancelAnimationFrame(raf);
+    if (!d.on) return;                                   // it was a tap: the click handler selects it
+    suppressClick = true; setTimeout(() => suppressClick = false, 0);
+    document.body.classList.remove("dragging"); d.c.classList.remove("lifted");
+    if (d.over) d.over.classList.remove("over");
+    if (d.g) d.g.remove();
+    if (!selected) $("chart").classList.remove("targeting");
+    if (drop && d.over) place(d.w, d.over);
+  }
+  document.addEventListener("pointerup", e => { if (drag && e.pointerId === drag.id) endDrag(true) });
+  document.addEventListener("pointercancel", e => { if (drag && e.pointerId === drag.id) endDrag(false) });   // the browser took over to scroll
+
+  // Keep the chart clear of the bottom tray on small screens
+  function measureTray() { const h = window.innerWidth < 600 ? $("bank").offsetHeight + 16 : 0; document.documentElement.style.setProperty("--tray", h + "px") }
+  window.addEventListener("resize", measureTray);
+
+  function finish() {
+    if (startT) elapsed += Date.now() - startT; startT = 0; finished = true; clearInterval(timer); $("pauseBtn").hidden = true;
+    const secs = secsNow();
+    $("bank").classList.add("finished");
+    if (revealed) {   // answers shown: no card over the chart, just the full chart (Start over is in the toolbar)
+      $("doneBox").innerHTML = ""; $("bank").hidden = true; measureTray();
+      nums(); window.scrollTo({ top: 0, behavior: reduceMotion() ? "auto" : "smooth" }); $("chart").scrollTo({ top: 0 });
+      return;
+    }
+    measureTray();
+    if (!revealed) {
+      let best = null; try { best = JSON.parse(localStorage.getItem(BEST_KEY) || "null") } catch (e) { }
+      const isBest = !best || mistakes < best.m || (showTimer && mistakes === best.m && secs < best.s);
+      if (isBest) { try { localStorage.setItem(BEST_KEY, JSON.stringify({ m: mistakes, s: showTimer ? secs : (best && best.m === mistakes ? best.s : 0) })) } catch (e) { } }
+      toast(isBest ? "New best result" : "Chart complete");
+    }
+    $("doneBox").innerHTML = `<div class="done-card"><h2>Chart complete</h2>
+      <p class="sub">${TOTAL} traits placed with ${mistakes} mistake${mistakes === 1 ? "" : "s"}${hints ? ` and ${hints} hint${hints === 1 ? "" : "s"}` : ""}${showTimer ? " in " + mmss(secs) : ""}.</p>
+      <div class="nav"><button class="btn" id="again"><span>Start over</span></button><a class="btn ghost" href="index.html" style="text-decoration:none"><span>Practice the Classification questions</span></a></div></div>`;
+    $("again").onclick = reset;
+    nums(); window.scrollTo({ top: 0, behavior: reduceMotion() ? "auto" : "smooth" }); $("chart").scrollTo({ top: 0 });
+  }
+  $("hintBtn").onclick = () => {
+    if (!selected) { say("Tap a trait first, then Hint shows where it goes."); return }
+    hints++;
+    const targets = ANS[selected].filter(t => !placed[t].includes(selected));
+    targets.forEach(t => { const b = $("chart").querySelector(`[data-t="${t}"]`); b.classList.add("hint"); setTimeout(() => b.classList.remove("hint"), 1600); b.scrollIntoView({ block: "center", behavior: reduceMotion() ? "auto" : "smooth" }) });
+    say(`Hint: look at ${targets.map(t => NAME[t]).join(" and ")}.`);
+  };
+  $("revealBtn").onclick = () => {
+    revealed = true; selected = null; $("chart").classList.remove("targeting");
+    KEY.forEach(([w, ts]) => ts.forEach(t => { if (!placed[t].includes(w)) { placed[t].push(w); fillSlot(t, w) } }));
+    Object.keys(left).forEach(w => left[w] = 0);
+    $("chart").querySelectorAll(".slot.filled").forEach(s => s.classList.add("revealed"));
+    finish();
+  };
+  function setPaused(on) {
+    if (on === paused) return;
+    if (on) { if (startT) elapsed += Date.now() - startT; startT = 0; clearInterval(timer) }
+    paused = on;
+    document.body.classList.toggle("paused", on);
+    $("pauseBtn").textContent = on ? "Resume" : "Pause"; $("pauseBtn").setAttribute("aria-pressed", on);
+    $("pauseCover").hidden = !on;
+    if (!on && (elapsed > 0)) { startT = Date.now(); timer = setInterval(nums, 1000) }
+    nums();
+  }
+  $("pauseBtn").onclick = () => setPaused(!paused);
+  $("timerTgl").checked = showTimer;
+  $("timerTgl").onchange = e => {
+    showTimer = e.target.checked; try { localStorage.setItem(TIMER_KEY, JSON.stringify(showTimer)) } catch (err) { }
+    if (!showTimer && paused) setPaused(false);
+    $("pauseBtn").hidden = !(showTimer && startT && !finished); nums();
+  };
+  $("resumeBtn").onclick = () => setPaused(false);
+  // pause automatically when the student switches tab or app
+  document.addEventListener("visibilitychange", () => { if (showTimer && document.hidden && startT && !finished) setPaused(true) });
+  $("resetBtn").onclick = reset;
+  reset();
+})();
+</script>
+</body></html>

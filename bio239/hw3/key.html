@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>HW 3 Answer Key · Bi 239</title>
+<meta name="description" content="Bi 239 Homework 3: every question as multiple choice, answered from the lecture slides and clicker questions, with explanations.">
+<meta name="theme-color" content="#f5f5f7">
+<link rel="stylesheet" href="../../shared/drill.css">
+<script src="../../shared/platform.js"></script>
+<script src="../course.js"></script>
+<script src="../../shared/settings.js"></script>
+<style>
+/* Layout: header + controls → one card per homework question number → parts as lettered multiple choice */
+.ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ctl .sp{flex:1}
+.jump{display:flex;flex-wrap:wrap;gap:6px}
+.jump a{font:600 12px var(--mono);color:var(--accent);background:var(--accent-soft);border-radius:8px;padding:4px 8px;text-decoration:none}
+.jump a:hover{background:var(--accent);color:var(--accent-ink)}
+.sect{font:800 20px/1.2 var(--display);margin:18px 0 0;letter-spacing:-.01em}
+.hwq{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;display:flex;flex-direction:column;gap:14px;scroll-margin-top:16px}
+.hwq h3{margin:0;font:700 13px var(--mono);color:var(--muted);letter-spacing:.02em}
+.hwq .orig{margin:0;font:600 calc(16px * var(--rs))/1.45 var(--read)}
+.part{border-top:1px dashed var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px}
+.part .pq{margin:0;font:500 calc(15px * var(--rs))/1.5 var(--read)}
+.part .pl{font:600 11px var(--mono);color:var(--accent);text-transform:uppercase;letter-spacing:.06em}
+.opts{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.opts li{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start;padding:8px 10px;border:1px solid var(--line);border-radius:10px;font-size:calc(14.5px * var(--rs));line-height:1.45}
+.opts li b{font:700 13px var(--mono);color:var(--muted)}
+body:not(.hide) .opts li.ok{background:var(--good-soft);border-color:color-mix(in srgb,var(--good) 45%,transparent)}
+body:not(.hide) .opts li.ok b{color:var(--good)}
+.ans{font-size:calc(14px * var(--rs));color:var(--ink);background:var(--sunk);border-radius:10px;padding:10px 12px;margin:0;line-height:1.5}
+.ans strong{color:var(--good)}
+body.hide .ans{display:none}
+.reveal{display:none}
+body.hide .reveal{display:inline-flex;align-self:flex-start}
+.part.open .ans{display:block!important}
+.part.open .reveal{display:none!important}
+.part.open .opts li.ok{background:var(--good-soft);border-color:color-mix(in srgb,var(--good) 45%,transparent)}
+.note{font-size:13px;color:var(--muted);margin:0}
+@media print{
+  body{background:#fff;padding:0} .ctl,.back,.jump,.reveal,.foot{display:none!important}
+  .hwq{box-shadow:none;break-inside:avoid;border-color:#bbb} body.hide .ans{display:none}
+}
+</style>
+<script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</head><body class="hide">
+<div class="wrap">
+  <header>
+    <a class="back" href="../index.html">← All drills</a>
+    <div class="titlerow"><h1>HW 3 Answer Key</h1></div>
+    <p class="sub">Every Homework 3 question on one page, written as multiple choice and answered from the lecture slides and the Ch 29, 30, 31 and 39 clicker questions. Questions with several parts are split into one question per part. Each answer comes with a short explanation.</p>
+  </header>
+  <div class="ctl">
+    <button class="chip" id="hideBtn" aria-pressed="true">Show all answers</button>
+    <a class="chip" href="index.html" style="text-decoration:none">Multiple-choice drill →</a>
+    <span class="sp"></span>
+    <button class="chip" id="printBtn">Print</button>
+  </div>
+  <p class="note">Answers are hidden. Pick an answer in your head, then tap <b>Show answer</b> under each question, or <b>Show all answers</b> to read through. For scored practice with saved progress, use the <a href="index.html">HW 3 multiple-choice drill</a>.</p>
+  <nav class="jump" id="jump" aria-label="Jump to a question"></nav>
+  <main id="list" style="display:flex;flex-direction:column;gap:12px"></main>
+  <p class="foot">Answers for Ch 39 come straight from the lecture slides. For Ch 29–31 (plants and fungi) they follow the clicker questions and the Campbell <i>Biology</i> chapters they come from. Check anything that differs from your lecture notes. Questions 29–35 aren't in the homework file.</p>
+</div>
+<script src="../drill/shared.js"></script>
+<script>
+(() => {
+  const BIO = window.BIO, $ = id => document.getElementById(id);
+  // Reading settings from the drill's Options menu (font and size)
+  try { const r = JSON.parse(localStorage.getItem("bio-reading") || "null"); if (r && r.s) document.documentElement.style.setProperty("--rs", r.s) } catch (e) { }
+  // The homework's own wording, keyed by question number
+  const ORIG = {
+    1: "Name the closest relatives to the land plants.",
+    2: "List advantages and problems faced by early plants when they started colonizing terrestrial habitats.",
+    3: "List all the similarities that all current land plants share with charophytes. What distinguishes modern plants from charophytes?",
+    4: "Plants can be classified based on the presence or absence of ________. Nonvascular plants are called?",
+    5: "Which form dominates the nonvascular plant life cycle? Which form is dominant for vascular plants?",
+    6: "Which additional characteristics are specific for vascular plants?",
+    7: "Describe life cycles of nonvascular and seedless vascular plants. Differentiate gametophytes in each group. How does fertilization occur in each case? Which structure produces and disperses spores in each case?",
+    8: "Describe the differences between seedless and seed producing vascular plants. What is pollen? Where are gametangia located? What does it mean heterosporous?",
+    9: "How do Gymnosperms and Angiosperms differ from each other?",
+    10: "What is the composition of seeds?",
+    11: "Which other adaptations do seed plants have? Describe the life cycle of Gymnosperms and Angiosperms.",
+    12: "What is the function of flowers? What is the origin of different parts of the flowers?",
+    13: "What are fruits? What is their contribution to the fitness of angiosperms?",
+    14: "List differences between monocots and eudicots.",
+    15: "What is etiolation? What happens during de-etiolation? In general what happens during signal transduction (describe each step)?",
+    16: "What causes the coleoptile to bend towards light? Where is the signal produced? Which part of the coleoptile is affected? Plant cells are surrounded by cell walls. How can they elongate? Describe the acid growth hypothesis.",
+    17: "List an example of a plant hormone that can exert different effects depending on concentration.",
+    18: "What are cytokinins doing?",
+    19: "What is the role of gibberellins?",
+    20: "Which molecule is responsible for ripening of the fruits and abscission of leaves?",
+    21: "To which hormones are brassinosteroids similar?",
+    22: "What are major roles of abscisic acid?",
+    23: "How can mechanical stress change plants' morphology?",
+    24: "Phytochromes exist in active and inactive form. How is light influencing these forms?",
+    25: "When are short-day plants flowering? How about long-day plants?",
+    26: "Cyclic changes (for example opening of flowers) observed in plants during a 24h period are called?",
+    27: "What is meant by stress for plants? How do plants cope with stress? List abiotic factors affecting plants and means by which plants cope with them.",
+    28: "List defense methods used by plants against pathogens. What is the role of salicylic acid?",
+    36: "What are lichens? How do fungi participate in this ecological interaction?",
+    37: "Why are fungi important in the biosphere?",
+    38: "What are the fruiting bodies present in some fungi?",
+    39: "What are the types of reproduction that occur in fungi?",
+    40: "What are the hyphae and the mycelium?",
+    41: "How do fungi get nutrients?",
+    42: "Describe reproductive cycles of various groups of fungi.",
+    43: "What is special about chytrids?",
+    44: "List special features of zygomycetes, ascomycetes and basidiomycetes."
+  };
+  // Stable option order per question, so the answer letter stays the same between visits (and in print)
+  const hash = s => { let h = 2166136261; for (const c of s) h = Math.imul(h ^ c.charCodeAt(0), 16777619); return h >>> 0 };
+  const order = (q, id) => { const a = [q.ok, ...q.wrong]; let h = hash(id + q.q); for (let k = a.length - 1; k > 0; k--) { h = Math.imul(h, 1103515245) + 12345 >>> 0; const j = h % (k + 1); [a[k], a[j]] = [a[j], a[k]] } return a };
+  const L = "ABCDEFG";
+  // Group the HW deck by question number: "HW3 · Q7 (fern spores)" → 7, "fern spores"
+  const groups = new Map();
+  BIO.HW.forEach((r, i) => {
+    const id = "HW" + i, q = { tag: r[0], q: r[1], ok: r[2], wrong: r[3], ex: r[4] || "", topic: (BIO.TOPICS[r[6]] || {}).name || "" };
+    const m = q.tag.match(/Q(\d+)(?:\s*\((.+)\))?/); const n = +m[1];
+    if (!groups.has(n)) groups.set(n, []);
+    groups.get(n).push({ id, q, part: m[2] || "" });
+  });
+  // Sections follow the homework's chapters
+  const SECT = n => n <= 7 ? "Plants colonize land (Ch 29)" : n <= 14 ? "Seed plants (Ch 30)" : n <= 28 ? "Plant responses to signals (Ch 39)" : "Fungi (Ch 31)";
+  let html = "", last = "";
+  for (const [n, parts] of groups) {
+    const s = SECT(n); if (s !== last) { html += `<h2 class="sect">${s}</h2>`; last = s }
+    html += `<article class="hwq" id="q${n}"><h3>QUESTION ${n} · ${parts[0].q.topic}</h3><p class="orig">${ORIG[n] || ""}</p>`;
+    for (const { id, q, part } of parts) {
+      const opts = order(q, id), k = opts.indexOf(q.ok);
+      html += `<div class="part">${parts.length > 1 ? `<span class="pl">${part}</span>` : ""}<p class="pq">${q.q}</p>
+        <ol class="opts">${opts.map((o, i) => `<li class="${i === k ? "ok" : ""}"><b>${L[i]}</b><span>${o}</span></li>`).join("")}</ol>
+        <button class="chip reveal" type="button">Show answer</button>
+        <p class="ans"><strong>Answer: ${L[k]}.</strong> ${q.ex}</p></div>`;
+    }
+    html += `</article>`;
+  }
+  $("list").innerHTML = html;
+  $("jump").innerHTML = [...groups.keys()].map(n => `<a href="#q${n}">Q${n}</a>`).join("");
+  $("list").addEventListener("click", e => { const b = e.target.closest(".reveal"); if (b) { b.closest(".part").classList.add("open") } });
+  const setHide = on => { document.body.classList.toggle("hide", on); $("hideBtn").setAttribute("aria-pressed", on); $("hideBtn").textContent = on ? "Show all answers" : "Hide answers (quiz yourself)"; if (!on) document.querySelectorAll(".part.open").forEach(p => p.classList.remove("open")) };
+  $("hideBtn").onclick = () => setHide(!document.body.classList.contains("hide"));
+  setHide(true);   // answers start hidden: quiz yourself first
+  $("printBtn").onclick = () => window.print();
+})();
+</script>
+</body></html>

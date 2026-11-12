@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Anthro Exam 1 Multiple-Choice Drill</title>
+<meta name="description" content="ANTH 102 Exam 1 practice by subject: science, natural selection, DNA, genetics and forces of evolution.">
+<meta name="theme-color" content="#2a46cf">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="../assets/drill.css">
+<link rel="stylesheet" href="../assets/shell.css">
+<script src="../../shared/platform.js"></script>
+<script src="../course.js"></script>
+<script src="../assets/shell.js"></script>
+<!-- Vercel Web Analytics: anonymous page views, no cookies (enable Analytics for the project in the Vercel dashboard) -->
+<script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</head><body>
+<div class="wrap">
+  <header>
+    <a class="back" href="../index.html">← All drills</a>
+    <div class="titlerow">
+      <h1>Exam 1 Multiple&#8209;Choice Drill</h1>
+      <div class="habit" id="habit" aria-live="polite"></div>
+    </div>
+  </header>
+  <nav class="tabs" role="tablist" aria-label="Subjects" id="tabs"></nav>
+  <section class="deckhead" id="deckhead">
+    <p class="sub" id="deckSub"></p>
+    <div class="map" id="map" role="img"></div>
+  </section>
+  <div class="toolbar" id="toolbar">
+    <div class="roundinfo" id="roundInfo"></div>
+    <div class="tbtns">
+    <span data-timer-slot></span>
+    <button class="chip" id="randBtn" title="Start this set again in a new random order"><span aria-hidden="true">⤨</span> Randomize</button>
+    <div class="menuwrap">
+      <button class="chip" id="optBtn" aria-haspopup="menu" aria-expanded="false" aria-controls="menu">Options</button>
+      <div class="menu" id="menu" role="menu" hidden>
+        <button class="mi" id="shuffleBtn" role="menuitemcheckbox"><span class="box"></span>Shuffle questions</button>
+        <button class="mi" id="autoBtn" role="menuitemcheckbox"><span class="box"></span>Go to the next question after a right answer</button>
+        <button class="mi sep" id="restartBtn" role="menuitem">Restart this set</button>
+        <button class="mi warn" id="resetBtn" role="menuitem">Clear all progress</button>
+      </div>
+    </div>
+    </div>
+  </div>
+  <div class="bar" id="barRow"><i id="prog"></i></div>
+  <main class="card" id="card"></main>
+  <p class="foot">Tap any square to jump to that question. Keys: 1–5 to answer, ← and → to move between questions, Enter for the main button. Progress is saved in this browser on this device. <a href="../review/index.html">Review list</a> · <a href="../index.html#sources">Where the questions come from</a></p>
+</div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<div class="lightbox" id="lightbox" hidden><img id="lbImg" alt=""><button id="lbClose" type="button">Close</button></div>
+<script src="../assets/glossary.js"></script>
+<script src="questions.js"></script>
+<script src="../assets/drill.js"></script>
+</body></html>

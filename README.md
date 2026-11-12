@@ -1,90 +1,53 @@
-# ANTH 104 Drills
+# MeowStudy
 
-Study drills for **ANTH 104: Language, Culture, and Society** (Queens College, Fall 2026). Built from Laura Ahearn's *Living Language: An Introduction to Linguistic Anthropology* (3rd ed., Ch 1–13), the eleven assigned readings and the Language Acquisition and Socialization lecture slides. It uses the same engine and approach as [anthro-drills](https://github.com/Aksaddd/anthro-drills) and [bio-drills](https://github.com/Aksaddd/bio-drills).
+One study platform for several classes. Each class has its own study guide (reading chapters, drills, mock exams, review games), and one study buddy (Dexter and the other cats, gold, outfits, the Cat Café) follows the student across all of them.
 
-Everything is plain static HTML, CSS and JavaScript, with no build step and no server code. The course materials themselves (PDFs, links) stay in the `Week_*` / `week_*` folders.
+It combines three repositories that used to be separate sites: [Anth104](https://github.com/Aksaddd/Anth104), [bio-drills](https://github.com/Aksaddd/bio-drills) and [anthro-drills](https://github.com/Aksaddd/anthro-drills). Everything is plain static HTML, CSS and JavaScript, with no build step.
 
-| Module | Folder | What it is |
-|---|---|---|
-| Landing | `index.html` | Course hero, optional exam countdown (set the date in Settings), **Continue**, module bar, and a card per module |
-| Read & Learn | `read/` | The whole course as 10 reading chapters (57 short passages), with **Check yourself** questions after each passage and 25 activities (match, sort, put in order, flip cards) |
-| Multiple-Choice Drill | `drill/` | 586 questions in 10 subject tabs, plus **Mixed**, **Missed** and **Progress**. **Group by: Source** practices chosen chapters or the readings together |
-| Anthro-pardy | `board/` | A Jeopardy-style board: 6 categories × 5 values, one hidden ×2 tile |
-| Word Roots | `roots/` | 77 Greek and Latin roots behind course terms (*hetero-* + *-glossia*, *il-* + *locution*…), sorted by subject, with a drill |
-| Readings | `readings/` | Derived from the original reading PDFs in the Archive. Its own drill: 133 questions, one tab per assigned article in syllabus order, with separate progress (`a104-readings-v1`). `readings/key.html` is the answer key, **answers hidden by default** |
-| Mock Exam | `mock/` | A fresh 50- or 100-question exam each time, a quarter from the readings |
-| Review List | `review/` | Every question marked ⚑ for review, from both drills and mock exams |
-| Discussion Board (beta) | `discuss/` | **In testing mode** (marked Beta). Google sign-in isn't set up yet, so a clearly labelled **demo account** lets anyone, including the professor, try every feature: it is not a real sign-in, posts stay in that browser (`a104-discuss-demo-db`), and a few "Sample classmate" posts show likes and replies. Students sign in with Google and post one response per question (32 starter questions, two per week, plus questions students add), with likes, replies and an "answer first" gate. Needs Firestore rules: see [docs/discussion-board.md](docs/discussion-board.md) |
-| Archive | `archive/` | The original course material that everything else is built from, week by week (13 textbook chapters, 12 reading PDFs, the lecture slides, 14 videos, 2 links), with search, type filters and links into Read & Learn and the readings drill |
-
-## Subjects
-
-| Tab | Covers |
+| Folder | What it is |
 |---|---|
-| Social action | Ch 1 · Rickford & King |
-| Gesture & sign | Ch 2 |
-| Research | Ch 3 · García-Sánchez |
-| Socialization | Ch 4 · Paugh · lecture slides |
-| Thought & culture | Ch 5 · DeGraff |
-| Multilingual | Ch 6 · Wiel |
-| Literacy & online | Ch 7 · Ch 8 · Phyak |
-| Performance & gender | Ch 9 · Ch 10 |
-| Race & ethnicity | Ch 11 · Zentella · hooks · Smalls & Davis |
-| Power & agency | Ch 12 · Ch 13 · Perley · Alim |
+| `index.html` | The front page: enter a class code, then open your classes |
+| `shared/` | The engine every class uses: study buddy and Cat Café (`buddy.js`, `wardrobe.js`, `xp.js`), settings and Google account (`settings.js`, `account.js`), the drill engine (`drill.js`, `drill.css`), the double-tap dictionary (`lookup.js`), and the class list and class codes (`platform.js`) |
+| `anth104/` | ANTH 104: Language, Culture & Society. See [anth104/README.md](anth104/README.md) |
+| `bio239/` | Bi 239: Plants, Fungi & Signals. See [bio239/README.md](bio239/README.md) |
+| `anth102/` | ANTH 102: Biology & Evolution of Human Species. See [anth102/README.md](anth102/README.md). Still on its own older drill engine (`anth102/assets/`), so it has no study buddy yet |
+| `docs/` | Setting up Google sign-in and the ANTH 104 discussion board |
+| `tools/class-code.js` | Makes the fingerprint for a new class code |
 
-## Where the questions come from
+## Class codes
 
-| Deck | Count | Source |
-|---|---|---|
-| `C01`–`C13` | 417 | Practice written from the textbook, one deck per chapter |
-| `RD` | 133 | Practice written from the assigned readings (Rickford & King, García-Sánchez, Paugh, DeGraff, Wiel, Phyak, Zentella, hooks, Smalls & Davis, Perley, Alim) |
-| `LS` | 6 | Practice written from the Language Acquisition and Socialization slides |
-| `AP` | 30 | Anthro-pardy clues (an optional deck the student can switch out of the drill) |
+Each class opens with a code. A student types it once on the front page and that class stays open on that device. A class page opened without the code sends the student back to the front page to enter it.
 
-None of the questions are the professor's own, so the site marks them all **✎ Based on…** and never **★ From the professor**. Students should check anything that differs from their notes.
+| Class | Starting code |
+|---|---|
+| ANTH 104 | `ANTH104-MEOW` |
+| Bi 239 | `BI239-MEOW` |
+| ANTH 102 | `ANTH102-MEOW` |
 
-## Add or edit questions
-
-Textbook, slides and Anthro-pardy rows live in `drill/questions.js`. The readings rows, the subject list (`TOPICS`) and the article list (`ARTICLES`) live in `drill/shared.js`, because both the main drill and the Readings drill read them. Each question is one line:
-
-```js
-["Tag shown above the question", "Question text?", "Correct answer", ["Wrong 1", "Wrong 2", "Wrong 3"], "Explanation", "", "topicKey"],
-```
-
-- **Append new questions to the end of a deck.** Progress is stored by position, so inserting in the middle shifts saved history onto the wrong questions.
-- `topicKey` is one of `F G M A T W L P R E` (see `TOPICS` in `drill/shared.js`).
-- A readings row belongs to the article whose author starts its tag (`"Perley · Zombie Linguistics"`).
-- Read & Learn passages (`read/chapters.js`) point at drill questions by id (`C0112` = Ch 1, question 12; `RD40` = readings row 40), so answers count toward the drill.
-
-**After changing questions, run:**
+Codes ignore capitals, spaces and dashes. **Change these before sharing the site**, since this README is public. To set a new code:
 
 ```bash
-node tools/build.js
+node tools/class-code.js "NEW-CODE"
 ```
 
-This rebuilds `review/bank.js` (Review List) and `mock/bank.js` (Mock Exam). Also update the counts on the landing page if they change.
+Paste the line it prints over that class's `code:` in `shared/platform.js`. Only the fingerprint is stored there, so the file doesn't reveal the code. Then delete the table above.
 
-The double-tap dictionary is `assets/lexicon.js`; the "Why not …?" notes after a wrong answer come from `assets/glossary.js`. Underlined key terms in the reading (`<b>`) should have a lexicon entry; use `<strong>` for names and other emphasis.
+Two things to know:
 
-## Archive
+- Students who already had ANTH 104 progress in their browser before class codes existed keep their access without a code.
+- The codes are a courtesy gate, not security. The site is static, so the study files are public to anyone who knows their address. Real access control would need sign-in checked by a server.
 
-`archive/files.js` lists every file and link in the `Week_*` / `week_*` folders. It's generated: after adding, renaming or removing course files, run
+## How a class plugs in
 
-```bash
-node tools/build-archive.js
-```
+Every page of a class loads `shared/platform.js`, then the class's own `course.js`, then the shared engine. `course.js` tells the engine what is specific to the class: its storage prefix (`a104-`, `bio-`), the name of its review game, its XP bonuses, Dexter's facts and which Read & Learn badges belong to it.
 
-Textbook PDFs are named `<chapter number> <title>.pdf`; readings are matched to the drill's article list by author name; `.txt` files hold one URL per line (videos show their YouTube thumbnail, and the title is looked up in the visitor's browser). The page has `noindex` so search engines skip it, but the files are publicly reachable by URL, like everything else in a public repository and deployment.
+Progress is saved in the browser per class (`a104-drill-v1`, `bio-read-v1`, `ant1-progress-v2` …). The cats, gold, outfits, theme and reading settings are shared by every class; they keep their original `a104-` key names so nobody's existing cats were lost in the move.
 
-## How progress is saved
+To add a class: make a folder with its pages and a `course.js`, add it to `COURSES` in `shared/platform.js`, and (if it has Read & Learn chapters) add its badges to `COURSE_BADGES` in `shared/wardrobe.js`.
 
-Progress is saved **in the student's own browser** (`localStorage`). Every key starts with `a104-`, so this site never mixes with the Bio or Anthro sites even on the same domain. The main drill uses `a104-drill-v1`, the Readings drill `a104-readings-v1`, Read & Learn `a104-read-v1`, and the mock exam `a104-mock-v1` / `a104-mock-history-v1`.
+## Old addresses
 
-Optional **Google sign-in** (Settings → Account) syncs everything across devices through Firebase. It writes to its own Firestore collection, `anth104-progress`, so it can't touch the Bio site's data. It needs two one-time steps in the Firebase console before it works: see [docs/google-sign-in.md](docs/google-sign-in.md).
-
-## Study buddy
-
-Dexter the kitten, the gold, the Shop, the Cat Café and the badges work as on the Bio site (`assets/buddy.js`, `assets/wardrobe.js`). Tap any cat for its panel: **Cats** starts with the Cat Café and lets you **return a cat to the café** (it keeps its XP and outfits and can come home again, which frees a spot for a new cat), and the **⚙** tab holds every cat setting (size, anchoring, levels, meow, rename, hide). Dexter's form cards now carry linguistic anthropology facts, and finishing each Read & Learn chapter earns one of 10 new badges (Voice, Hand, Fieldnote, Rattle, Lightbulb, Polyglot, Letter, Spotlight, Unity, Revival).
+ANTH 104 used to live at the top of the site. `vercel.json` redirects its old addresses (`/drill/…`, `/readings/…`, `/Week_1/…`) into `/anth104/`.
 
 ## Run it locally
 
@@ -93,13 +56,3 @@ python3 -m http.server 8000
 ```
 
 Then open <http://localhost:8000>.
-
-## Publish it on Vercel
-
-1. On <https://vercel.com/new>, import this repository.
-2. Set **Framework Preset** to **Other**, leave **Build Command** empty, and leave **Output Directory** as the project root.
-3. Deploy. Every later push redeploys automatically.
-
-## A note on content
-
-Passages and questions are written for this site as a study aid; they aren't official course material.
