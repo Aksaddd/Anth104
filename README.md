@@ -42,6 +42,7 @@ Two things to know:
 - **Nobody starts with a pet.** A new student sees an "Adopt a study pet" button and picks one; that one is theirs. Answers before adopting earn nothing. Students who already had a buddy keep it.
 - **Two separate sides.** ANTH 102 has primates only (adopted from the Primate Safari Café); every other class has cats only (from the Cat Café). The other kind is never listed, shown or trained on the wrong side, and each kind has its own limit of six.
 - **Each class remembers its own choice.** Which pet is in training and which ones come along is saved per class (`per` inside `a104-dexter-cats-v1`) and restored when the student opens that class again. The pets themselves, with their XP, gold and outfits, are shared.
+- **Nothing is locked in.** Any pet, the first one included, can study with you, take a break ("💤 Take a break": nobody studies with you in that class until you pick someone), or go back to the café or safari. Returned pets keep their XP and outfits and can come home again. Returning your last pet brings back the adopt prompt.
 - Every pet on screen shows its level unless the student switches levels off.
 
 ## How a class plugs in
