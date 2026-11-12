@@ -271,6 +271,12 @@ html[data-layout="simple"] .guide{display:none}
 </header>
 
 <main class="inner">
+  <button type="button" id="safariDoor" style="display:flex;align-items:center;gap:16px;width:100%;margin:0 0 18px;padding:18px 20px;border-radius:18px;border:1.5px solid rgba(52,140,70,.45);background:linear-gradient(135deg,rgba(120,200,120,.28),rgba(255,214,120,.32));font:inherit;color:inherit;text-align:left;cursor:pointer">
+    <span style="font-size:38px" aria-hidden="true">🌴</span>
+    <span><b style="display:block;font-size:19px">The Primate Safari Café</b><span style="opacity:.75;font-size:14.5px">Only in ANTH 102: lemurs, tarsiers, monkeys and apes, each in its own habitat from Madagascar to the African forest. Meet them, see what makes each one different, and adopt one to study with you.</span></span>
+    <span style="margin-left:auto;font-weight:600;white-space:nowrap">Enter ›</span>
+  </button>
+  <script>document.getElementById("safariDoor").onclick = function () { if (window.BioBuddy && window.BioBuddy.openSafari) window.BioBuddy.openSafari() };</script>
   <details class="exampanel ep1" data-ep="1">
     <summary class="ephead"><span class="eptext"><h2 id="ep1">Exam 1</h2><p>Science, natural selection, cells &amp; DNA, protein synthesis, genetics and the forces of evolution.</p><span class="eptools">Multiple-Choice Drill · Anthro-pardy · Word Roots · Review List</span></span><span class="epgo" aria-hidden="true"><span class="ep-open">Open</span><span class="ep-close">Close</span></span></summary>
     <div class="cards">

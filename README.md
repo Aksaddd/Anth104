@@ -45,11 +45,19 @@ Progress is saved in the browser per class (`a104-drill-v1`, `bio-read-v1`, `ant
 
 To add a class: make a folder with its pages and a `course.js`, add it to `COURSES` in `shared/platform.js`, and (if it has Read & Learn chapters) add its badges to `COURSE_BADGES` in `shared/wardrobe.js`.
 
-## Primates (ANTH 102)
+## Primates and the Primate Safari Café (ANTH 102 only)
 
-Alongside the cat breeds, `shared/buddy.js` has ten primate species in taxonomic order: ring-tailed lemur, tarsier, golden lion tamarin, capuchin, macaque, gibbon, orangutan, gorilla, chimpanzee and bonobo. In ANTH 102 they visit the Cat Café and can be adopted; once adopted they come along in every class, like any cat.
+`shared/buddy.js` has ten primate species in taxonomic order: ring-tailed lemur, tarsier, golden lion tamarin, capuchin, macaque, gibbon, orangutan, gorilla, chimpanzee and bonobo. They belong to ANTH 102: the **Primate Safari Café** opens only inside that class (its front page and the Cats tab), for students who have its class code, and an adopted primate keeps you company on ANTH 102 pages only. The Cat Café holds cats in every class.
 
-They have their own bodies and postures (knuckle-walking great apes that stand taller at the shoulder, an upright gibbon with its arms raised, a crouched tarsier, monkeys with their hands on their knees) and the anatomy the course teaches: platyrrhine and catarrhine nostrils, the lemur's wet nose and ringed tail, the capuchin's prehensile tail, the macaque's sitting pads, no tails on the apes, the gorilla's sagittal crest and silver saddle, the orangutan's cheek flanges. They wear a bead necklace where the cats wear a collar.
+The safari is one wide scene of six habitats, left to right in taxonomic order: Madagascar's spiny forest (lemurs), a Southeast Asian night forest (tarsiers), the Amazon canopy (tamarins, capuchins), the Jigokudani hot spring in Japan (macaques), the Borneo rainforest (gibbons, orangutans) and an African forest (gorillas, chimpanzees, bonobos). Each primate sits and wanders only in its own habitat. On a laptop the whole scene fits; on a phone you swipe sideways.
+
+What the models show:
+
+- **Bodies and postures:** knuckle-walking great apes that stand taller at the shoulder, an upright gibbon with its arms raised (it hangs from the vine), a crouched tarsier, monkeys sitting with their hands on their knees, the lemur's sun-worship posture, grasping hands and feet, and relative body size (tarsier smallest, gorilla largest).
+- **Anatomy:** platyrrhine and catarrhine nostrils, the lemur's snout, wet nose and ringed tail, the capuchin's prehensile tail, the macaque's sitting pads and cheek ruffs, no tails on the apes, the gorilla's sagittal crest, broad nose and silver saddle, the orangutan's cheek flanges and throat sac, the chimpanzee's big ears and white chin beard, the bonobo's parted hair, cheek whiskers and pink lips.
+- **Behavior:** each holds what it is known for (the capuchin's hammer stone and nut, the chimpanzee's termite-fishing stick, the gorilla's bamboo, the macaque's sweet potato, the tarsier's insect, the bonobo's fruit to share, the orangutan's leaf umbrella), macaques soak in the hot spring, and each species has its own calls in its speech bubbles (pant-hoot, long call, duet, chest beat).
+
+They wear a bead necklace where the cats wear a collar.
 
 ## Old addresses
 
