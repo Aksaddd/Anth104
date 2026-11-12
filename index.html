@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ANTH 104 Study Drills · Language, Culture &amp; Society</title>
+<meta name="description" content="Practice drills for ANTH 104, Language, Culture, and Society: Read &amp; Learn, a multiple-choice drill, a readings drill, Anthro-pardy, word roots, mock exam and review list.">
+<meta name="theme-color" content="#f5f5f7">
+<script src="assets/settings.js"></script>
+<script src="assets/xp.js"></script>
+<script src="assets/wardrobe.js"></script>
+<script src="assets/buddy.js"></script>
+<script src="assets/lookup.js"></script>
+<style>
+/* Layout (same organization as the anthro site): frosted nav → hero (course, countdown, Continue)
+   → module bar (which modules go with the exam) → exam panel with module cards in a fixed order:
+   Read &amp; Learn · Drill · Anthro-pardy · Word Roots · Readings (multiple choice + answer key) · Mock Exam · Review List
+   → How it works + legend → where the questions come from → footer.
+   Visual language: Apple (system font, #f5f5f7, Apple blue, borderless cards, pills, frosted bars). */
+:root{
+  --bg:#f5f5f7; --paper:#fff; --ink:#1d1d1f; --muted:#6e6e73; --line:#d2d2d7; --fill:#e8e8ed;
+  --accent:#0071e3; --accent-hover:#0077ed; --link:#0066cc;
+  --st-right:#34c759; --st-wrong:#ff453a; --st-review:#ff9f0a; --st-new:#e5e5ea;
+  --i-blue:#0a84ff; --i-orange:#ff9500; --i-purple:#af52de; --i-green:#30b350; --i-red:#ff375f; --i-yellow:#ffb800;
+  --display:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --body:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --shadow:0 2px 14px rgba(0,0,0,.06); --shadow-hover:0 8px 30px rgba(0,0,0,.1);
+  color-scheme:light;
+}
+:root[data-theme="dark"]{
+  --bg:#000; --paper:#1c1c1e; --ink:#f5f5f7; --muted:#98989f; --line:#38383a; --fill:#2c2c2e;
+  --accent:#0a84ff; --accent-hover:#409cff; --link:#2997ff; --st-new:#3a3a3c;
+  --shadow:0 0 0 .5px rgba(255,255,255,.07); --shadow-hover:0 0 0 .5px rgba(255,255,255,.12),0 8px 30px rgba(0,0,0,.5);
+  color-scheme:dark;
+}
+[data-theme="dark"] .gnav{background:rgba(22,22,23,.8);border-bottom-color:rgba(255,255,255,.1)}
+[data-theme="dark"] .gnav nav a{color:rgba(255,255,255,.8)}
+[data-theme="dark"] .hero,[data-theme="dark"] .modbar{background:var(--bg)}
+[data-theme="dark"] .modbar{border-bottom-color:rgba(255,255,255,.1)}
+[data-theme="dark"] .unit{background:var(--paper)}
+[data-theme="dark"] .tags span,[data-theme="dark"] .cta{background:#2c2c2e}
+[data-theme="dark"] .cta:hover{background:#3a3a3c}
+[data-theme="dark"] .plink.ghost:hover{background:#3a3a3c}
+[data-theme="dark"] .hero h1 .grad{background-image:linear-gradient(95deg,#4cd964 0%,#2997ff 55%,#c77dff 100%)}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:60px}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.47 var(--body);letter-spacing:-.022em;-webkit-font-smoothing:antialiased}
+a{color:var(--link)}
+:is(a,button,summary,input):focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+.inner{max-width:980px;margin:0 auto;padding-left:max(22px,env(safe-area-inset-left,0px));padding-right:max(22px,env(safe-area-inset-right,0px))}
+.num{font-variant-numeric:tabular-nums}
+
+/* ===== Global nav: frosted bar */
+.gnav{position:sticky;top:0;z-index:30;background:rgba(251,251,253,.8);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);border-bottom:.5px solid rgba(0,0,0,.1);padding-top:env(safe-area-inset-top,0px)}
+.gnav .inner{display:flex;align-items:center;gap:22px;height:48px}
+.gnav .brand{font:600 17px var(--display);color:var(--ink);text-decoration:none;letter-spacing:-.02em;white-space:nowrap}
+.gnav nav{display:flex;gap:20px;overflow-x:auto;scrollbar-width:none;margin-left:auto}
+.gnav nav::-webkit-scrollbar{display:none}
+.gnav nav a{font:400 12.5px var(--body);color:rgba(0,0,0,.8);text-decoration:none;white-space:nowrap;letter-spacing:-.01em}
+.gnav nav a:hover{color:var(--accent)}
+@media (max-width:700px){.gnav nav{display:none}.setbtn{margin-left:auto}}
+.setbtn{flex:none;display:inline-flex;align-items:center;gap:6px;font:400 12.5px var(--body);color:var(--ink);opacity:.8;background:none;border:0;padding:6px 0;cursor:pointer;letter-spacing:-.01em}
+.setbtn:hover{opacity:1;color:var(--accent)}
+.setbtn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* ===== Hero */
+.hero{background:var(--paper);text-align:center;padding:56px 0 34px}
+.eyebrow{font:600 17px var(--display);color:var(--i-orange);margin:0 0 6px;letter-spacing:-.01em}
+.hero h1{font:700 clamp(40px,9vw,80px)/1.04 var(--display);letter-spacing:-.035em;margin:0 auto;max-width:12ch;text-wrap:balance}
+.hero h1 .grad{background:linear-gradient(95deg,#2f9e44 0%,#0a84ff 55%,#af52de 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lede{font:400 clamp(19px,2.6vw,24px)/1.35 var(--display);color:var(--muted);max-width:30ch;margin:16px auto 0;letter-spacing:-.02em;text-wrap:balance}
+.countdown{margin:30px auto 0;display:flex;flex-direction:column;align-items:center;gap:10px}
+.clock{display:flex;gap:10px}
+.unit{width:76px;padding:10px 0 8px;background:var(--bg);border-radius:16px;display:flex;flex-direction:column;align-items:center}
+.unit b{font:600 32px/1.05 var(--display);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.unit span{font:400 12px var(--body);color:var(--muted)}
+.exam{font:400 15px var(--body);color:var(--muted)}
+.exam strong{color:var(--ink);font-weight:600}
+.actions{margin-top:28px;display:flex;justify-content:center;align-items:center;gap:14px 26px;flex-wrap:wrap}
+.go{display:inline-flex;align-items:center;background:var(--accent);color:#fff;font:400 17px var(--body);padding:12px 24px;border-radius:980px;text-decoration:none;transition:background .15s}
+.go:hover{background:var(--accent-hover)}
+.more{font:400 17px var(--body);color:var(--link);text-decoration:none}
+.more:hover{text-decoration:underline}
+.more::after{content:" ›"}
+.today{display:block;margin-top:14px;font:400 14px var(--body);color:var(--muted);font-variant-numeric:tabular-nums}
+.today:empty{display:none}
+
+/* ===== Module bar (Apple "chapter nav"): which modules go with the exam */
+.modbar{background:var(--paper);border-bottom:.5px solid rgba(0,0,0,.08)}
+.modbar ul{list-style:none;margin:0 auto;padding:6px 0 18px;display:flex;justify-content:center;gap:4px;overflow-x:auto;scrollbar-width:none}
+.modbar ul::-webkit-scrollbar{display:none}
+.modbar a{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:86px;padding:8px 6px;text-decoration:none;color:var(--ink);font:400 12px/1.2 var(--body);text-align:center;letter-spacing:-.01em;border-radius:12px}
+.modbar a:hover{color:var(--accent)}
+.modbar a:hover .ico{transform:translateY(-2px)}
+@media (max-width:640px){.modbar ul{justify-content:flex-start;padding-left:14px;padding-right:14px}}
+
+/* App-icon style squircles */
+.ico{flex:none;width:46px;height:46px;border-radius:12px;display:grid;place-items:center;color:#fff;transition:transform .2s;box-shadow:inset 0 0 0 .5px rgba(0,0,0,.06)}
+.ico svg{width:26px;height:26px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ico.t{font:700 19px var(--display);letter-spacing:-.02em}
+.i-blue{background:linear-gradient(180deg,#3fa2ff,#0a7cff)} .i-orange{background:linear-gradient(180deg,#ffb340,#ff9500)}
+.i-teal{background:linear-gradient(180deg,#5ac8d8,#30a5b8)} .i-purple{background:linear-gradient(180deg,#c77dff,#a64bd9)} .i-green{background:linear-gradient(180deg,#4fd06c,#28a745)}
+.i-red{background:linear-gradient(180deg,#ff6482,#ff2d55)} .i-yellow{background:linear-gradient(180deg,#ffd03c,#ffb000)}
+
+/* ===== Exam panel */
+main.inner{padding-top:48px;padding-bottom:64px;display:flex;flex-direction:column;gap:20px}
+.exampanel{background:transparent}
+.ephead{list-style:none;cursor:pointer;display:flex;align-items:flex-end;justify-content:space-between;gap:16px;padding:0 4px 4px}
+.ephead::-webkit-details-marker{display:none}
+.ephead h2{font:700 clamp(30px,5vw,40px)/1.1 var(--display);letter-spacing:-.03em;margin:0}
+.ephead p{margin:6px 0 0;color:var(--muted);font-size:17px;max-width:52ch}
+.eptools{display:block;margin-top:6px;font-size:14px;color:var(--muted)}
+.epgo{flex:none;width:32px;height:32px;border-radius:50%;background:var(--fill);display:grid;place-items:center;transition:transform .25s}
+.epgo::before{content:"";width:9px;height:9px;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);transform:translateY(-2px) rotate(45deg)}
+.exampanel[open] .epgo{transform:rotate(180deg)}
+.cards{margin-top:20px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+@media (max-width:640px){.cards{grid-template-columns:1fr}}
+.card{background:var(--paper);border-radius:22px;box-shadow:var(--shadow);padding:24px;display:flex;flex-direction:column;gap:14px;transition:box-shadow .25s,transform .25s}
+.card:hover{box-shadow:var(--shadow-hover);transform:translateY(-2px)}
+.card.wide{grid-column:1/-1}
+.chead{display:flex;gap:14px;align-items:flex-start}
+.chead h3{margin:0;font:600 21px/1.2 var(--display);letter-spacing:-.02em}
+.chead h3 a{color:inherit;text-decoration:none}
+.chead p{margin:5px 0 0;font-size:15px;line-height:1.45;color:var(--muted);text-wrap:pretty}
+.prow{display:flex;align-items:center;gap:12px;margin-top:auto}
+.stack{flex:1;display:flex;height:6px;border-radius:3px;overflow:hidden;background:var(--st-new);min-width:40px}
+.stack:empty{display:none}
+.stack i{display:block;height:100%}
+.c-right{background:var(--st-right)} .c-wrong{background:var(--st-wrong)} .c-review{background:var(--st-review)} .c-new{background:var(--st-new)}
+.ptext{flex:1;font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.stack:not(:empty)+.ptext{flex:1 1 auto}
+.prow{flex-wrap:wrap;min-width:0}.ptext{min-width:0}.card{min-width:0}
+/* phones: the progress bar gets its own full-width line, with the status and the button underneath, all inside the card */
+@media (max-width:640px){.prow .stack{flex:1 1 100%}.prow .ptext{flex:1 1 100%}.prow .plink{flex:1 1 100%;text-align:center;padding:12px 17px;font-weight:600;font-size:16px}}
+.plink{flex:none;font:400 15px var(--body);color:#fff;background:var(--accent);text-decoration:none;border-radius:980px;padding:8px 17px;transition:background .15s}
+.plink:hover{background:var(--accent-hover)}
+.plink.ghost{background:var(--fill);color:var(--accent)}
+.plink.ghost:hover{background:#dedee3}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tags span{font-size:13px;background:var(--bg);border-radius:980px;padding:3px 11px;color:var(--muted)}
+/* Two-way module (Readings: multiple choice + answer key), like anthro's Classification card */
+.ctas{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cta{display:flex;flex-direction:column;gap:3px;background:var(--bg);border-radius:16px;padding:14px 16px;text-decoration:none;color:var(--ink);transition:background .15s}
+.cta:hover{background:#ececf0}
+.cta strong{font:600 16px var(--display);letter-spacing:-.015em}
+.cta small{font-size:13.5px;color:var(--muted);line-height:1.4}
+.cta .go2{margin-top:6px;font-size:14px;color:var(--link)}
+.cta .go2::after{content:" ›"}
+.cta .mini{display:flex;height:4px;border-radius:2px;overflow:hidden;background:var(--st-new);margin-top:6px}
+.cta .mini:empty{display:none}
+.cta .mini i{display:block;height:100%}
+@media (max-width:520px){.ctas{grid-template-columns:1fr}}
+
+/* ===== How it works + sources */
+.how{background:var(--paper);border-radius:22px;box-shadow:var(--shadow);padding:24px 26px;font-size:15px}
+.how>b{display:block;font:600 21px var(--display);letter-spacing:-.02em;margin-bottom:4px}
+.how ul{margin:8px 0 0;padding-left:20px} .how li{margin:6px 0}
+.how p{margin:6px 0 0;color:var(--muted)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:14px;font-size:13px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:10px;height:10px;border-radius:3px}
+.tablewrap{overflow-x:auto;margin-top:12px}
+.srctable{width:100%;border-collapse:collapse;font-size:15px}
+.srctable th,.srctable td{text-align:left;padding:9px 4px;border-bottom:.5px solid var(--line)}
+.srctable .n{text-align:right;font-variant-numeric:tabular-nums;width:90px}
+.srctable thead th{font-size:13px;color:var(--muted);font-weight:500}
+.srctable .grp th{font:600 17px var(--display);letter-spacing:-.015em;padding-top:20px;border-bottom:0}
+.srctable .tot td{font-weight:600;border-bottom:0}
+.pstar{color:var(--i-orange);font-size:13px;margin-left:4px}
+.pstar.based-star{color:var(--muted)}
+footer.site{border-top:.5px solid var(--line);padding:20px 0 40px;font-size:12px;color:var(--muted)}
+footer.site .inner{display:flex;flex-direction:column;gap:6px}
+@media (max-width:560px){.hero{padding-top:40px}.unit{width:66px}.unit b{font-size:27px}.card{padding:20px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ===== The Cat Café entrance: a little storefront; her cats and today's guests sit in the windows. Tap to go in. */
+.cafe-door{padding:0;overflow:hidden;cursor:pointer;border:0;text-align:left;font:inherit;color:inherit;width:100%}
+.cafe-door .front{position:relative;background:linear-gradient(180deg,#fde7d3,#f6d2b4)}
+.cafe-door .front>svg{display:block;width:100%;height:auto}
+.cafe-door .win{position:absolute;display:flex;align-items:flex-end;justify-content:space-around;pointer-events:none}
+.cafe-door .win span{position:relative;width:30%;max-width:84px;aspect-ratio:1;animation:cdBob 3.2s ease-in-out infinite}
+.cafe-door .win span:nth-child(2){animation-delay:-1.1s}.cafe-door .win span:nth-child(3){animation-delay:-2.2s}
+.cafe-door .win span svg{width:100%;height:100%;filter:drop-shadow(0 2px 3px rgba(0,0,0,.18))}
+.cafe-door .win span.mine::after{content:"♥";position:absolute;top:2%;right:6%;font-size:12px;color:#ff5f87}
+.cafe-door .wl{left:4.6%;width:37%;top:43%;height:44%}.cafe-door .wr{left:63.4%;width:32%;top:43%;height:44%}
+@keyframes cdBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.cafe-door .door{transform-box:fill-box;transform-origin:left center;transition:transform .5s cubic-bezier(.3,1.3,.5,1)}
+.cafe-door:hover .door,.cafe-door:focus-visible .door{transform:perspective(400px) rotateY(-38deg)}
+.cafe-door .glow{opacity:0;transition:opacity .4s}.cafe-door:hover .glow,.cafe-door:focus-visible .glow{opacity:1}
+.cafe-door .bulb{animation:cdTw 2.4s ease-in-out infinite}.cafe-door .bulb:nth-child(2n){animation-delay:-1.2s}
+@keyframes cdTw{0%,100%{opacity:1}50%{opacity:.35}}
+.cafe-door .sign{transform-box:fill-box;transform-origin:50% 0;animation:cdSwing 3s ease-in-out infinite}
+@keyframes cdSwing{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
+.cafe-door .ctext{display:flex;align-items:center;gap:14px;padding:18px 24px 22px;flex-wrap:wrap}
+.cafe-door .ctext div{flex:1 1 240px;min-width:0}
+.cafe-door h3{margin:0;font:600 21px/1.2 var(--display);letter-spacing:-.02em}
+.cafe-door p{margin:5px 0 0;font-size:15px;line-height:1.45;color:var(--muted)}
+.cafe-door .plink{pointer-events:none}
+@media (max-width:640px){.cafe-door .plink{flex:1 1 100%;text-align:center;padding:12px 17px;font-weight:600;font-size:16px}}
+@media (prefers-reduced-motion:reduce){.cafe-door *{animation:none!important;transition:none!important}}
+</style>
+<script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</head><body>
+<header class="gnav"><div class="inner">
+  <a class="brand" href="index.html">ANTH 104</a>
+  <nav aria-label="Modules">
+    <a href="read/index.html">Read</a><a href="drill/index.html">Drill</a><a href="board/index.html">Anthro-pardy</a><a href="roots/index.html">Word Roots</a><a href="readings/index.html">Readings</a><a href="mock/index.html">Mock Exam</a><a href="review/index.html">Review List</a>
+  </nav>
+  <button type="button" class="setbtn" id="settingsBtn" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span>Settings</span></button>
+</div></header>
+
+<section class="hero" aria-labelledby="courseTitle"><div class="inner">
+  <p class="eyebrow">ANTH 104 · Fall 2026 · Queens College</p>
+  <h1 id="courseTitle">Language, culture &amp; <span class="grad">society.</span></h1>
+  <p class="lede">Practice by subject. Mark what you still need to review. Spend your time on what you don't know yet.</p>
+  <div class="countdown" id="countdown" hidden>
+    <div class="clock" id="clock" role="timer" aria-live="off" aria-label="Time until the exam">
+      <div class="unit"><b id="cD">–</b><span>days</span></div>
+      <div class="unit"><b id="cH">–</b><span>hours</span></div>
+      <div class="unit"><b id="cM">–</b><span>minutes</span></div>
+      <div class="unit"><b id="cS">–</b><span>seconds</span></div>
+    </div>
+    <div class="exam"><strong id="examTitle">Exam</strong> · Living Language, Ch 1–13 &amp; the readings</div>
+  </div>
+  <div class="actions">
+    <a class="go" id="goBtn" href="read/index.html">Let's begin</a>
+    <a class="more" href="readings/index.html">Practice the readings</a>
+  </div>
+  <span class="today" id="todayTxt"></span>
+</div></section>
+
+<nav class="modbar" aria-label="Which modules go with the exam"><ul>
+  <li><a href="read/index.html"><span class="ico i-teal"><svg viewBox="0 0 24 24"><path d="M3 5.5C5.5 4.5 8.5 4.5 12 6.5v13c-3.5-2-6.5-2-9-1z"/><path d="M21 5.5c-2.5-1-5.5-1-9 1v13c3.5-2 6.5-2 9-1z"/></svg></span>Read &amp; Learn</a></li>
+  <li><a href="drill/index.html"><span class="ico i-blue"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12l3 3 5-6"/></svg></span>Multiple&#8209;Choice Drill</a></li>
+  <li><a href="board/index.html"><span class="ico t i-orange">$</span>Anthro&#8209;pardy</a></li>
+  <li><a href="roots/index.html"><span class="ico t i-purple">Aa</span>Word Roots</a></li>
+  <li><a href="readings/index.html"><span class="ico t i-green">R</span>Readings</a></li>
+  <li><a href="mock/index.html"><span class="ico i-red"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="7"/><path d="M12 9v4l2.5 2M10 3h4"/></svg></span>Mock Exam</a></li>
+  <li><a href="review/index.html"><span class="ico i-yellow"><svg viewBox="0 0 24 24"><path d="M6 21V4M6 4h11l-2.5 4L17 12H6"/></svg></span>Review List</a></li>
+</ul></nav>
+
+<main class="inner">
+  <button type="button" class="card cafe-door" id="cafeDoor" aria-label="Enter the Cat Café to meet the cats" hidden>
+    <div class="front"><svg viewBox="0 0 600 230" aria-hidden="true">
+      <defs><linearGradient id="cdIn" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#ffe6b8"/><stop offset="1" stop-color="#f7c58b"/></linearGradient>
+        <linearGradient id="cdWood" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#a86b3c"/><stop offset="1" stop-color="#7d4b27"/></linearGradient>
+        <pattern id="cdBrick" width="40" height="20" patternUnits="userSpaceOnUse"><rect width="40" height="20" fill="#f3cfae"/><path d="M0 10H40M20 0V10M0 10V20M40 10V20" stroke="#e6b98f" stroke-width="1.4"/></pattern></defs>
+      <rect width="600" height="230" fill="url(#cdBrick)"/>
+      <rect y="214" width="600" height="16" fill="#cfa47f"/><rect y="212" width="600" height="4" fill="#b9875e"/>
+      <path d="M0 6 Q75 22 150 8 T300 8 T450 8 T600 6" stroke="#6b4a2e" stroke-width="1.2" fill="none"/>
+      <g><circle class="bulb" cx="18" cy="14" r="4" fill="#ffd36e"/><circle class="bulb" cx="56" cy="18" r="4" fill="#ff8fb3"/><circle class="bulb" cx="94" cy="14" r="4" fill="#7dd3fc"/><circle class="bulb" cx="132" cy="18" r="4" fill="#a3e635"/><circle class="bulb" cx="170" cy="14" r="4" fill="#ffd36e"/><circle class="bulb" cx="208" cy="18" r="4" fill="#ff8fb3"/><circle class="bulb" cx="246" cy="14" r="4" fill="#7dd3fc"/><circle class="bulb" cx="284" cy="18" r="4" fill="#a3e635"/><circle class="bulb" cx="322" cy="14" r="4" fill="#ffd36e"/><circle class="bulb" cx="360" cy="18" r="4" fill="#ff8fb3"/><circle class="bulb" cx="398" cy="14" r="4" fill="#7dd3fc"/><circle class="bulb" cx="436" cy="18" r="4" fill="#a3e635"/><circle class="bulb" cx="474" cy="14" r="4" fill="#ffd36e"/><circle class="bulb" cx="512" cy="18" r="4" fill="#ff8fb3"/><circle class="bulb" cx="550" cy="14" r="4" fill="#7dd3fc"/><circle class="bulb" cx="588" cy="18" r="4" fill="#a3e635"/></g>
+      <rect x="20" y="64" width="560" height="10" fill="url(#cdWood)"/>
+      <g><rect x="20" y="62" width="560" height="8" fill="#ff8fb3" stroke="#3a2a1e" stroke-width="1.4"/><path d="M20 66 V74 Q37.5 92 55 74 V66Z" fill="#ff8fb3" stroke="#3a2a1e" stroke-width="1.4"/><path d="M55 66 V74 Q72.5 92 90 74 V66Z" fill="#fff6ec" stroke="#3a2a1e" stroke-width="1.4"/><path d="M90 66 V74 Q107.5 92 125 74 V66Z" fill="#ff8fb3" stroke="#3a2a1e" stroke-width="1.4"/><path d="M125 66 V74 Q142.5 92 160 74 V66Z" fill="#fff6ec" stroke="#3a2a1e" stroke-width="1.4"/><path d="M160 66 V74 Q177.5 92 195 74 V66Z" fill="#ff8fb3" stroke="#3a2a1e" stroke-width="1.4"/><path d="M195 66 V74 Q212.5 92 230 74 V66Z" fill="#fff6ec" stroke="#3a2a1e" stroke-width="1.4"/><path d="M230 66 V74 Q247.5 92 265 74 V66Z" fill="#ff8fb3" stroke="#3a2a1e" stroke-width="1.4"/><path d="M265 66 V74 Q282.5 92 300 74 V66Z" fill="#fff6ec" stroke="#3a2a1e" stroke-width="1.4"/><path d="M300 66 V74 Q317.5 92 335 74 V66Z" fill="#ff8fb3" stroke="#3a2a1e" stroke-width="1.4"/><path d="M335 66 V74 Q352.5 92 370 74 V66Z" fill="#fff6ec" stroke="#3a2a1e" stroke-width="1.4"/><path d="M370 66 V74 Q387.5 92 405 74 V66Z" fill="#ff8fb3" stroke="#3a2a1e" stroke-width="1.4"/><path d="M405 66 V74 Q422.5 92 440 74 V66Z" fill="#fff6ec" stroke="#3a2a1e" stroke-width="1.4"/><path d="M440 66 V74 Q457.5 92 475 74 V66Z" fill="#ff8fb3" stroke="#3a2a1e" stroke-width="1.4"/><path d="M475 66 V74 Q492.5 92 510 74 V66Z" fill="#fff6ec" stroke="#3a2a1e" stroke-width="1.4"/><path d="M510 66 V74 Q527.5 92 545 74 V66Z" fill="#ff8fb3" stroke="#3a2a1e" stroke-width="1.4"/><path d="M545 66 V74 Q562.5 92 580 74 V66Z" fill="#fff6ec" stroke="#3a2a1e" stroke-width="1.4"/></g>
+      <rect x="222" y="22" width="156" height="36" rx="10" fill="#3a2a1e" stroke="#ffd36e" stroke-width="2.4"/>
+      <text x="300" y="47" text-anchor="middle" font-family="Georgia,serif" font-size="20" font-weight="700" fill="#ffe7a8">☕ Cat Café</text>
+      <rect x="22" y="92" width="234" height="112" rx="10" fill="url(#cdIn)" stroke="url(#cdWood)" stroke-width="7"/>
+      <rect x="378" y="92" width="200" height="112" rx="10" fill="url(#cdIn)" stroke="url(#cdWood)" stroke-width="7"/>
+      <path d="M30 100 L70 100 L40 150Z M386 100 L420 100 L392 140Z" fill="#fff" opacity=".35"/>
+      <rect x="22" y="196" width="234" height="10" rx="3" fill="url(#cdWood)"/><rect x="378" y="196" width="200" height="10" rx="3" fill="url(#cdWood)"/>
+      <g transform="translate(528 128)" opacity=".55"><rect x="-4" y="0" width="8" height="70" fill="#c99f72"/><ellipse cx="0" cy="0" rx="26" ry="5" fill="#9cc0e4"/><ellipse cx="0" cy="38" rx="20" ry="4" fill="#9cc0e4"/></g>
+      <rect x="266" y="82" width="102" height="132" rx="6" fill="#5b3a22"/>
+      <rect class="glow" x="272" y="88" width="90" height="126" fill="#ffd98a"/>
+      <g class="door"><rect x="272" y="88" width="90" height="126" rx="4" fill="url(#cdWood)" stroke="#3a2a1e" stroke-width="2"/>
+        <rect x="282" y="98" width="70" height="64" rx="32" fill="url(#cdIn)" stroke="#3a2a1e" stroke-width="2"/>
+        <path d="M297 150 l6 -9 l6 9 M322 150 l6 -9 l6 9" fill="#3a2a1e" opacity=".75"/><ellipse cx="317" cy="156" rx="26" ry="8" fill="#3a2a1e" opacity=".75"/>
+        <circle cx="352" cy="176" r="4" fill="#ffd36e" stroke="#3a2a1e" stroke-width="1.4"/>
+        <g class="sign"><path d="M305 108 L317 100 L329 108" stroke="#3a2a1e" stroke-width="1.2" fill="none"/><rect x="299" y="108" width="36" height="16" rx="3" fill="#fff" stroke="#3a2a1e" stroke-width="1.4"/><text x="317" y="120" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" font-weight="800" fill="#e8457a">OPEN</text></g></g>
+      <g transform="translate(250 214)"><path d="M-10 0 L-7 -18 H7 L10 0Z" fill="#d9744a" stroke="#3a2a1e" stroke-width="1.6"/><path d="M0 -18 Q-14 -34 -8 -46 M0 -18 Q2 -38 10 -44 M0 -18 Q12 -28 16 -36" stroke="#4f9a4a" stroke-width="3" fill="none" stroke-linecap="round"/></g>
+      <g transform="translate(386 214)"><path d="M-10 0 L-7 -18 H7 L10 0Z" fill="#d9744a" stroke="#3a2a1e" stroke-width="1.6"/><circle cx="0" cy="-30" r="13" fill="#5ea85a" stroke="#3a2a1e" stroke-width="1.6"/><circle cx="-4" cy="-33" r="2.4" fill="#ff8fb3"/><circle cx="5" cy="-26" r="2.4" fill="#ffd36e"/></g>
+    </svg>
+    <div class="win wl" id="cdWinL"></div><div class="win wr" id="cdWinR"></div></div>
+    <div class="ctext"><div><h3>The Cat Café</h3><p id="cafeTxt">Your cats and today's guests are hanging out. Step inside to meet them, pick a breed and coat, and bring one home to study.</p></div><span class="plink">Step inside ›</span></div>
+  </button>
+  <details class="exampanel" data-ep="course" open>
+    <summary class="ephead"><span class="eptext"><h2 id="ep">The course</h2><p>Ahearn, <i>Living Language</i>, Ch 1–13, plus the eleven assigned readings and the lecture slides. <span id="examWhen">Set your exam date in Settings for a countdown.</span></p><span class="eptools">Read &amp; Learn · Multiple-Choice Drill · Anthro-pardy · Word Roots · Readings · Mock Exam · Review List</span></span><span class="epgo" aria-hidden="true"></span></summary>
+    <div class="cards">
+      <article class="card wide" id="readCard">
+        <div class="chead"><span class="ico i-teal"><svg viewBox="0 0 24 24"><path d="M3 5.5C5.5 4.5 8.5 4.5 12 6.5v13c-3.5-2-6.5-2-9-1z"/><path d="M21 5.5c-2.5-1-5.5-1-9 1v13c3.5-2 6.5-2 9-1z"/></svg></span>
+          <div><h3><a href="read/index.html">Read &amp; Learn</a></h3>
+          <p>Start here. The whole course as short reading passages, written from the textbook and the readings, with something to do in most passages: match, sort, put in order, flip cards. Then answer questions about what you just read. Answers count toward the drill.</p></div></div>
+        <div class="tags"><span>10 chapters</span><span>57 passages</span><span>25 activities</span><span>11 readings covered</span><span>386 questions</span></div>
+        <div class="prow"><div class="stack" id="readStack"></div><span class="ptext" id="readTxt">Not started</span><a class="plink" href="read/index.html" id="readGo">Start reading</a></div>
+      </article>
+      <article class="card wide" data-key="a104-drill-v1" data-total="586" data-optional="a104-drill-v1-include-AP:30">
+        <div class="chead"><span class="ico i-blue"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12l3 3 5-6"/></svg></span>
+          <div><h3><a href="drill/index.html">Multiple&#8209;Choice Drill</a></h3>
+          <p>Every question in one place: all 13 textbook chapters, the readings, the lecture slides and Anthro-pardy. Weakest questions come first.</p></div></div>
+        <div class="tags"><span>Social action</span><span>Gesture &amp; sign</span><span>Research</span><span>Socialization</span><span>Thought &amp; culture</span><span>Multilingual</span><span>Literacy &amp; online</span><span>Performance &amp; gender</span><span>Race &amp; ethnicity</span><span>Power &amp; agency</span></div>
+        <div class="prow"><div class="stack"></div><span class="ptext">586 questions · not started</span><a class="plink" href="drill/index.html">Start</a></div>
+      </article>
+      <article class="card">
+        <div class="chead"><span class="ico t i-orange">$</span>
+          <div><h3><a href="board/index.html">Anthro-pardy</a></h3>
+          <p>A colorful review board: 6 categories, 30 clues. Pick a category and a value, answer the multiple-choice question, earn the money.</p></div></div>
+        <div class="prow"><span class="ptext" id="boardTxt">No games played yet</span><a class="plink" href="board/index.html">Play</a></div>
+      </article>
+      <article class="card">
+        <div class="chead"><span class="ico t i-purple">Aa</span>
+          <div><h3><a href="roots/index.html">Word Roots</a></h3>
+          <p>77 Greek and Latin roots, sorted by subject. <i>hetero-</i> (different) + <i>-glossia</i> (tongues) = many ways of speaking in one society. Drill them all or one subject at a time.</p></div></div>
+        <div class="prow"><span class="ptext" id="rootsTxt">Not started</span><a class="plink" href="roots/index.html">Open</a></div>
+      </article>
+      <article class="card wide" data-key="a104-readings-v1" data-total="133">
+        <div class="chead"><span class="ico t i-green">R</span>
+          <div><h3><a href="readings/index.html">Readings</a></h3>
+          <p>Every assigned reading, from Rickford &amp; King to Alim, as its own tab of multiple-choice questions, with its own progress. The answer key keeps the answers hidden until you reveal them.</p></div></div>
+        <div class="prow"><div class="stack"></div><span class="ptext">133 questions · not started</span><a class="plink" href="readings/index.html">Start</a></div>
+        <div class="ctas">
+          <a class="cta" href="readings/index.html"><strong>Multiple choice</strong><small>133 questions in 11 tabs, one per reading, in syllabus order</small><span class="go2">Practice</span></a>
+          <a class="cta" href="readings/key.html"><strong>Answer key</strong><small>All the readings questions on one page, answers hidden until you tap. Printable.</small><span class="go2">Open</span></a>
+        </div>
+      </article>
+      <article class="card">
+        <div class="chead"><span class="ico i-red"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="7"/><path d="M12 9v4l2.5 2M10 3h4"/></svg></span>
+          <div><h3><a href="mock/index.html">Mock Exam</a></h3>
+          <p>50 or 100 random questions, a quarter from the readings. Every exam is a brand-new set; change answers until you submit.</p></div></div>
+        <div class="prow"><span class="ptext" id="mockLast">No exams taken yet</span><a class="plink" href="mock/index.html">Start an exam</a></div>
+      </article>
+      <article class="card">
+        <div class="chead"><span class="ico i-yellow"><svg viewBox="0 0 24 24"><path d="M6 21V4M6 4h11l-2.5 4L17 12H6"/></svg></span>
+          <div><h3><a href="review/index.html">Review List</a></h3>
+          <p>Every question you've marked for review, from both drills and your mock exams. Quiz yourself on them.</p></div></div>
+        <div class="prow"><span class="ptext" id="reviewCount">Nothing marked yet</span><a class="plink ghost" href="review/index.html">Open</a></div>
+      </article>
+    </div>
+  </details>
+
+  <div class="how">
+    <b>How it works</b>
+    <ul>
+      <li>Pick a subject and answer. Your weakest questions come first, and you can jump to any question with the squares at the top.</li>
+      <li>Meet your <b>study buddy</b> in the bottom corner: Dexter, a blonde kitten who grows up as you learn, from a sleepy freshman through sophomore, junior, senior and grad student to a professor in a cap and gown. He meows when you get one right and drops his yarn ball when you miss. Right answers also earn <b>gold</b> to spend in <b>Dexter's Shop</b>: police, firefighter, chef, farmer and doctor gear, school uniforms, hats, glasses and more. Tap Dexter to open it. Right answers earn XP: harder questions earn more, and answering several right in a row multiplies it. Tap it to see how close it is to evolving. You can hide it in Settings.</li>
+      <li>Tap <b>⚑ Mark for review</b> on any question you want to come back to. They all collect in your <a href="review/index.html">Review List</a>.</li>
+      <li>Every question shows its source. Your progress and answers are saved only in this browser on this device. The site counts anonymous visits with Vercel Web Analytics (no cookies, nothing about you or your answers).</li>
+    </ul>
+    <div class="legend"><span><i class="c-right"></i>Got it right</span><span><i class="c-wrong"></i>Got it wrong</span><span><i class="c-review"></i>Marked for review</span><span><i class="c-new"></i>Not answered yet</span></div>
+  </div>
+
+  <section class="how" id="sources" aria-labelledby="srcTitle">
+    <b id="srcTitle">Where the questions come from</b>
+    <p>Every question was written for this site to match ANTH 104 class materials: Laura Ahearn's <i>Living Language: An Introduction to Linguistic Anthropology</i> (3rd ed.), the assigned readings, and the Language Acquisition and Socialization lecture slides. <span class="pstar based-star" style="margin:0">✎</span> marks practice written from that material. None of the questions are the professor's own, so check anything that differs from your class notes.</p>
+    <div class="tablewrap">
+      <table class="srctable">
+        <thead><tr><th scope="col">Source</th><th scope="col" class="n">Questions</th></tr></thead>
+        <tbody>
+          <tr class="grp"><th scope="colgroup" colspan="2">Multiple-Choice Drill</th></tr>
+          <tr><td>Textbook, Ch 1–13 <span class="pstar based-star" title="Written for this site from the course material">✎</span></td><td class="n">417</td></tr>
+          <tr><td>Assigned readings (11) <span class="pstar based-star" title="Written for this site from the course material">✎</span></td><td class="n">133</td></tr>
+          <tr><td>Lecture slides: Language Acquisition and Socialization <span class="pstar based-star" title="Written for this site from the course material">✎</span></td><td class="n">6</td></tr>
+          <tr><td>Anthro-pardy review game <span class="pstar based-star" title="Written for this site from the course material">✎</span></td><td class="n">30</td></tr>
+          <tr class="tot"><td>Total</td><td class="n">586</td></tr>
+          <tr class="grp"><th scope="colgroup" colspan="2">Readings</th></tr>
+          <tr><td>The same readings questions as in the drill, one tab per article, with their own progress</td><td class="n">133</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+<footer class="site"><div class="inner">
+  <span>Made as a study aid. Not official course material: check anything you're unsure of against the textbook, the readings and your notes.</span>
+</div></footer>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const read = k => { try { return JSON.parse(localStorage.getItem(k) || "null") } catch (e) { return null } };
+  const dayKey = d => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  const KEYS = { drill: "a104-drill-v1", readings: "a104-readings-v1" };
+  { // Read & Learn: chapters finished and how far into the current one (read/index.html saves a104-read-v1)
+    const r = read("a104-read-v1") || {}, CH = ["social", "gesture", "methods", "socialization", "thought", "multilingual", "literacy", "performance", "race", "power"];
+    const fin = CH.filter(k => r[k] && (r[k].finished || r[k].done)).length, started = CH.filter(k => r[k] && (r[k].at || Object.keys(r[k].a || {}).length)).length;
+    const ans = CH.reduce((n, k) => n + Object.keys((r[k] || {}).a || {}).length, 0), ok = CH.reduce((n, k) => n + Object.values((r[k] || {}).a || {}).filter(x => x.ok).length, 0);
+    if (started || fin) {
+      $("readStack").innerHTML = `<i style="width:${100 * fin / CH.length}%;background:var(--st-right)"></i>`;
+      $("readTxt").textContent = `${fin} of ${CH.length} chapters read${ans ? ` · ${ok} of ${ans} right` : ""}`;
+      $("readGo").textContent = fin === CH.length ? "Read again" : "Continue";
+    }
+  }
+  // Same statuses as the drills: right / wrong (last answer) or marked for review (takes priority).
+  function levels(s, total) {
+    const n = { right: 0, wrong: 0, review: 0 }; let a = 0, c = 0, seen = 0;
+    const st = (s && s.stats) || {}, hist = (s && s.hist) || {}, mark = (s && s.mark) || {};
+    for (const k in mark) if (mark[k] && mark[k].m === "review") n.review++;
+    for (const k in st) {
+      if (!st[k][0]) continue; seen++; a += st[k][0]; c += st[k][1];
+      if (!(mark[k] && mark[k].m === "review")) n[hist[k] === 1 ? "right" : "wrong"]++;
+    }
+    return { n, seen: Math.min(seen, total), acc: a ? Math.round(c / a * 100) : 0, total };
+  }
+  const bar = L => ["right", "wrong", "review"].map(l => L.n[l] ? `<i class="c-${l}" style="width:${L.n[l] / L.total * 100}%"></i>` : "").join("");
+  document.querySelectorAll(".card[data-key]").forEach(card => {
+    let total = +card.dataset.total;
+    if (card.dataset.optional) {   // Anthro-pardy switched out of the drill
+      const [k, n] = card.dataset.optional.split(":");
+      try { if (localStorage.getItem(k) === "0") { total -= +n; card.querySelector(".ptext").textContent = `${total} questions · not started` } } catch (e) { }
+    }
+    const s = read(card.dataset.key), L = levels(s, total);
+    if (!L.seen && !L.n.review) return;
+    card.querySelector(".stack").innerHTML = bar(L);
+    card.querySelector(".ptext").textContent = `${L.seen} of ${L.total} answered · ${L.acc}% right`;
+    if (L.seen) card.querySelector(".prow .plink").textContent = "Resume";
+  });
+  // Anthro-pardy best game, roots mastered, last mock exam
+  try { const g = read("a104-board-v1") || {}; if (g.unit && g.unit.best != null) $("boardTxt").textContent = "Best game: $" + g.unit.best.toLocaleString("en-US") } catch (e) { }
+  try { const rs = read("a104-roots-v1") || {}, n = Object.keys((rs.unit || {}).m || {}).length; if (n) $("rootsTxt").textContent = `${n} of 77 mastered` } catch (e) { }
+  try { const h = read("a104-mock-history-v1") || []; if (h.length) { const l = h[h.length - 1]; $("mockLast").textContent = `Last exam: ${l.pct}% (${l.right}/${l.total}) · ${h.length} taken` } } catch (e) { }
+  // Review List: marked questions across both drills. Readings questions share ids (RD0…RD132) in both, so each counts once.
+  try {
+    const seen = new Set();
+    for (const k of Object.values(KEYS)) { const st = read(k); if (st && st.mark) for (const id in st.mark) if (st.mark[id].m === "review") seen.add(/^RD\d+$/.test(id) ? id : k + id) }
+    const n = seen.size; if (n) $("reviewCount").textContent = n === 1 ? "1 question marked for review" : n + " questions marked for review";
+  } catch (e) { }
+  // Exam panel: open by default; remember if the student closes it
+  document.querySelectorAll("details.exampanel").forEach(d => {
+    const k = "a104-home-open-" + d.dataset.ep;
+    try { if (localStorage.getItem(k) === "0") d.open = false } catch (e) { }
+    d.addEventListener("toggle", () => { try { localStorage.setItem(k, d.open ? "1" : "0") } catch (e) { } });
+  });
+
+  // Countdown to the exam. The date lives in Settings (assets/settings.js): built in, changeable per device.
+  const pad = n => String(n).padStart(2, "0");
+  let timer = null;
+  function startClock() {
+    clearInterval(timer);
+    const exam = window.BioSettings ? window.BioSettings.examDate() : null;
+    if (!exam) { $("countdown").hidden = true; $("examWhen").textContent = "Set your exam date in Settings for a countdown."; return }
+    $("countdown").hidden = false;
+    const when = exam.toLocaleString("en-US", { weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+    $("examTitle").textContent = "Exam · " + when; $("examWhen").textContent = "Exam: " + when.replace(/ (AM|PM)$/, m => m.toLowerCase()) + ".";
+    const tick = () => {
+      const ms = exam - Date.now();
+      if (ms <= 0) { clearInterval(timer); $("countdown").hidden = true; $("goBtn").textContent = "Keep practicing"; return }
+      const s = Math.floor(ms / 1000), v = { cD: Math.floor(s / 86400), cH: pad(Math.floor(s / 3600) % 24), cM: pad(Math.floor(s / 60) % 60), cS: pad(s % 60) };
+      for (const id in v) $(id).textContent = v[id];
+      $("clock").setAttribute("aria-label", `${v.cD} days, ${+v.cH} hours, ${+v.cM} minutes until the exam`);
+    };
+    tick(); timer = setInterval(tick, 1000);
+  }
+  startClock();
+  window.addEventListener("bio:exam", startClock);   // changed in Settings
+
+  // Continue: new visitors start with Read & Learn; returning visitors resume the drill they used last, at its weakest subject.
+  const used = [["drill", read(KEYS.drill)], ["readings", read(KEYS.readings)]].filter(([, s]) => s && s.stats && Object.keys(s.stats).length)
+    .sort((a, b) => (b[1].updatedAt || 0) - (a[1].updatedAt || 0));
+  if (used.length || localStorage.getItem("a104-roots-seen")) { $("goBtn").textContent = "Continue"; $("goBtn").href = (used.length ? used[0][0] : "drill") + "/index.html#continue" }
+  // Today's activity and streak, across both drills
+  const days = {}; for (const k of Object.values(KEYS)) { const s = read(k); if (s && s.days) for (const d in s.days) days[d] = (days[d] || 0) + s.days[d] }
+  const t = days[dayKey(new Date())] | 0;
+  let streak = 0; { const d = new Date(); if (!days[dayKey(d)]) d.setDate(d.getDate() - 1); while (days[dayKey(d)]) { streak++; d.setDate(d.getDate() - 1) } }
+  $("todayTxt").textContent = t || streak ? `${t} answered today` + (streak ? ` · ${streak}-day streak` : "") : "";
+})();
+</script>
+<script>
+// Cat Café entrance: fill the windows with who's inside today, and open the café on tap
+(() => {
+  const B = window.BioBuddy, door = document.getElementById("cafeDoor"); if (!B || !B.cafeWindow || !door) return;
+  const esc = t => String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const fill = () => {
+    const w = B.cafeWindow(6), cell = c => `<span class="${c.mine ? "mine" : ""}" title="${esc(c.nick ? c.nick + " · " + c.name : c.name)}">${c.svg}</span>`;
+    document.getElementById("cdWinL").innerHTML = w.cats.slice(0, 3).map(cell).join("");
+    document.getElementById("cdWinR").innerHTML = w.cats.slice(3, 5).map(cell).join("");
+    const mine = w.cats.filter(c => c.mine).length;
+    document.getElementById("cafeTxt").textContent = `${w.count} cats are hanging out today${mine ? `, including ${mine === 1 ? "one of yours" : mine + " of yours"}` : ""}. Step inside to meet them, pick a breed and coat, and bring one home to study.`;
+  };
+  fill(); door.hidden = false;
+  door.onclick = () => { B.openCafe(); const t = setInterval(() => { if (!document.querySelector(".cf-veil")) { clearInterval(t); fill() } }, 500) };
+  addEventListener("pageshow", fill); document.addEventListener("visibilitychange", () => { if (!document.hidden) fill() });
+})();
+</script>
+</body></html>
