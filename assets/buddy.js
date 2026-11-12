@@ -675,6 +675,7 @@ body.bb-on{padding-bottom:96px}
 .bb-dock.drag{transform:scale(1.1);box-shadow:0 14px 30px rgba(0,0,0,.25)}
 .bb-spot{margin:14px 0;padding:12px 14px;border-radius:14px;background:var(--c-fill);text-align:left;font-size:14px;line-height:1.4}
 .bb-spot b{display:block;font-size:15px}.bb-spot small{display:block;opacity:.7;margin-top:2px}
+.bb-size{display:flex;align-items:center;gap:10px;margin-top:10px;font-weight:600}.bb-size input{flex:1;accent-color:var(--c-acc)}.bb-size output{min-width:3.2em;text-align:right;font-variant-numeric:tabular-nums;font-weight:500;opacity:.75}
 .bb-spot button{margin-top:8px;border:0;border-radius:980px;padding:7px 14px;background:var(--c-acc);color:#fff;font:600 14px -apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif;cursor:pointer}
 .bb-palon.bb-on{padding-bottom:110px}
 .bb-pal .bb-palart{position:absolute;inset:0;transform-origin:50% 92%}
@@ -906,7 +907,11 @@ html:not(.bb-showlv) .bb-pal .bb-lv,html:not(.bb-showlv) .bb-dock .bb-lv,html:no
         <p><b>What makes a question harder:</b> EXCEPT/NOT wording, putting steps in order, reading an experiment or a figure, comparing two things or explaining why, five answer choices, long and similar answers, high-value Anthro-pardy clues, questions on the assigned readings, and questions <i>you</i> missed before. A question you've already gotten right 3+ times earns half.</p>
         <p><b>Win streaks multiply XP and gold:</b> ${X ? X.STREAKS.slice(0, -1).reverse().map(([n, m]) => `${n} in a row ×${m}`).join(" · ") : ""}. A wrong answer resets the streak but never takes anything away. Each evolution adds ${EVOLVE_BONUS} gold.</p>
       </details>
-      <div class="bb-spot"><b>Where ${esc(name(s))} sits</b>${getSpot() ? `Right where you put him. He still runs over to each answer you pick, then goes back to his spot.` : `Next to your questions. He runs over to each answer you pick.`}<small>Drag ${esc(name(s))} anywhere on the screen to move him (or focus him and use the arrow keys). Each companion cat can be dragged to its own spot too.</small>${getSpot() ? `<button type="button" id="bbSpotReset">Put him back beside my questions</button>` : ""}</div>
+      <div class="bb-spot"><b>Where ${esc(name(s))} sits</b>${anchored() && getSpot() ? `Anchored right where you put him. He stays there, even when you pick an answer.` : getSpot() ? `Right where you put him. He still runs over to each answer you pick, then goes back to his spot.` : `Next to your questions. He runs over to each answer you pick.`}<small>Drag ${esc(name(s))} anywhere on the screen to move him (or focus him and use the arrow keys). Each companion cat can be dragged to its own spot too.</small>
+        <label class="bb-size"><span>Size</span><input type="range" id="bbSize" min="60" max="180" step="10" value="${Math.round(userScale() * 100)}" aria-label="Cat size"><output id="bbSizeOut">${Math.round(userScale() * 100)}%</output></label>
+        <label class="pf-tog pf-prog"><span>Anchor him in place (he won't run to your answers)</span><input type="checkbox" id="bbAnchor"${anchored() ? " checked" : ""}></label>
+        ${getSpot() ? `<button type="button" id="bbSpotReset">Put him back beside my questions</button>` : ""}</div>
+
       <label class="pf-tog pf-prog"><span>Show levels on the cats on screen</span><input type="checkbox" id="pgShowLv"${showLv() ? " checked" : ""}></label>
       <div class="bb-acts"><button type="button" id="bbRename">Rename</button><button type="button" id="bbHide">Hide buddy</button></div>
     </div>`;
@@ -930,6 +935,15 @@ html:not(.bb-showlv) .bb-pal .bb-lv,html:not(.bb-showlv) .bb-dock .bb-lv,html:no
   // Levels on screen: hidden by default (tap a cat to see its level and stats); this setting shows them on the cats
   const LV_KEY = "a104-dexter-showlv";
   const showLv = () => { try { return localStorage.getItem(LV_KEY) === "1" } catch (e) { return false } };
+  function setSize(v) {
+    v = Math.min(1.8, Math.max(.6, +v || 1));
+    try { Math.abs(v - 1) < .01 ? localStorage.removeItem(SCALE_KEY) : localStorage.setItem(SCALE_KEY, String(v)) } catch (e) { }
+    paintPal(); if (typeof refreshMates === "function") refreshMates(); const d = $("bbDock"); if (d) dockSpot(d); settle();
+  }
+  function setAnchored(on) {
+    try { on ? localStorage.setItem(ANCHOR_KEY, "1") : localStorage.removeItem(ANCHOR_KEY) } catch (e) { }
+    if (on && !getSpot()) { const S = palSize(), at = palAt || wantHome(); setSpot(xySpot(at.x, at.y, S)) } else settle();
+  }
   function setShowLv(on) { try { on ? localStorage.setItem(LV_KEY, "1") : localStorage.removeItem(LV_KEY) } catch (e) { } document.documentElement.classList.toggle("bb-showlv", on) }
   document.documentElement.classList.toggle("bb-showlv", showLv());
   const SOUND_KEY = "a104-dexter-sound";
@@ -1196,7 +1210,9 @@ html:not(.bb-showlv) .bb-pal .bb-lv,html:not(.bb-showlv) .bb-dock .bb-lv,html:no
         $("bbRename").onclick = () => { const n = prompt("Name your study buddy:", s.nick || "Dexter"); if (n === null) return; const t = load(); t.nick = n.trim().slice(0, 24); save(t); paintDock(); paint() };
         $("bbHide").onclick = () => { setEnabled(false); closeShop() };
         if ($("pgShowLv")) $("pgShowLv").onchange = e => { setShowLv(e.target.checked); refreshMates() };
-        if ($("bbSpotReset")) $("bbSpotReset").onclick = () => { setSpot(null); const H = household(); H.spots = {}; saveHouse(H); paint(); placeMates() };
+        if ($("bbSize")) $("bbSize").oninput = e => { $("bbSizeOut").textContent = e.target.value + "%"; setSize(e.target.value / 100) };
+        if ($("bbAnchor")) $("bbAnchor").onchange = e => { setAnchored(e.target.checked); paint() };
+        if ($("bbSpotReset")) $("bbSpotReset").onclick = () => { setAnchored(false); setSpot(null); const H = household(); H.spots = {}; saveHouse(H); paint(); placeMates() };
         return;
       }
       if (st.tab === "cats") {
@@ -1505,7 +1521,13 @@ html:not(.bb-showlv) .bb-pal .bb-lv,html:not(.bb-showlv) .bb-dock .bb-lv,html:no
     return base + (top - base) * frac;
   }
   const sizeK = () => sizeFor(load().pts);   // he grows with each evolution: 84% as a freshman → 119% as the Professor
-  const palSize = () => Math.round((innerWidth >= 900 ? 96 : 72) * sizeK());
+  // Base size by screen: phones keep 72px; laptops and desktops get a much bigger cat (they have the room).
+  // On top of that, a size the student picks (60%–180%, saved per device) and an optional anchor (he stays put).
+  const SCALE_KEY = KEY + "-scale", ANCHOR_KEY = KEY + "-anchor";
+  const baseSize = () => innerWidth < 900 ? 72 : innerWidth < 1400 ? 140 : 160;
+  function userScale() { try { const v = parseFloat(localStorage.getItem(SCALE_KEY)); return isFinite(v) ? Math.min(1.8, Math.max(.6, v)) : 1 } catch (e) { return 1 } }
+  function anchored() { try { return localStorage.getItem(ANCHOR_KEY) === "1" } catch (e) { return false } }
+  const palSize = () => Math.round(baseSize() * sizeK() * userScale());
   function anchor() { const p = $("bbPal"); return palOn && p ? p : $("bbDock") }
   function anchorRect(d) {   // where Dexter is headed (he may still be moving)
     if (d && d.id === "bbPal" && palAt) { const S = palSize(); return { left: palAt.x, top: palAt.y, right: palAt.x + S, bottom: palAt.y + S, width: S, height: S } }
@@ -1648,7 +1670,7 @@ html:not(.bb-showlv) .bb-pal .bb-lv,html:not(.bb-showlv) .bb-dock .bb-lv,html:no
   }
   function home() {
     if (treeOn() && palOn && layoutTree()) return slotPos(palSlot, palSize());
-    const want = wantHome(); if (avOff()) { stackN = stackers().length; return want }
+    const want = wantHome(); if (avOff() || (anchored() && getSpot())) { stackN = stackers().length; avSet($("bbPal"), 0); return want }
     const q = fitPal(avMap(), palSize(), want, palAt); avSet($("bbPal"), q.ov); return { x: q.x, y: q.y };
   }
   function place(pos) { const p = $("bbPal"); palAt = pos; if (p) p.style.transform = `translate(${Math.round(pos.x)}px,${Math.round(pos.y)}px)`; placeMates() }
@@ -1657,7 +1679,7 @@ html:not(.bb-showlv) .bb-pal .bb-lv,html:not(.bb-showlv) .bb-dock .bb-lv,html:no
   // so often interact with him: a nuzzle, a chase around him, grooming, or a play-pounce. Tap one to open the Cats tab.
   const MATE_ACTS = ["yarn", "feather", "leaf", "tail", "butterfly"];
   let mates = [], mateT = 0, playT = 0;
-  const mateSize = c => Math.round((innerWidth >= 900 ? 96 : 72) * sizeFor(c.pts) * .9);
+  const mateSize = c => Math.round(baseSize() * sizeFor(c.pts) * .9 * userScale());
   // each companion can be dragged anywhere; its spot is saved in the household (H.spots), like Dexter's own spot
   const mateSpot = id => { const H = household(); return H.spots && H.spots[id] || null };
   function setMateSpot(id, v) { const H = household(); H.spots = H.spots || {}; if (v) H.spots[id] = v; else delete H.spots[id]; saveHouse(H) }
@@ -1800,7 +1822,7 @@ html:not(.bb-showlv) .bb-pal .bb-lv,html:not(.bb-showlv) .bb-dock .bb-lv,html:no
   }
   // When she picks an answer, Dexter scurries to it (beside it on wide screens, peeking over its edge on phones)
   function visit() {
-    const p = $("bbPal"); if (!palOn || !p || !lastOpt || Date.now() - lastOptAt > 2000 || !document.contains(lastOpt)) return;
+    const p = $("bbPal"); if (!palOn || !p || !lastOpt || Date.now() - lastOptAt > 2000 || !document.contains(lastOpt) || (anchored() && getSpot())) return;
     const S = palSize(), r = lastOpt.getBoundingClientRect(), card = questionCard(), cr = card ? card.getBoundingClientRect() : null;
     const pos = cr && cr.right + S + 28 <= innerWidth ? { x: cr.right + 16, y: r.top + r.height / 2 - S * .6 } : { x: Math.min(r.right - S * .8, innerWidth - S - 6), y: r.top + r.height / 2 - S * .85 };
     pos.y = Math.min(Math.max(pos.y, 8), innerHeight - S - 8);
@@ -1916,5 +1938,5 @@ html:not(.bb-showlv) .bb-pal .bb-lv,html:not(.bb-showlv) .bb-dock .bb-lv,html:no
     return { count: R.length, cats: pick.map((r, i) => ({ mine: !!r.mine, nick: r.nick || "", name: breedName(r.breed, r.color),
       svg: art(stageOf(r.pts | 0), r.equip || { badges: [] }, { breed: r.breed, color: r.color, collar: r.collar || "navy", w: r.weight || 1, eyes: eyes[i % eyes.length], pose: i === 2 ? "lie" : "sit", plain: !r.mine }) })) };
   }
-  window.BioBuddy = { openCafe: () => openCafe(), cafeWindow, showLv, setShowLv, enabled: () => !off(), setEnabled, soundOn, setSound, open: openCard, openShop, openBadges, syncBadges, play: a => setAct(a), activity: () => act, art, STAGES, state: load, level };
+  window.BioBuddy = { openCafe: () => openCafe(), cafeWindow, showLv, setShowLv, size: userScale, setSize, anchored, setAnchored, enabled: () => !off(), setEnabled, soundOn, setSound, open: openCard, openShop, openBadges, syncBadges, play: a => setAct(a), activity: () => act, art, STAGES, state: load, level };
 })();

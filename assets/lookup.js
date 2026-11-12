@@ -194,7 +194,7 @@ html{touch-action:manipulation}   /* no double-tap zoom, so a double-tap looks a
   setTimeout(() => {
     try { if (localStorage.getItem(TIP_KEY)) return } catch (e) { return }
     if (!document.querySelector(".rd-prose,.q")) return;
-    const t = document.createElement("div"); t.className = "lk-tip"; t.innerHTML = `<span>💡 Double-tap any science word to see what it means and its Greek and Latin roots. Press and hold (or drag) to highlight text and add notes.</span><button type="button">Got it</button>`;
+    const t = document.createElement("div"); t.className = "lk-tip"; t.innerHTML = `<span>💡 Double-tap any course term to see what it means and its Greek and Latin roots. Press and hold (or drag) to highlight text and add notes.</span><button type="button">Got it</button>`;
     document.body.appendChild(t); t.querySelector("button").onclick = () => { t.remove(); try { localStorage.setItem(TIP_KEY, "1") } catch (e) { } };
     setTimeout(() => t.remove(), 9000);
   }, 2500);
