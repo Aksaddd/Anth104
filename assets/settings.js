@@ -169,6 +169,8 @@ button.st-row{cursor:pointer} button.st-row:active{background:var(--s-fill)}
       <div class="st-sec" style="margin-top:0"><div class="st-group">
         <label class="st-row"><span class="st-l"><span>Show study buddy</span><small>Dexter, a blonde kitten who grows up as you learn</small></span><input type="checkbox" class="st-sw" id="stBuddy"${window.BioBuddy.enabled() ? " checked" : ""}></label>
         ${window.BioBuddy.enabled() && window.BioBuddy.soundOn ? `<label class="st-row"><span class="st-l"><span>Dexter's meow</span><small>He meows when you get one right</small></span><input type="checkbox" class="st-sw" id="stMeow"${window.BioBuddy.soundOn() ? " checked" : ""}></label>` : ""}
+        ${window.BioBuddy.enabled() && window.BioBuddy.setSize ? `<label class="st-row"><span class="st-l"><span>Buddy size</span><small id="stSizeOut">${Math.round(window.BioBuddy.size() * 100)}% · bigger on laptops and desktops</small></span><input type="range" id="stSize" min="60" max="180" step="10" value="${Math.round(window.BioBuddy.size() * 100)}" style="width:42%;accent-color:var(--s-acc)" aria-label="Buddy size"></label>
+        <label class="st-row"><span class="st-l"><span>Anchor buddy in place</span><small>He stays where you drag him, even when you pick an answer</small></span><input type="checkbox" class="st-sw" id="stAnchor"${window.BioBuddy.anchored() ? " checked" : ""}></label>` : ""}
         ${window.BioBuddy.enabled() ? `<button type="button" class="st-row" id="stBuddyOpen"><span class="st-l" style="color:var(--s-acc)">See your buddy</span></button>` : ""}
       </div></div>` : ""}`;
   }
@@ -183,6 +185,8 @@ button.st-row{cursor:pointer} button.st-row:active{background:var(--s-fill)}
     di.onchange = () => { if (!di.value) return; set(DATE_KEY, di.value); set(SKIP_KEY, null); emit("bio:exam", examDate()); paint() };
     const bm = sh.querySelector("#stMeow"); if (bm) bm.onchange = () => window.BioBuddy.setSound(bm.checked);
     const bs = sh.querySelector("#stBuddy"); if (bs) bs.onchange = () => { window.BioBuddy.setEnabled(bs.checked); paint() };
+    const bz = sh.querySelector("#stSize"); if (bz) bz.oninput = () => { sh.querySelector("#stSizeOut").textContent = bz.value + "% · bigger on laptops and desktops"; window.BioBuddy.setSize(bz.value / 100) };
+    const ba = sh.querySelector("#stAnchor"); if (ba) ba.onchange = () => window.BioBuddy.setAnchored(ba.checked);
     const bo = sh.querySelector("#stBuddyOpen"); if (bo) bo.onclick = () => { close(); window.BioBuddy.open() };
     const A = window.BioAccount;
     const si = sh.querySelector("#stSignIn"); if (si) si.onclick = () => A.signIn();
