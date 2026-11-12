@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Anthro-pardy · ANTH 104</title>
+<meta name="description" content="Play the ANTH 104 Anthro-pardy review game: pick a category and value, answer the multiple-choice question, earn the money.">
+<meta name="theme-color" content="#f5f5f7">
+<link rel="stylesheet" href="../assets/drill.css">
+<script src="../assets/settings.js"></script>
+<script src="../assets/xp.js"></script>
+<script src="../assets/wardrobe.js"></script>
+<script src="../assets/buddy.js"></script>
+<script src="../assets/lookup.js"></script>
+<style>
+/* Layout: header (board switch, score, rules) → the board (categories × values) → a clue card that opens over
+   the board when a tile is picked → an end-of-game card when every tile is played. Own look, light theme. */
+:root{--read:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;--body:var(--read);--display:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;--bg:#f5f5f7;--accent:#0071e3;--money:#0a7d32}
+body{letter-spacing:-.016em;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1040px}
+.top{display:flex;flex-direction:column;gap:6px}
+h1{font:700 clamp(28px,6vw,40px)/1.08 var(--display);letter-spacing:-.03em}
+.gbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;justify-content:space-between}
+.boards{display:flex;gap:2px;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:3px}
+.boards button{font:600 14px var(--body);border:0;background:transparent;border-radius:999px;padding:8px 16px;cursor:pointer;color:var(--ink)}
+.boards button[aria-pressed="true"]{background:var(--accent);color:#fff}
+.scorebox{display:flex;align-items:center;gap:16px;background:var(--paper);border-radius:22px;padding:14px 20px;box-shadow:0 2px 12px rgba(0,0,0,.05)}
+.score{font:700 clamp(30px,6vw,40px)/1 var(--display);letter-spacing:-.03em;font-variant-numeric:tabular-nums;color:var(--money)}
+.score.neg{color:var(--bad)}
+.score.bump{animation:bump .5s ease}
+@keyframes bump{40%{transform:scale(1.12)}}
+.slab{display:flex;flex-direction:column;font-size:13px;color:var(--muted);line-height:1.35}
+.slab b{color:var(--ink);font-weight:600}
+.rules{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;font-size:14px;color:var(--muted)}
+.rules label{display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+.rules input{width:18px;height:18px;accent-color:var(--accent);margin:0}
+.newgame{font:400 15px var(--body);border:0;border-radius:999px;background:var(--accent);color:#fff;padding:9px 18px;cursor:pointer}
+.newgame:hover{background:#0077ed}
+/* Board */
+.boardwrap{padding:2px 0 8px}
+.board{display:grid;grid-template-columns:repeat(var(--cols),minmax(0,1fr));grid-template-rows:auto repeat(var(--vals),auto);gap:clamp(6px,.9vw,10px)}
+.col{display:grid;grid-row:span calc(var(--vals) + 1);grid-template-rows:subgrid;gap:inherit;min-width:0}
+.cat{display:flex;align-items:center;justify-content:center;text-align:center;min-height:68px;padding:8px;hyphens:auto;overflow-wrap:anywhere;border-radius:14px;background:var(--c);color:#fff;font:700 clamp(11.5px,1.35vw,14px)/1.25 var(--body);letter-spacing:-.01em;text-wrap:balance;text-shadow:0 1px 2px rgba(0,0,0,.25)}
+.tile{position:relative;min-height:66px;border:0;border-radius:14px;background:color-mix(in srgb,var(--c) var(--mix),#141418);cursor:pointer;font:800 clamp(17px,2.3vw,24px) var(--display);letter-spacing:-.02em;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .15s,filter .15s,box-shadow .15s}
+.tile:hover:not(:disabled){transform:translateY(-2px) scale(1.02);filter:brightness(1.12);box-shadow:0 6px 18px color-mix(in srgb,var(--c) 45%,transparent)}
+.tile:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.tile:disabled{cursor:default;font:700 15px var(--body);letter-spacing:0;background:var(--paper);color:var(--muted);text-shadow:none;box-shadow:inset 0 0 0 1px var(--line)}
+.tile.right{color:var(--good);box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--good) 55%,transparent);background:var(--good-soft)}
+.tile.wrong{color:var(--bad);box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--bad) 55%,transparent);background:var(--bad-soft)}
+.tile small{display:block;font:600 11.5px var(--body);color:var(--muted);margin-top:2px}
+@media (max-width:480px){.clue{padding:12px 10px 30px}.clue .card{padding:18px;border-radius:20px}.clue .chead{margin:-18px -18px 4px !important;padding:14px 18px !important;border-radius:20px 20px 0 0 !important}}
+.clue .chead{margin:-22px -22px 4px;padding:16px 22px;border-radius:24px 24px 0 0;background:var(--c,#1d1d1f);color:#fff}
+.clue .ctag{color:rgba(255,255,255,.9)}
+.clue .cval{color:#fff}
+/* Clue card */
+.clue{position:fixed;inset:0;z-index:40;background:rgba(245,245,247,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);overflow-y:auto;padding:max(18px,env(safe-area-inset-top,0px)) 16px 40px}
+.clue .card{max-width:680px;margin:0 auto;border:0;border-radius:24px;box-shadow:0 10px 40px rgba(0,0,0,.12)}
+.chead{display:flex;flex-wrap:wrap;align-items:center;gap:8px;justify-content:space-between}
+.ctag{font:600 13px var(--body);color:var(--muted)}
+.cval{font:700 22px var(--display);color:var(--accent);letter-spacing:-.02em}
+.bonus{font:700 12px var(--body);color:#8a5300;background:#ffefc7;border:1px solid #f3cf7a;border-radius:999px;padding:3px 10px}
+.earn{font:700 26px var(--display);letter-spacing:-.02em}
+.earn.plus{color:var(--money)} .earn.minus{color:var(--bad)} .earn.zero{color:var(--muted)}
+.fbx{display:flex;flex-direction:column;gap:6px}
+.endcard{text-align:center;align-items:center}
+.endcard .score{font-size:56px}
+.inc{display:flex;align-items:center;gap:10px;background:var(--paper);border-radius:16px;padding:12px 16px;font-size:14px;color:var(--muted);box-shadow:0 2px 12px rgba(0,0,0,.04);cursor:pointer}
+.inc input{width:20px;height:20px;accent-color:var(--accent);margin:0;flex:none}
+.inc b{color:var(--ink)}
+.note{font-size:12.5px;color:var(--muted);margin:0}
+.fbx .whynot{font-size:calc(14.5px * var(--rs));color:var(--muted);border-top:1px dashed var(--line);padding-top:6px}
+/* Phones: each category becomes a row (colored header, then its five tiles side by side) */
+@media (max-width:719px){
+  .board{display:flex;flex-direction:column;gap:12px;padding:10px;border-radius:20px}
+  .col{display:grid;grid-template-columns:repeat(var(--vals),minmax(0,1fr));grid-template-rows:none;grid-row:auto;gap:6px}
+  .cat{grid-column:1 / -1;min-height:0;padding:9px 12px;justify-content:flex-start;text-align:left;font-size:14px;border-radius:12px}
+  .tile{min-height:54px;font-size:clamp(14px,4.4vw,19px);border-radius:12px;padding:0 2px}
+  .tile:disabled{font-size:14px}
+  .tile small{font-size:10px}
+}
+/* Short landscape phones: keep the grid but make it compact */
+@media (max-height:500px) and (min-width:720px){.cat{min-height:48px;padding:6px}.tile{min-height:46px}}
+[data-theme="dark"]{--money:#30d158}
+[data-theme="dark"] .bonus{color:#ffcc66;background:rgba(255,159,10,.18);border-color:rgba(255,159,10,.35)}
+</style>
+<!-- Vercel Web Analytics: anonymous page views, no cookies (enable Analytics for the project in the Vercel dashboard) -->
+<script src="../assets/glossary.js"></script>
+<script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</head><body>
+<div class="wrap">
+  <header class="top">
+    <a class="back" href="../index.html">← All drills</a>
+    <h1>Anthro-pardy</h1>
+    <p class="sub">A Jeopardy-style review of key terms, theorists, gesture and sign, socialization, multilingualism, and power and race. Pick a category and a value, answer the multiple-choice question, and earn the money. One tile hides a ×2 bonus.</p>
+  </header>
+  <div class="gbar">
+    
+    <div class="rules"><label><input type="checkbox" id="harsh"> Lose money on wrong answers</label><button type="button" class="newgame" id="newGame">New game</button></div>
+  </div>
+  <div class="scorebox" aria-live="polite"><span class="score" id="score">$0</span><span class="slab"><span id="played">0 of 0 played</span><span id="best"></span></span></div>
+  <div class="boardwrap"><div class="board" id="board" role="grid" aria-label="Anthro-pardy board"></div></div>
+  <label class="inc" id="incRow" hidden><input type="checkbox" id="inc"><span><b>Add these questions to my drill.</b> Turn it off to keep the drill to the other sources. You can also switch it in the drill itself.</span></label>
+  <p class="note">Clues were written for this site from the textbook and the assigned readings. Your games are saved in this browser only, separately from your drill progress.</p>
+</div>
+<div class="clue" id="clue" hidden role="dialog" aria-modal="true" aria-labelledby="clueQ"></div>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const shuffle = a => { a = a.slice(); for (let k = a.length - 1; k > 0; k--) { const j = Math.random() * (k + 1) | 0; [a[k], a[j]] = [a[j], a[k]] } return a };
+  const whyNot = t => { const d = window.GLOSS && window.GLOSS.look(t); return d ? `<span class="whynot"><b>Why not “${esc(String(t).replace(/<[^>]*>/g, ""))}”?</b> ${esc(d)}</span>` : "" };
+  const money = n => (n < 0 ? "−$" : "$") + Math.abs(n).toLocaleString("en-US");
+  const BOARDS = { unit: { file: "../drill/questions.js", dir: "../drill/", inc: "a104-drill-v1-include-AP" } };
+  const KEY = "a104-board-v1", BKEY = "a104-board-which";
+  const params = new URLSearchParams(location.search);
+  let which = params.get("board") in BOARDS ? params.get("board") : (localStorage.getItem(BKEY) in BOARDS ? localStorage.getItem(BKEY) : "unit");
+  try { localStorage.setItem(BKEY, which) } catch (e) { }
+
+  // Saved games: { exam2: { done: {id: {ok, gain}}, score, bonus, best, harsh }, exam1: {...} }
+  let ALLS = {}; try { ALLS = JSON.parse(localStorage.getItem(KEY) || "{}") || {} } catch (e) { }
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(ALLS)) } catch (e) { } };
+
+  // Each exam's question file defines window.BANK; load only the one for this board.
+  const sh = document.createElement("script"); sh.src = "../drill/shared.js";
+  sh.onload = () => { const sc = document.createElement("script"); sc.src = BOARDS[which].file; sc.onload = start; document.body.appendChild(sc) };
+  document.body.appendChild(sh);
+
+  function start() {
+    const B = window.BANK, Q = B.q, dir = BOARDS[which].dir, html = !B.textOnly;
+    const txt = s => html ? String(s) : esc(s);
+    const ids = (B.ids.AP || []).filter(id => Q[id] && Q[id].val);
+    const cats = [...new Set(ids.map(id => Q[id].tag))];
+    const vals = [...new Set(ids.map(id => Q[id].val))].sort((a, b) => a - b);
+    const at = (c, v) => ids.find(id => Q[id].tag === c && Q[id].val === v);
+    const imgOf = id => Q[id].img || (B.img && B.img[id]) || null;
+    const total = ids.length;
+    // One bright color per category; tiles get deeper as the value rises
+    const PALETTE = ["#f04a2c", "#dc8a00", "#1c9a50", "#0890c2", "#7454f5", "#e2347a", "#0e9a8a"];
+    const colorOf = c => PALETTE[cats.indexOf(c) % PALETTE.length];
+    const mixOf = v => (95 - vals.indexOf(v) * 9) + "%";
+
+    function fresh() { return { done: {}, score: 0, bonus: ids[Math.random() * ids.length | 0], best: (G && G.best) || null, harsh: !!(G && G.harsh) } }
+    let G = ALLS[which];
+    if (!G || !G.done || !ids.includes(G.bonus)) { G = ALLS[which] = fresh(); save() }
+
+    document.querySelectorAll("[data-b]").forEach(b => { b.setAttribute("aria-pressed", b.dataset.b === which); b.onclick = () => { if (b.dataset.b !== which) location.search = "?board=" + b.dataset.b } });
+    $("harsh").checked = !!G.harsh; $("harsh").onchange = e => { G.harsh = e.target.checked; save() };
+    $("newGame").onclick = () => { if (Object.keys(G.done).length && Object.keys(G.done).length < total && !confirm("Start a new game? This one's score will be lost.")) return; G = ALLS[which] = fresh(); save(); paint() };
+    if (BOARDS[which].inc) {
+      $("incRow").hidden = false; const k = BOARDS[which].inc;
+      $("inc").checked = localStorage.getItem(k) !== "0";
+      $("inc").onchange = e => { try { localStorage.setItem(k, e.target.checked ? "1" : "0") } catch (er) { } };
+    }
+
+    function paint(bump) {
+      const n = Object.keys(G.done).length;
+      $("score").textContent = money(G.score); $("score").classList.toggle("neg", G.score < 0);
+      if (bump) { $("score").classList.remove("bump"); void $("score").offsetWidth; $("score").classList.add("bump") }
+      $("played").innerHTML = `<b>${n} of ${total}</b> played · ${Object.values(G.done).filter(d => d.ok).length} right`;
+      $("best").textContent = G.best != null ? `Best finished game: ${money(G.best)}` : "";
+      const b = $("board"); b.style.setProperty("--cols", cats.length); b.style.setProperty("--vals", vals.length);
+      b.innerHTML = cats.map(c => `<div class="col" role="group" aria-label="${esc(c)}" style="--c:${colorOf(c)}"><div class="cat">${esc(c)}</div>` +
+        vals.map(v => { const id = at(c, v); if (!id) return `<div></div>`; const d = G.done[id];
+          const st = `--mix:${mixOf(v)}`;
+          return d ? `<button class="tile ${d.ok ? "right" : "wrong"}" style="${st}" disabled aria-label="${esc(c)} ${money(v)}: ${d.ok ? "right" : "wrong"}">${d.ok ? "✓" : "✗"}<small>${d.gain ? (d.gain > 0 ? "+" : "") + money(d.gain) : "$0"}</small></button>`
+            : `<button class="tile" style="${st}" data-id="${id}" aria-label="${esc(c)} for ${money(v)}">${money(v)}</button>` }).join("") + `</div>`).join("");
+      b.querySelectorAll(".tile[data-id]").forEach(t => t.onclick = () => openClue(t.dataset.id));
+      if (n === total) showEnd();
+    }
+
+    let lastTile = null;
+    function openClue(id) {
+      lastTile = id;
+      const q = Q[id], isBonus = id === G.bonus, worth = q.val * (isBonus ? 2 : 1), im = imgOf(id);
+      const opts = shuffle([{ t: q.ok, c: true }, ...q.wrong.map(t => ({ t, c: false }))]);
+      const el = $("clue"); el.hidden = false; document.body.style.overflow = "hidden";
+      el.innerHTML = `<article class="card" style="--c:${colorOf(q.tag)}">
+        <div class="chead"><span class="ctag">${esc(q.tag)}</span><span>${isBonus ? `<span class="bonus">★ Bonus tile: ×2</span> ` : ""}<span class="cval">${money(worth)}</span></span></div>
+        <p class="q" id="clueQ">${txt(q.q)}</p>
+        ${im ? `<figure class="fig"><img src="${dir + im[0]}" alt="${esc(im[1])}"></figure>` : ""}
+        <div class="opts">${opts.map((o, j) => `<button class="opt" data-j="${j}"><span class="bub">${"ABCD"[j]}</span><span>${txt(o.t)}</span></button>`).join("")}</div>
+        <div class="fbx" id="fbx" hidden></div>
+        <div class="nav"><button class="btn ghost" id="skipClue"><span>Back to the board</span></button></div>
+      </article>`;
+      $("skipClue").onclick = closeClue;
+      el.querySelectorAll(".opt").forEach(b => b.onclick = () => {
+        const o = opts[+b.dataset.j], ok = o.c, gain = ok ? worth : (G.harsh ? -worth : 0);
+        G.done[id] = { ok, gain }; G.score += gain; save();
+        window.dispatchEvent(new CustomEvent(ok ? "bio:correct" : "bio:wrong", { detail: { kind: "board", from: "board", val: Q[id].val, img: !!imgOf(id) } }));
+        el.querySelectorAll(".opt").forEach(x => { x.disabled = true; if (opts[+x.dataset.j].c) x.classList.add("right"); else if (x === b) x.classList.add("wrong") });
+        const f = $("fbx"); f.hidden = false;
+        f.innerHTML = `<span class="earn ${gain > 0 ? "plus" : gain < 0 ? "minus" : "zero"}">${ok ? "Correct! +" + money(worth) : gain < 0 ? "Not quite. " + money(gain) : "Not quite. +$0"}</span>${!ok ? `<span>The answer: <b>${txt(q.ok)}</b></span>` : ""}${q.ex ? `<span class="sub"><b>Why:</b> ${txt(q.ex)}</span>` : ""}${!ok ? whyNot(o.t) : ""}`;
+        $("skipClue").outerHTML = `<button class="btn" id="backBoard"><span>Back to the board →</span></button>`;
+        $("backBoard").onclick = closeClue; $("backBoard").focus();
+        paint(true);
+      });
+      el.querySelector(".opt").focus();
+    }
+    function closeClue() {
+      $("clue").hidden = true; $("clue").innerHTML = ""; document.body.style.overflow = "";
+      const t = document.querySelector(`.tile[aria-label^="${CSS.escape(Q[lastTile].tag)}"]`); if (t) t.focus();
+      if (Object.keys(G.done).length === total) showEnd();
+    }
+    function showEnd() {
+      if (!$("clue").hidden) return;
+      const right = Object.values(G.done).filter(d => d.ok).length, max = ids.reduce((s, id) => s + Q[id].val * (id === G.bonus ? 2 : 1), 0);
+      const newBest = G.best == null || G.score > G.best; if (newBest && !G.ended) { G.best = G.score } G.ended = true; save();
+      const el = $("clue"); el.hidden = false; document.body.style.overflow = "hidden";
+      el.innerHTML = `<article class="card endcard"><p class="sub">Board finished</p><span class="score${G.score < 0 ? " neg" : ""}">${money(G.score)}</span>
+        <p>${right} of ${total} right · the most possible this game was ${money(max)}</p>${newBest ? `<p class="bonus">★ New best score</p>` : `<p class="sub">Best finished game: ${money(G.best)}</p>`}
+        <div class="nav" style="justify-content:center"><button class="btn ghost" id="seeBoard"><span>See the board</span></button><button class="btn" id="again"><span>Play again</span></button></div></article>`;
+      $("again").onclick = () => { G = ALLS[which] = fresh(); save(); $("clue").hidden = true; document.body.style.overflow = ""; paint() };
+      $("seeBoard").onclick = () => { $("clue").hidden = true; document.body.style.overflow = ""; G.ended = true };
+    }
+    document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("clue").hidden) closeClue() });
+    paint();
+  }
+})();
+</script>
+</body></html>
