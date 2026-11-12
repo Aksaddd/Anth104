@@ -60,6 +60,7 @@
     if (!H || !H.cats || !H.active) { const s = load(); H = { active: "c1", cats: { c1: Object.assign(pickCat(s), { breed: s.breed || "domestic", color: s.color || "golden", nick: s.nick || "" }) }, along: [] } }
     H.along = (H.along || []).filter(id => H.cats[id] && id !== H.active).slice(0, MAX_ALONG);
     H.co = (H.co || []).filter(id => H.along.includes(id));   // co-trainees: on-screen cats that share the XP
+    H.alumni = H.alumni || {};   // cats returned to the café: they keep their XP, outfits and name, and can come home again
     return H;
   }
   const saveHouse = H => { try { localStorage.setItem(CATS_KEY, JSON.stringify(H)) } catch (e) { } };
@@ -78,6 +79,19 @@
     if (!H.along.includes(H.active)) H.along.push(H.active);   // the old trainee comes along
     if (wasCo) H.co.push(H.active);                            // swapping within a co-training group keeps the group
     H.active = id; save(s); saveHouse(H);
+  }
+  // Return a cat to the café (frees a spot at home). The cat in training can't go: train another cat first.
+  function returnCat(id) {
+    const H = household(); if (!H.cats[id] || id === H.active) return false;
+    H.alumni[id] = Object.assign({}, H.cats[id], { returnedAt: Date.now() }); delete H.cats[id];
+    H.along = H.along.filter(x => x !== id); H.co = H.co.filter(x => x !== id); if (H.spots) delete H.spots[id];
+    saveHouse(H); return true;
+  }
+  function welcomeBack(id) {   // a returned cat comes home with all its progress
+    const H = household(); if (!H.alumni[id] || Object.keys(H.cats).length >= MAX_CATS) return null;
+    H.cats[id] = H.alumni[id]; delete H.cats[id].returnedAt; delete H.alumni[id];
+    if (H.along.length < MAX_ALONG) H.along.push(id);
+    saveHouse(H); return id;
   }
   function adoptCat(breed, nick, color) {
     const H = household(); if (Object.keys(H.cats).length >= MAX_CATS) return null;
@@ -554,7 +568,7 @@ body.bb-on{padding-bottom:96px}
 .sh-tile.on::after{content:"✓";position:absolute;top:6px;right:8px;font-weight:800;color:#248a3d}
 .sh-note{margin:16px 18px 0;font-size:12.5px;color:var(--c-muted)}
 @media (max-width:420px){.sh-grid{grid-template-columns:repeat(3,1fr)}.sh-tile>svg{height:50px}}
-.sh-tabs.pal{margin:2px 16px 10px;--tabs:5}.sh-tabs.pal button{font-size:13.5px;padding:7px 2px}
+.sh-tabs.pal{margin:2px 16px 10px;grid-template-columns:repeat(5,1fr) auto}.sh-tabs.pal .sh-gear{padding:7px 10px;font-size:16px}.sh-tabs.pal button{font-size:13.5px;padding:7px 2px}
 .ct-list{display:flex;flex-direction:column;gap:8px;margin:0 16px 12px}
 .ct-cat{display:grid;grid-template-columns:64px 1fr auto;gap:10px;align-items:center;background:var(--c-fill);border-radius:16px;padding:8px 12px 8px 6px;text-align:left}
 .ct-cat.on{background:color-mix(in srgb,#34c759 14%,var(--c-fill));box-shadow:inset 0 0 0 2px #34c759}
@@ -908,13 +922,7 @@ html:not(.bb-showlv) .bb-pal .bb-lv,html:not(.bb-showlv) .bb-dock .bb-lv,html:no
         <p><b>What makes a question harder:</b> EXCEPT/NOT wording, putting steps in order, reading an experiment or a figure, comparing two things or explaining why, five answer choices, long and similar answers, high-value Anthro-pardy clues, questions on the assigned readings, and questions <i>you</i> missed before. A question you've already gotten right 3+ times earns half.</p>
         <p><b>Win streaks multiply XP and gold:</b> ${X ? X.STREAKS.slice(0, -1).reverse().map(([n, m]) => `${n} in a row ×${m}`).join(" · ") : ""}. A wrong answer resets the streak but never takes anything away. Each evolution adds ${EVOLVE_BONUS} gold.</p>
       </details>
-      <div class="bb-spot"><b>Where ${esc(name(s))} sits</b>${anchored() && getSpot() ? `Anchored right where you put him. He stays there, even when you pick an answer.` : getSpot() ? `Right where you put him. He still runs over to each answer you pick, then goes back to his spot.` : `Next to your questions. He runs over to each answer you pick.`}<small>Drag ${esc(name(s))} anywhere on the screen to move him (or focus him and use the arrow keys). Each companion cat can be dragged to its own spot too.</small>
-        <label class="bb-size"><span>Size</span><input type="range" id="bbSize" min="60" max="180" step="10" value="${Math.round(userScale() * 100)}" aria-label="Cat size"><output id="bbSizeOut">${Math.round(userScale() * 100)}%</output></label>
-        <label class="pf-tog pf-prog"><span>Anchor him in place (he won't run to your answers)</span><input type="checkbox" id="bbAnchor"${anchored() ? " checked" : ""}></label>
-        ${getSpot() ? `<button type="button" id="bbSpotReset">Put him back beside my questions</button>` : ""}</div>
-
-      <label class="pf-tog pf-prog"><span>Show levels on the cats on screen</span><input type="checkbox" id="pgShowLv"${showLv() ? " checked" : ""}></label>
-      <div class="bb-acts"><button type="button" id="bbRename">Rename</button><button type="button" id="bbHide">Hide buddy</button></div>
+      <button type="button" class="ct-cafe" data-tab="settings"><span class="ic" aria-hidden="true">⚙</span><span><b>Cat settings</b><small>Size, anchoring, where he sits, levels, sound, name</small></span><i aria-hidden="true">›</i></button>
     </div>`;
   }
 
@@ -1122,14 +1130,27 @@ html:not(.bb-showlv) .bb-pal .bb-lv,html:not(.bb-showlv) .bb-dock .bb-lv,html:no
     // Cats: the household. Pick who to train, who comes along on screen, and adopt new breeds.
     function catsHTML() {
       const { H, list } = catList(), n = list.length, full = n >= MAX_CATS;
-      return `<p class="ct-h">Your cats<small>The cat in training earns XP from your answers. Any of your other cats can come along on screen too. Tick <b>Co-train</b> to train several at once: each answer's XP is split evenly between them.</small></p>
+      return `<button type="button" class="ct-cafe" id="ctCafe"><span class="ic" aria-hidden="true">☕</span><span><b>Visit the Cat Café</b><small>${full ? `Your home is full (${MAX_CATS} cats). Return a cat to the café to make room for a new one.` : Object.keys(H.alumni).length ? `Meet new cats, or bring back ${Object.keys(H.alumni).length > 1 ? `one of the ${Object.keys(H.alumni).length} cats who live there now` : "the cat who lives there now"}.` : "Meet cats of every breed, pick a coat color, and bring one home to study."}</small></span><i aria-hidden="true">›</i></button>
+        <p class="ct-h">Your cats · ${n}/${MAX_CATS}<small>The cat in training earns XP from your answers. Any of your other cats can come along on screen too. Tick <b>Co-train</b> to train several at once: each answer's XP is split evenly between them.</small></p>
         <div class="ct-list">${list.map(c => { const k2 = stageOf(c.pts | 0); return `<div class="ct-cat${c.active ? " on" : ""}">
           ${art(k2, c.equip || { badges: [] }, { breed: c.breed, color: c.color, collar: c.collar, w: c.weight, eyes: "happy", plain: true })}
           <span><b>${esc(c.nick || "Dexter")}</b><small>${esc(breedName(c.breed, c.color))} · Lv ${level(c.pts | 0)} · ${esc(STAGES[k2].form)}</small></span>
           <span class="ct-btns"><button type="button" class="ct-dress" data-dressgo="${c.id}" aria-label="Dress ${esc(c.nick || "Dexter")}">👗 Dress</button>${c.active ? `<span class="ct-tag">✓ Training</span>${H.co.length ? `<span class="ct-split">XP split ${H.co.length + 1} ways</span>` : ""}` : `<button type="button" class="sh-act" data-train="${c.id}">Train</button>
             <label class="ct-along"><input type="checkbox" data-along="${c.id}"${c.along ? " checked" : ""}${!c.along && H.along.length >= MAX_ALONG ? " disabled" : ""}> On screen</label>
-            <label class="ct-along ct-co"><input type="checkbox" data-co="${c.id}"${c.co ? " checked" : ""}${c.along ? "" : " disabled"}> 📚 Co-train</label>${c.along && H.spots && H.spots[c.id] ? `<button type="button" class="ct-unpin" data-unpin="${c.id}">↺ Back beside him</button>` : ""}`}</span></div>` }).join("")}</div>
-        <button type="button" class="ct-cafe" id="ctCafe"><span class="ic" aria-hidden="true">☕</span><span><b>Visit the Cat Café</b><small>${full ? `Your home is full (${MAX_CATS} cats), but your cats love to hang out here.` : "Meet cats of every breed, pick a coat color, and bring one home to study."}</small></span><i aria-hidden="true">›</i></button>`;
+            <label class="ct-along ct-co"><input type="checkbox" data-co="${c.id}"${c.co ? " checked" : ""}${c.along ? "" : " disabled"}> 📚 Co-train</label>${c.along && H.spots && H.spots[c.id] ? `<button type="button" class="ct-unpin" data-unpin="${c.id}">↺ Back beside him</button>` : ""}<button type="button" class="ct-unpin" data-return="${c.id}">↩ Return to café</button>`}</span></div>` }).join("")}</div>`;
+    }
+    // Settings: size, anchoring, where he sits, levels, sound, name, hide (the same settings as the site's Settings sheet)
+    function settingsHTML(s) {
+      const sp = getSpot(), H = household(), pinned = H.spots && Object.keys(H.spots).length;
+      return `<div class="bb-spot"><b>Size</b><small>Bigger on laptops and desktops; this scales every cat on screen.</small>
+          <label class="bb-size"><span>Size</span><input type="range" id="bbSize" min="60" max="180" step="10" value="${Math.round(userScale() * 100)}" aria-label="Cat size"><output id="bbSizeOut">${Math.round(userScale() * 100)}%</output></label></div>
+        <div class="bb-spot"><b>Where ${esc(name(s))} sits</b>${anchored() && sp ? "Anchored right where you put him. He stays there, even when you pick an answer." : sp ? "Right where you put him. He still runs over to each answer you pick, then goes back to his spot." : "Next to your questions. He runs over to each answer you pick."}<small>Drag any cat to move it, or focus it and use the arrow keys.</small>
+          <label class="pf-tog pf-prog"><span>Anchor him in place (he won't run to your answers)</span><input type="checkbox" id="bbAnchor"${anchored() ? " checked" : ""}></label>
+          ${sp || pinned ? `<button type="button" id="bbSpotReset">Put every cat back beside my questions</button>` : ""}</div>
+        <div class="bb-spot"><b>On screen</b>
+          <label class="pf-tog pf-prog"><span>Show levels on the cats on screen</span><input type="checkbox" id="pgShowLv"${showLv() ? " checked" : ""}></label>
+          <label class="pf-tog pf-prog"><span>${esc(name(s))}'s meow on right answers</span><input type="checkbox" id="bbMeow"${soundOn() ? " checked" : ""}></label></div>
+        <div class="bb-acts"><button type="button" id="bbRename">Rename ${esc(name(s))}</button><button type="button" id="bbHide">Hide study buddy</button></div>`;
     }
     // Badge case: one badge per Read & Learn chapter, like a trainer's case. Earned badges can be pinned on Dexter.
     function badgesHTML(s) {
@@ -1195,25 +1216,26 @@ html:not(.bb-showlv) .bb-pal .bb-lv,html:not(.bb-showlv) .bb-dock .bb-lv,html:no
       const s = load(), k = stageOf(s.pts);
       syncBadges();
       const d = st.tab === "closet" && W ? dressGet() : null, many = d && catList().list.length > 1;
-      const body = st.tab === "cats" ? catsHTML() : st.tab === "progress" || !W ? progressHTML(s) : st.tab === "shop" ? shopHTML(s) : st.tab === "badges" ? badgesHTML(load()) : closetHTML(d, stageOf(d.pts));
+      const body = st.tab === "settings" ? settingsHTML(s) : st.tab === "cats" ? catsHTML() : st.tab === "progress" || !W ? progressHTML(s) : st.tab === "shop" ? shopHTML(s) : st.tab === "badges" ? badgesHTML(load()) : closetHTML(d, stageOf(d.pts));
       shop.innerHTML = `<div class="bb-card bb-shop${st.opened ? " still" : ""}" role="dialog" aria-modal="true" aria-labelledby="shTitle">
         <div class="sh-head"><h3 id="shTitle">${esc(name(d || s))}</h3><span class="sh-gold" aria-label="${s.gold} gold">${COIN}${fmt(s.gold)}</span><button type="button" class="sh-done" id="shDone">Done</button></div>
-        <div class="sh-tabs pal" role="tablist">${[["cats", "Cats"], ["closet", "Closet"], ["shop", "Shop"], ["badges", "Badges"], ["progress", "Progress"]].map(([key, label]) => `<button type="button" role="tab" aria-selected="${st.tab === key}" data-tab="${key}">${label}</button>`).join("")}</div>
+        <div class="sh-tabs pal" role="tablist">${[["cats", "Cats"], ["closet", "Closet"], ["shop", "Shop"], ["badges", "Badges"], ["progress", "Progress"], ["settings", "⚙"]].map(([key, label]) => `<button type="button" role="tab" aria-selected="${st.tab === key}" data-tab="${key}"${key === "settings" ? ` aria-label="Cat settings" title="Cat settings" class="sh-gear"` : ""}>${label}</button>`).join("")}</div>
         ${d ? `${dressPicker()}<div class="sh-stage cl-stage" style="--dz:${sizeFor(d.pts).toFixed(2)}">${many ? `<button type="button" class="cl-arrow l" data-step="-1" aria-label="Previous cat">‹</button>` : ""}<span class="cl-who">${dressArt(d, "wide")}</span>${many ? `<span class="cl-name">Dressing <b>${esc(name(d))}</b></span><button type="button" class="cl-arrow r" data-step="1" aria-label="Next cat">›</button>` : ""}</div>`
-          : st.tab === "progress" || st.tab === "cats" ? "" : `<div class="sh-stage" style="--dz:${sizeFor(s.pts).toFixed(2)}">${art(k, st.tab === "shop" ? st.tryEq : s.equip, { eyes: "wide" })}</div>`}
+          : st.tab === "progress" || st.tab === "cats" || st.tab === "settings" ? "" : `<div class="sh-stage" style="--dz:${sizeFor(s.pts).toFixed(2)}">${art(k, st.tab === "shop" ? st.tryEq : s.equip, { eyes: "wide" })}</div>`}
         ${d ? statsHTML(d) + `<p class="sh-cap pf-acc">Accessories &amp; looks</p>` : ""}
         ${body}
       </div>`;
       $("shDone").onclick = closeShop;
       shop.querySelectorAll("[data-tab]").forEach(b => b.onclick = () => { st.tab = b.dataset.tab; st.sel = null; st.tryEq = Object.assign({}, load().equip); paint(); shop.querySelector(".bb-shop").scrollTop = 0 });
       shop.querySelectorAll("[data-sub]").forEach(b => b.onclick = () => keepScroll(() => { st.sub = b.dataset.sub; st.sel = null; st.tryEq = Object.assign({}, load().equip); paint() }));
-      if (st.tab === "progress") {
+      if (st.tab === "settings") {
         $("bbRename").onclick = () => { const n = prompt("Name your study buddy:", s.nick || "Dexter"); if (n === null) return; const t = load(); t.nick = n.trim().slice(0, 24); save(t); paintDock(); paint() };
         $("bbHide").onclick = () => { setEnabled(false); closeShop() };
-        if ($("pgShowLv")) $("pgShowLv").onchange = e => { setShowLv(e.target.checked); refreshMates() };
-        if ($("bbSize")) $("bbSize").oninput = e => { $("bbSizeOut").textContent = e.target.value + "%"; setSize(e.target.value / 100) };
-        if ($("bbAnchor")) $("bbAnchor").onchange = e => { setAnchored(e.target.checked); paint() };
-        if ($("bbSpotReset")) $("bbSpotReset").onclick = () => { setAnchored(false); setSpot(null); const H = household(); H.spots = {}; saveHouse(H); paint(); placeMates() };
+        $("pgShowLv").onchange = e => { setShowLv(e.target.checked); refreshMates() };
+        $("bbMeow").onchange = e => setSound(e.target.checked);
+        $("bbSize").oninput = e => { $("bbSizeOut").textContent = e.target.value + "%"; setSize(e.target.value / 100) };
+        $("bbAnchor").onchange = e => keepScroll(() => { setAnchored(e.target.checked); paint() });
+        if ($("bbSpotReset")) $("bbSpotReset").onclick = () => keepScroll(() => { setAnchored(false); setSpot(null); const H = household(); H.spots = {}; saveHouse(H); paint(); placeMates() });
         return;
       }
       if (st.tab === "cats") {
@@ -1222,6 +1244,11 @@ html:not(.bb-showlv) .bb-pal .bb-lv,html:not(.bb-showlv) .bb-dock .bb-lv,html:no
         shop.querySelectorAll("[data-unpin]").forEach(b => b.onclick = () => keepScroll(() => { setMateSpot(b.dataset.unpin, null); paint(); placeMates() }));
         shop.querySelectorAll("[data-along]").forEach(b => b.onchange = () => keepScroll(() => { const H = household(); const id = b.dataset.along; H.along = b.checked ? H.along.concat(id).slice(0, MAX_ALONG) : H.along.filter(x => x !== id); H.co = H.co.filter(x => H.along.includes(x)); saveHouse(H); paint(); refreshMates() }));
         shop.querySelectorAll("[data-co]").forEach(b => b.onchange = () => keepScroll(() => { const H = household(); const id = b.dataset.co; H.co = b.checked ? H.co.filter(x => x !== id).concat(id) : H.co.filter(x => x !== id); saveHouse(H); paint(); refreshMates() }));
+        shop.querySelectorAll("[data-return]").forEach(b => b.onclick = () => {
+          const c = catList().list.find(x => x.id === b.dataset.return); if (!c) return; const nm = c.nick || "Dexter";
+          if (!confirm(`Return ${nm} to the café? ${nm} keeps all their XP, outfits and badges, and you can bring them home again from the café any time.`)) return;
+          keepScroll(() => { returnCat(c.id); paint(); refreshMates(); settle() }); pop(`<b>${esc(nm)} moved into the café</b><small>Visit to adopt someone new or bring ${esc(nm)} back</small>`, "buy");
+        });
         $("ctCafe").onclick = () => { closeShop(); openCafe() };
         return;
       }
@@ -1361,7 +1388,8 @@ html:not(.bb-showlv) .bb-pal .bb-lv,html:not(.bb-showlv) .bb-dock .bb-lv,html:no
     const { list } = catList(), chill = list.filter(c => !c.active && !c.along).slice(0, 3);
     const day = Math.floor(Date.now() / 864e5);
     const guests = [0, 1].flatMap(n => Object.keys(BREEDS).map((b, i) => { const cs = Object.keys(BREEDS[b].colors); return { guest: true, breed: b, color: cs[(day + i + n) % cs.length], nick: "", pts: n ? 150 + i * 90 : 0 } }));
-    return chill.map(c => Object.assign({ mine: true }, c)).concat(guests).slice(0, CAFE_SPOTS.length - 3);
+    const back = Object.entries(household().alumni).sort((a, b) => (b[1].returnedAt || 0) - (a[1].returnedAt || 0)).slice(0, 4).map(([id, c]) => Object.assign({ mine: true, alumni: true, id }, c));
+    return back.concat(chill.map(c => Object.assign({ mine: true }, c))).concat(guests).slice(0, CAFE_SPOTS.length - 3);
   }
   let cafe = null;
   function openCafe() {
@@ -1420,9 +1448,11 @@ html:not(.bb-showlv) .bb-pal .bb-lv,html:not(.bb-showlv) .bb-dock .bb-lv,html:no
         const k = r.mine ? stageOf(r.pts | 0) : 0;
         sheet.innerHTML = `<button type="button" class="cf-close" aria-label="Back to the café">✕</button>
           <div class="cf-meet">${art(k, r.equip || { badges: [] }, { breed: r.breed, color, collar: r.collar || "navy", w: r.weight || 1, eyes: "happy", plain: !r.mine })}
-          <div><p class="cf-kicker">${r.mine ? "Your cat" : "Looking for a study buddy"}</p><h3>${r.mine ? esc(r.nick || "Dexter") : esc(B.name)}</h3><p class="cf-desc">${esc(B.desc)}.</p>
+          <div><p class="cf-kicker">${r.alumni ? "Used to live with you" : r.mine ? "Your cat" : "Looking for a study buddy"}</p><h3>${r.mine ? esc(r.nick || "Dexter") : esc(B.name)}</h3><p class="cf-desc">${esc(B.desc)}.</p>
           ${r.mine ? `<p class="cf-desc">${esc(breedName(r.breed, r.color))} · Lv ${level(r.pts | 0)} · ${esc(STAGES[stageOf(r.pts | 0)].form)}</p>` : ""}</div></div>
-          ${r.mine ? `<div class="cf-acts"><button type="button" class="cf-go" data-do="train">📚 Study with me</button><button type="button" class="cf-go alt" data-do="along">🎒 Come along</button><button type="button" class="cf-go ghost" data-do="stay">Keep chilling</button></div>`
+          ${r.alumni ? (full ? `<p class="cf-desc">Your home is full (${MAX_CATS} cats). Return a cat to the café to make room, and ${esc(r.nick || "this cat")} can come home with all their progress.</p>`
+            : `<p class="cf-desc">Still has all their XP, outfits and badges.</p><div class="cf-acts"><button type="button" class="cf-go" data-do="home-train">📚 Come home &amp; study</button><button type="button" class="cf-go alt" data-do="home">🏠 Come home</button><button type="button" class="cf-go ghost" data-do="stay">Not now</button></div>`)
+          : r.mine ? `<div class="cf-acts"><button type="button" class="cf-go" data-do="train">📚 Study with me</button><button type="button" class="cf-go alt" data-do="along">🎒 Come along</button><button type="button" class="cf-go ghost" data-do="stay">Keep chilling</button>${r.active ? "" : `<button type="button" class="cf-go ghost" data-do="return">↩ Live at the café</button>`}</div>`
           : full ? `<p class="cf-desc">Your home is full (${MAX_CATS} cats). Visit anytime to say hi!</p>`
           : `<p class="cf-lab">Coat color</p><div class="cf-colors">${Object.entries(B.colors).map(([key, c]) => `<button type="button" class="cf-col${key === color ? " on" : ""}" data-col="${key}" aria-pressed="${key === color}"><i style="background:linear-gradient(135deg,${c.fur[0]} 55%,${c.pat ? (Array.isArray(c.pat) ? c.pat[0] : c.pat) : c.fur[1]} 55%)"></i>${esc(c.name)}</button>`).join("")}</div>
             <p class="cf-lab">Name</p><input class="cf-name" maxlength="24" value="${esc(B.names.find(x => !used.has(x.toLowerCase())) || B.names[0])}" aria-label="Name">
@@ -1433,6 +1463,8 @@ html:not(.bb-showlv) .bb-pal .bb-lv,html:not(.bb-showlv) .bb-dock .bb-lv,html:no
           const d = b.dataset.do, H2 = household();
           if (d === "stay") { sheet.hidden = true; return }
           let id = r.id, nm = r.nick || "Dexter";
+          if (d === "return") { if (!confirm(`Return ${nm} to the café? ${nm} keeps all their progress and you can bring them home any time.`)) return; returnCat(id); close(); refreshMates(); settle(); pop(`<b>${esc(nm)} moved into the café</b><small>Visit to bring them home again</small>`, "buy"); return }
+          if (d.startsWith("home")) { if (!welcomeBack(id)) return; if (d === "home-train") trainCat(id); close(); paintDock(); checkPal(); paintPal(); refreshMates(); settle(); pop(`<b>Welcome back, ${esc(nm)}!</b><small>${esc(breedName(r.breed, r.color))} · Lv ${level(r.pts | 0)}</small>`, "buy"); return }
           if (d.startsWith("adopt")) { nm = (sheet.querySelector(".cf-name").value || "").trim().slice(0, 24) || B.names[0]; id = adoptCat(resolveBreed(r.breed)[0], nm, color); if (!id) return }
           if (d === "train" || d === "adopt-train") trainCat(id);
           else if (d === "along") { const H3 = household(); if (!H3.along.includes(id)) { H3.along = H3.along.concat(id).slice(-MAX_ALONG); saveHouse(H3) } }

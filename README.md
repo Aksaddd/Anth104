@@ -84,7 +84,7 @@ Optional **Google sign-in** (Settings → Account) syncs everything across devic
 
 ## Study buddy
 
-Dexter the kitten, the gold, the Shop, the Cat Café and the badges work as on the Bio site (`assets/buddy.js`, `assets/wardrobe.js`). Dexter's form cards now carry linguistic anthropology facts, and finishing each Read & Learn chapter earns one of 10 new badges (Voice, Hand, Fieldnote, Rattle, Lightbulb, Polyglot, Letter, Spotlight, Unity, Revival).
+Dexter the kitten, the gold, the Shop, the Cat Café and the badges work as on the Bio site (`assets/buddy.js`, `assets/wardrobe.js`). Tap any cat for its panel: **Cats** starts with the Cat Café and lets you **return a cat to the café** (it keeps its XP and outfits and can come home again, which frees a spot for a new cat), and the **⚙** tab holds every cat setting (size, anchoring, levels, meow, rename, hide). Dexter's form cards now carry linguistic anthropology facts, and finishing each Read & Learn chapter earns one of 10 new badges (Voice, Hand, Fieldnote, Rattle, Lightbulb, Polyglot, Letter, Spotlight, Unity, Revival).
 
 ## Run it locally
 
