@@ -14,6 +14,7 @@ Everything is plain static HTML, CSS and JavaScript, with no build step and no s
 | Readings | `readings/` | Its own drill: 133 questions, one tab per assigned article in syllabus order, with separate progress (`a104-readings-v1`). `readings/key.html` is the answer key, **answers hidden by default** |
 | Mock Exam | `mock/` | A fresh 50- or 100-question exam each time, a quarter from the readings |
 | Review List | `review/` | Every question marked ⚑ for review, from both drills and mock exams |
+| Discussion Board | `discuss/` | Students sign in with Google and post one response per question (32 starter questions, two per week, plus questions students add), with likes, replies and an "answer first" gate. Needs Firestore rules: see [docs/discussion-board.md](docs/discussion-board.md) |
 | Archive | `archive/` | The original course materials week by week (13 textbook chapters, 12 reading PDFs, the lecture slides, 14 videos, 2 links), with search, type filters and links into Read & Learn and the readings drill |
 
 ## Subjects

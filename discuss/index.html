@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Discussion Board · ANTH 104</title>
+<meta name="description" content="ANTH 104 discussion board: post your response to discussion questions and read your classmates' answers.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#f5f5f7">
+<link rel="stylesheet" href="../assets/drill.css">
+<script src="../assets/settings.js"></script>
+<style>
+/* Layout: header + account bar → list view (week filter, search, add-a-question, prompt cards by week)
+   or prompt view (#p/<id>: the question, your response, classmates' responses with likes and replies). */
+.acct{display:flex;align-items:center;gap:10px;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:10px 14px}
+.acct img,.av{width:32px;height:32px;border-radius:50%;object-fit:cover;flex:none;background:var(--fill);display:grid;place-items:center;font:700 13px var(--body);color:var(--muted)}
+.acct .who{flex:1;min-width:0;font-size:14px}.acct .who small{display:block;color:var(--muted)}
+.pill{font:600 14px var(--body);border:0;border-radius:980px;padding:8px 16px;background:var(--accent);color:var(--accent-ink);cursor:pointer;text-decoration:none;white-space:nowrap}
+.pill.ghost{background:var(--accent-soft);color:var(--accent)}.pill.warn{background:transparent;color:var(--bad)}
+.pill[disabled]{opacity:.5;cursor:default}
+.ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ctl input,.ctl select{font:inherit;font-size:15px;padding:9px 14px;border-radius:980px;border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+.ctl input{flex:1;min-width:180px}
+.wkh{margin:10px 0 0;font:700 13px var(--body);color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.pc{display:block;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 16px;text-decoration:none;color:inherit}
+.pc:hover{border-color:var(--accent)}
+.pc b{display:block;font-size:calc(16px * var(--rs));line-height:1.3}
+.pc p{margin:4px 0 0;color:var(--muted);font-size:14px;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;font:500 12.5px var(--body);color:var(--muted)}
+.meta .done{color:var(--good);font-weight:700}.meta .mine{color:var(--accent);font-weight:600}
+.q{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px}
+.q h2{margin:4px 0 8px;font:700 calc(22px * var(--rs))/1.25 var(--display)}
+.q p{margin:0;font-size:calc(16px * var(--rs));line-height:1.55}
+.box{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;gap:10px}
+.box h3{margin:0;font:700 15px var(--body)}
+textarea{font:inherit;font-size:calc(15px * var(--rs));line-height:1.5;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);min-height:120px;resize:vertical;width:100%;box-sizing:border-box}
+textarea.sm{min-height:60px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.row .sp{flex:1}
+.count{font-size:12.5px;color:var(--muted)}
+.resp{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.resp.me{border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
+.rh{display:flex;align-items:center;gap:10px;font-size:14px}.rh b{font-weight:600}.rh small{color:var(--muted)}
+.rt{margin:0;font-size:calc(15px * var(--rs));line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}
+.ra{display:flex;flex-wrap:wrap;gap:6px}
+.chip.on{background:#ffe4ec;border-color:#ff375f;color:#c2185b}
+.reps{margin-left:18px;border-left:2px solid var(--line);padding-left:12px;display:flex;flex-direction:column;gap:8px}
+.rep{font-size:14px}.rep .rt{font-size:calc(14px * var(--rs))}
+.gate{background:var(--accent-soft);border-radius:var(--radius);padding:14px 16px;font-size:14.5px;line-height:1.5}
+.note{font-size:13px;color:var(--muted);margin:0}
+.err{background:#fff2f2;color:#a10000;border-radius:12px;padding:12px 14px;font-size:14px;line-height:1.5}
+[data-theme="dark"] .err{background:#3a1515;color:#ffb4b4}
+[data-theme="dark"] .chip.on{background:#4a1626;color:#ff8fab}
+.empty{color:var(--muted);text-align:center;padding:18px}
+</style>
+<script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</head><body>
+<div class="wrap">
+  <header>
+    <a class="back" id="back" href="../index.html">← All drills</a>
+    <div class="titlerow"><h1 id="title">Discussion Board</h1></div>
+    <p class="sub" id="lead">Post your response to a discussion question and read how your classmates answered. Pick one of the starter questions or add the exact question your professor asked. Everyone signs in with Google, and each person gets one response per question (you can edit it any time).</p>
+  </header>
+  <div class="acct" id="acct"></div>
+  <main id="view" style="display:flex;flex-direction:column;gap:12px"></main>
+  <p class="foot">Responses are visible to signed-in users of this site. Be kind and stay on topic. You can edit or delete your own posts at any time.</p>
+</div>
+<script src="prompts.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const COL = { prompts: "anth104-prompts", resp: "anth104-responses", reps: "anth104-replies" };
+  const LIM = { resp: 4000, rep: 1500, title: 140, text: 1500 };
+  const GATE_KEY = "a104-discuss-peek";   // prompts where the student chose to see answers before posting
+  let A = null, fb = null, F = null, me = null, err = "";
+  let userPrompts = [], allResp = [], unsub = [], view = null, peek = {};
+  try { peek = JSON.parse(localStorage.getItem(GATE_KEY) || "{}") } catch (e) { }
+
+  const STATIC = (window.PROMPTS || []).map(p => ({ ...p, static: true }));
+  const prompts = () => STATIC.concat(userPrompts).sort((a, b) => a.week - b.week || (a.static === b.static ? 0 : a.static ? -1 : 1));
+  const promptOf = id => prompts().find(p => p.id === id);
+  const ago = t => { if (!t) return "just now"; const d = (Date.now() - (t.toMillis ? t.toMillis() : t)) / 1000; return d < 60 ? "just now" : d < 3600 ? Math.round(d / 60) + " min ago" : d < 86400 ? Math.round(d / 3600) + " h ago" : new Date(t.toMillis ? t.toMillis() : t).toLocaleDateString("en-US", { month: "short", day: "numeric" }) };
+  const avatar = (photo, name) => photo ? `<img src="${esc(photo)}" alt="" referrerpolicy="no-referrer">` : `<span class="av">${esc((name || "?").trim()[0] || "?")}</span>`;
+  const friendly = e => /permission|insufficient/i.test((e && (e.code || e.message)) || "") ? "The discussion board isn't switched on yet: the site owner still needs to add its Firestore rules (see docs/discussion-board.md)." : "Something went wrong: " + esc((e && (e.code || e.message)) || "unknown error");
+
+  // ----- account bar
+  function paintAcct() {
+    const info = A ? A.info() : null, u = info && info.user;
+    if (!A || !A.configured()) { $("acct").innerHTML = `<span class="who">Sign-in isn't set up on this site yet, so the board is read-only.</span>`; return }
+    $("acct").innerHTML = u ? `${avatar(u.photo, u.name)}<span class="who"><b>${esc(u.name || "Signed in")}</b><small>Posting as this name</small></span><button type="button" class="pill ghost" id="outBtn">Sign out</button>`
+      : `<span class="who"><b>Sign in to join the discussion</b><small>Use your Google account. Your progress on this site syncs too.</small></span><button type="button" class="pill" id="inBtn">Sign in with Google</button>`;
+    if ($("inBtn")) $("inBtn").onclick = () => A.signIn();
+    if ($("outBtn")) $("outBtn").onclick = () => A.signOut();
+  }
+
+  // ----- live data (signed in only: the rules let signed-in users read)
+  function stop() { unsub.forEach(f => f()); unsub = [] }
+  function listen() {
+    stop(); err = "";
+    if (!fb || !me) { userPrompts = []; allResp = []; route(); return }
+    const S = fb.store, db = fb.db;
+    unsub.push(S.onSnapshot(S.collection(db, COL.prompts), q => { userPrompts = q.docs.map(d => ({ id: "u-" + d.id, fid: d.id, ...d.data() })); route() }, e => { err = friendly(e); route() }));
+    unsub.push(S.onSnapshot(S.collection(db, COL.resp), q => { allResp = q.docs.map(d => ({ id: d.id, ...d.data() })); route() }, e => { err = friendly(e); route() }));
+  }
+
+  // ----- list view
+  let wk = "all", query = "", adding = false;
+  function list() {
+    $("title").textContent = "Discussion Board"; $("back").href = "../index.html"; $("back").textContent = "← All drills"; $("lead").hidden = false;
+    const P = prompts(), q = query.trim().toLowerCase();
+    const shown = P.filter(p => (wk === "all" || p.week === +wk) && (!q || (p.title + " " + p.text + " " + (p.src || "")).toLowerCase().includes(q)));
+    const weeks = [...new Set(P.map(p => p.week))].sort((a, b) => a - b);
+    const cnt = id => allResp.filter(r => r.promptId === id).length, mine = id => me && allResp.some(r => r.promptId === id && r.uid === me.uid);
+    let html = err ? `<div class="err">${err}</div>` : "";
+    html += `<div class="ctl"><input type="search" id="q" placeholder="Search questions" value="${esc(query)}" aria-label="Search questions"><select id="wk" aria-label="Week"><option value="all">All weeks</option>${weeks.map(w => `<option value="${w}"${+wk === w ? " selected" : ""}>Week ${w}</option>`).join("")}</select>${me ? `<button type="button" class="pill" id="addBtn">+ Add a question</button>` : ""}</div>`;
+    if (adding && me) html += `<div class="box"><h3>Add a question your professor asked</h3>
+      <div class="row"><label class="count" for="nw">Week</label><select id="nw" style="font:inherit;padding:6px 10px;border-radius:10px;border:1px solid var(--line);background:var(--paper);color:var(--ink)">${Array.from({ length: 16 }, (_, i) => `<option value="${i + 1}">Week ${i + 1}</option>`).join("")}</select></div>
+      <textarea id="nt" class="sm" maxlength="${LIM.title}" placeholder="Short title (e.g. Is Paris Burning? and spectacle)"></textarea>
+      <textarea id="nx" maxlength="${LIM.text}" placeholder="The full question, as your professor asked it"></textarea>
+      <div class="row"><button type="button" class="pill" id="saveQ">Add question</button><button type="button" class="pill ghost" id="cancelQ">Cancel</button><span class="sp"></span><span class="count">Anyone signed in can answer it</span></div></div>`;
+    let last = null;
+    for (const p of shown) {
+      if (p.week !== last) { html += `<h2 class="wkh">Week ${p.week}</h2>`; last = p.week }
+      const n = cnt(p.id);
+      html += `<a class="pc" href="#p/${encodeURIComponent(p.id)}"><b>${esc(p.title)}</b><p>${esc(p.text)}</p><div class="meta">${p.static ? `<span>${esc(p.src || "")}</span>` : `<span class="mine">Added by ${esc(p.name || "a classmate")}</span>`}<span>${me ? (n === 1 ? "1 response" : n + " responses") : "Sign in to see responses"}</span>${mine(p.id) ? `<span class="done">✓ You answered</span>` : ""}</div></a>`;
+    }
+    if (!shown.length) html += `<p class="empty">No questions match.</p>`;
+    $("view").innerHTML = html;
+    $("q").oninput = e => { query = e.target.value; const pos = e.target.selectionStart; list(); const i = $("q"); i.focus(); i.setSelectionRange(pos, pos) };
+    $("wk").onchange = e => { wk = e.target.value; list() };
+    if ($("addBtn")) $("addBtn").onclick = () => { adding = !adding; list() };
+    if ($("cancelQ")) $("cancelQ").onclick = () => { adding = false; list() };
+    if ($("saveQ")) $("saveQ").onclick = async () => {
+      const title = $("nt").value.trim(), text = $("nx").value.trim(), week = +$("nw").value;
+      if (title.length < 3 || text.length < 3) { $("nt").focus(); return }
+      $("saveQ").disabled = true;
+      try { await fb.store.addDoc(fb.store.collection(fb.db, COL.prompts), { title, text, week, uid: me.uid, name: me.displayName || "Student", createdAt: fb.store.serverTimestamp() }); adding = false; list() }
+      catch (e) { alert(friendly(e).replace(/<[^>]+>/g, "")); $("saveQ").disabled = false }
+    };
+  }
+
+  // ----- prompt view
+  let pid = null, replies = [], editing = false, replyTo = null, repUnsub = null;
+  function openPrompt(id) {
+    if (pid !== id) { pid = id; editing = false; replyTo = null; replies = []; if (repUnsub) { repUnsub(); repUnsub = null }
+      if (fb && me) repUnsub = fb.store.onSnapshot(fb.store.query(fb.store.collection(fb.db, COL.reps), fb.store.where("promptId", "==", id)), q => { replies = q.docs.map(d => ({ id: d.id, ...d.data() })); route() }, e => { err = friendly(e); route() });
+    }
+    const p = promptOf(id);
+    $("back").href = "#"; $("back").textContent = "← All questions"; $("lead").hidden = true;
+    if (!p) { $("title").textContent = "Question"; $("view").innerHTML = `<p class="empty">${me ? "This question was removed or is still loading." : "Sign in to see this question."}</p>`; return }
+    $("title").textContent = "Week " + p.week;
+    const rs = allResp.filter(r => r.promptId === id).sort((a, b) => (a.createdAt && b.createdAt ? a.createdAt.toMillis() - b.createdAt.toMillis() : 0));
+    const mine = me && rs.find(r => r.uid === me.uid), others = rs.filter(r => !me || r.uid !== me.uid);
+    const ts = r => r.updatedAt && r.createdAt && r.updatedAt.toMillis() - r.createdAt.toMillis() > 60000 ? ago(r.createdAt) + " · edited" : ago(r.createdAt);
+    let html = err ? `<div class="err">${err}</div>` : "";
+    html += `<article class="q"><span class="count">${p.static ? esc(p.src || "") + " · starter question" : "Added by " + esc(p.name || "a classmate")}</span><h2>${esc(p.title)}</h2><p>${esc(p.text)}</p>
+      ${!p.static && me && (p.uid === me.uid) ? `<div class="row" style="margin-top:10px"><button type="button" class="pill warn" id="delQ">Delete this question</button></div>` : ""}</article>`;
+    if (!me) html += `<div class="gate">Sign in with Google (above) to post your response and read your classmates' answers.</div>`;
+    else if (!mine || editing) html += `<div class="box"><h3>${mine ? "Edit your response" : "Your response"}</h3><textarea id="rt" maxlength="${LIM.resp}" placeholder="Write your answer. Use the readings: name the concept, give an example.">${esc(mine ? mine.text : (localStorage.getItem("a104-discuss-draft-" + id) || ""))}</textarea>
+      <div class="row"><button type="button" class="pill" id="post">${mine ? "Save changes" : "Post response"}</button>${mine ? `<button type="button" class="pill ghost" id="cancelE">Cancel</button>` : ""}<span class="sp"></span><span class="count" id="rc"></span></div></div>`;
+    const respHTML = r => {
+      const liked = me && (r.likes || []).includes(me.uid), n = (r.likes || []).length, isMe = me && r.uid === me.uid;
+      const reps = replies.filter(x => x.responseId === r.id).sort((a, b) => (a.createdAt && b.createdAt ? a.createdAt.toMillis() - b.createdAt.toMillis() : 0));
+      return `<div class="resp${isMe ? " me" : ""}"><div class="rh">${avatar(r.photo, r.name)}<span><b>${esc(r.name || "Student")}${isMe ? " (you)" : ""}</b><br><small>${ts(r)}</small></span></div>
+        <p class="rt">${esc(r.text)}</p>
+        <div class="ra"><button type="button" class="chip${liked ? " on" : ""}" data-like="${esc(r.id)}" ${isMe ? "disabled title=\"You can't like your own response\"" : ""}>♥ ${n || ""}</button><button type="button" class="chip" data-rep="${esc(r.id)}">Reply${reps.length ? " · " + reps.length : ""}</button>${isMe ? `<button type="button" class="chip" id="editMine">Edit</button><button type="button" class="chip" id="delMine">Delete</button>` : ""}</div>
+        ${reps.length || replyTo === r.id ? `<div class="reps">${reps.map(x => `<div class="rep"><div class="rh">${avatar(x.photo, x.name)}<span><b>${esc(x.name || "Student")}</b> <small>${ago(x.createdAt)}</small></span>${me && x.uid === me.uid ? `<span class="sp" style="flex:1"></span><button type="button" class="chip" data-delrep="${esc(x.id)}">Delete</button>` : ""}</div><p class="rt">${esc(x.text)}</p></div>`).join("")}
+          ${replyTo === r.id ? `<div class="box" style="padding:10px"><textarea class="sm" id="repText" maxlength="${LIM.rep}" placeholder="Reply to ${esc(r.name || "this response")}"></textarea><div class="row"><button type="button" class="pill" id="sendRep">Reply</button><button type="button" class="pill ghost" id="cancelRep">Cancel</button></div></div>` : ""}</div>` : ""}</div>`;
+    };
+    if (me && mine && !editing) html += `<h2 class="wkh">Your response</h2>` + respHTML(mine);
+    if (me) {
+      const hide = !mine && others.length && !peek[id];
+      html += `<h2 class="wkh">Classmates' responses · ${others.length}</h2>`;
+      if (hide) html += `<div class="gate">Post your own answer first, then read how your classmates answered. <button type="button" class="pill ghost" id="peekBtn" style="margin-left:6px">Show them anyway</button></div>`;
+      else html += others.length ? others.map(respHTML).join("") : `<p class="empty">No responses from classmates yet.</p>`;
+    }
+    $("view").innerHTML = html;
+    wireCard(id, p, mine);
+  }
+  function wireCard(id, p, mine) {
+    const S = fb && fb.store;
+    const rt = $("rt"); if (rt) { const upd = () => { $("rc").textContent = rt.value.length + " / " + LIM.resp; try { if (!mine) localStorage.setItem("a104-discuss-draft-" + id, rt.value) } catch (e) { } }; rt.oninput = upd; upd() }
+    if ($("post")) $("post").onclick = async () => {
+      const text = rt.value.trim(); if (!text) { rt.focus(); return }
+      $("post").disabled = true;
+      const ref = S.doc(fb.db, COL.resp, id + "__" + me.uid);
+      try {
+        if (mine) await S.updateDoc(ref, { text, name: me.displayName || "Student", photo: me.photoURL || "", updatedAt: S.serverTimestamp() });
+        else await S.setDoc(ref, { promptId: id, uid: me.uid, name: me.displayName || "Student", photo: me.photoURL || "", text, likes: [], createdAt: S.serverTimestamp(), updatedAt: S.serverTimestamp() });
+        try { localStorage.removeItem("a104-discuss-draft-" + id) } catch (e) { }
+        editing = false; route();
+      } catch (e) { err = friendly(e); route() }
+    };
+    if ($("cancelE")) $("cancelE").onclick = () => { editing = false; route() };
+    if ($("editMine")) $("editMine").onclick = () => { editing = true; route() };
+    if ($("delMine")) $("delMine").onclick = async () => { if (!confirm("Delete your response? Replies to it will stay hidden.")) return; try { await S.deleteDoc(S.doc(fb.db, COL.resp, mine.id)) } catch (e) { err = friendly(e); route() } };
+    if ($("delQ")) $("delQ").onclick = async () => { if (!confirm("Delete this question?")) return; try { await S.deleteDoc(S.doc(fb.db, COL.prompts, p.fid)); location.hash = "" } catch (e) { err = friendly(e); route() } };
+    if ($("peekBtn")) $("peekBtn").onclick = () => { peek[id] = 1; try { localStorage.setItem(GATE_KEY, JSON.stringify(peek)) } catch (e) { } route() };
+    document.querySelectorAll("[data-like]").forEach(b => b.onclick = async () => {
+      const rid = b.dataset.like, r = allResp.find(x => x.id === rid); if (!r || r.uid === me.uid) return;
+      const on = (r.likes || []).includes(me.uid);
+      try { await S.updateDoc(S.doc(fb.db, COL.resp, rid), { likes: on ? S.arrayRemove(me.uid) : S.arrayUnion(me.uid) }) } catch (e) { err = friendly(e); route() }
+    });
+    document.querySelectorAll("[data-rep]").forEach(b => b.onclick = () => { replyTo = replyTo === b.dataset.rep ? null : b.dataset.rep; route(); const t = $("repText"); if (t) t.focus() });
+    if ($("cancelRep")) $("cancelRep").onclick = () => { replyTo = null; route() };
+    if ($("sendRep")) $("sendRep").onclick = async () => {
+      const text = $("repText").value.trim(); if (!text) return; $("sendRep").disabled = true;
+      try { await S.addDoc(S.collection(fb.db, COL.reps), { promptId: id, responseId: replyTo, uid: me.uid, name: me.displayName || "Student", photo: me.photoURL || "", text, createdAt: S.serverTimestamp() }); replyTo = null; route() }
+      catch (e) { err = friendly(e); route() }
+    };
+    document.querySelectorAll("[data-delrep]").forEach(b => b.onclick = async () => { if (!confirm("Delete your reply?")) return; try { await S.deleteDoc(S.doc(fb.db, COL.reps, b.dataset.delrep)) } catch (e) { err = friendly(e); route() } });
+  }
+
+  // ----- routing: #p/<id> opens a question; anything else is the list
+  function route() {
+    // don't repaint over a textarea the student is typing in (live updates arrive while they write)
+    const a = document.activeElement; if (a && a.tagName === "TEXTAREA" && a.value && view === location.hash) return;
+    view = location.hash;
+    const m = location.hash.match(/^#p\/(.+)$/);
+    if (m) openPrompt(decodeURIComponent(m[1])); else { pid = null; if (repUnsub) { repUnsub(); repUnsub = null } list() }
+  }
+  addEventListener("hashchange", () => { view = null; window.scrollTo(0, 0); route() });
+  $("back").addEventListener("click", e => { if ($("back").getAttribute("href") === "#") { e.preventDefault(); location.hash = "" } });
+
+  // ----- boot: wait for the account module (loaded by settings.js), then Firebase
+  async function start() {
+    A = window.BioAccount;
+    paintAcct(); route();
+    if (!A || !A.configured()) return;
+    fb = await A.firebase();
+    if (!fb) { err = "Couldn't load Google sign-in."; route(); return }
+    fb.auth.onAuthStateChanged(fb.au, u => { me = u; paintAcct(); listen(); route() });
+    A.on(() => paintAcct());
+  }
+  let tries = 0; (function wait() { if (window.BioAccount || tries++ > 40) start(); else setTimeout(wait, 100) })();
+})();
+</script>
+</body></html>

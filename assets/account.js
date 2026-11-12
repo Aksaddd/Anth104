@@ -129,7 +129,10 @@
       if (which === "cloud") useCloud(P.cloud, P.cdata);
       else { writeMeta(Object.assign(readMeta(), { uid: user.uid, dirtyAt: Date.now() })); await push(true) }
     },
-    pending: null, onChoose: null
+    pending: null, onChoose: null,
+    // shared Firebase handle for other features (the discussion board): { auth, store, au, db } or null if not set up
+    firebase: async () => { try { return await boot() } catch (e) { return null } },
+    uid: () => user ? user.uid : null
   };
   window.BioAccount = api;
   if (CONFIG) boot().catch(e => setStatus("error", "Couldn't load Google sign-in."));
