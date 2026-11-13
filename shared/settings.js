@@ -26,7 +26,7 @@
 
   // ===== Appearance
   const mq = window.matchMedia ? matchMedia("(prefers-color-scheme: dark)") : null;
-  const themePref = () => { const t = get(THEME_KEY); return t === "dark" || t === "auto" ? t : "light" };   // Light by default
+  const themePref = () => { const t = get(THEME_KEY); return t === "dark" || t === "light" ? t : "auto" };   // Automatic by default: follows the device's light or dark setting
   function applyTheme() {
     const t = themePref(), dark = t === "dark" || (t === "auto" && mq && mq.matches);
     root.dataset.theme = dark ? "dark" : "light";
@@ -178,7 +178,7 @@ button.st-row{cursor:pointer} button.st-row:active{background:var(--s-fill)}
     const sh = veil.querySelector(".st-sheet"), y = sh.scrollTop;
     sh.innerHTML = sheetHTML(); sh.scrollTop = y;
     sh.querySelector("#stDone").onclick = close;
-    sh.querySelectorAll("[data-theme-pick]").forEach(b => b.onclick = () => { set(THEME_KEY, b.dataset.themePick === "light" ? null : b.dataset.themePick); applyTheme(); emit("bio:theme", themePref()); paint() });
+    sh.querySelectorAll("[data-theme-pick]").forEach(b => b.onclick = () => { set(THEME_KEY, b.dataset.themePick === "auto" ? null : b.dataset.themePick); applyTheme(); emit("bio:theme", themePref()); paint() });
     sh.querySelectorAll("[data-font-pick]").forEach(b => b.onclick = () => { const r = reading(); r.font = b.dataset.fontPick; set(READ_KEY, JSON.stringify(r)); applyReading(r); emit("bio:reading", r); paint() });
     sh.querySelectorAll("[data-size-pick]").forEach(b => b.onclick = () => { const r = reading(); r.size = +b.dataset.sizePick; set(READ_KEY, JSON.stringify(r)); applyReading(r); emit("bio:reading", r); paint() });
     const di = sh.querySelector("#stDate");

@@ -12,7 +12,7 @@
   // ===== Appearance: light (default), dark, or automatic (follows the device)
   const mq = window.matchMedia ? matchMedia("(prefers-color-scheme: dark)") : null;
   function applyTheme() {
-    const pref = get(KEYS.theme, "light");
+    const pref = get(KEYS.theme, "auto");
     const dark = pref === "dark" || (pref === "auto" && mq && mq.matches);
     document.documentElement.dataset.theme = dark ? "dark" : "light";
     document.documentElement.style.colorScheme = dark ? "dark" : "light";
@@ -72,7 +72,7 @@
   function toLocalInput(d) { const p = n => String(n).padStart(2, "0"); return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}` }
   function openSheet() {
     lastFocus = document.activeElement;
-    const pref = get(KEYS.theme, "light"), r = reading();
+    const pref = get(KEYS.theme, "auto"), r = reading();
     const wrap = document.createElement("div"); wrap.className = "gsheet-wrap"; wrap.id = "gsheet";
     wrap.innerHTML = `<div class="gsheet" role="dialog" aria-modal="true" aria-labelledby="gsTitle">
       <header class="gs-head"><span></span><h2 id="gsTitle">Settings</h2><button type="button" class="gs-done" id="gsDone">Done</button></header>
