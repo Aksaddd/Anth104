@@ -13,7 +13,7 @@
   // title, at the top of the class's front page and in the acknowledgments on the "What is Eureka?" page.
   // Leave it "" and nothing is shown.
   const COURSES = [
-    { id: "a104", professor: "", progress: [["a104-drill-v1", 586], ["a104-readings-v1", 133]], cover: ["#24439c", "#0c1f57"], path: "anth104/", code: "795711bb812198d854084af3a23c31bb110d3085563d3ae8b16d62d4d3db94b1",
+    { id: "a104", professor: "Dr. Keisha I. Wiel", progress: [["a104-drill-v1", 586], ["a104-readings-v1", 133]], cover: ["#24439c", "#0c1f57"], path: "anth104/", code: "795711bb812198d854084af3a23c31bb110d3085563d3ae8b16d62d4d3db94b1",
       name: "ANTH 104", title: "Language, Culture & Society", school: "Queens College", color: "#0a84ff",
       blurb: "Ahearn's Living Language, the assigned readings and the lecture slides: Read & Learn, drills, a mock exam, word roots, a discussion board and the original course files.",
       stats: "586 questions · 133 on the readings · 10 reading chapters" },
@@ -21,8 +21,8 @@
       name: "Bi 239", title: "Plants, Fungi & Signals", school: "Queensborough Community College", color: "#34c759",
       blurb: "Plant diversity, hormones, light and defense, and the fungi: Read & Learn chapters, the multiple-choice drill, Bio-pardy, word roots, Homework 3 and a mock exam.",
       stats: "Read & Learn · drill · Bio-pardy · mock exam" },
-    { id: "a102", professor: "", progress: [["ant1-progress-v2", 192], ["ant2-progress-v1", 376], ["anthro-class-v1", 149]], cover: ["#c9682f", "#7a2e12"], path: "anth102/", code: "04d54e00cac73576f630324b220f965184bd1838897ffbed5ba3a89c973972e8",
-      name: "ANTH 102", title: "Biology & Evolution of Human Species", school: "Queens College", color: "#ff9f0a",
+    { id: "a102", professor: "Dr. Felicia Madimenos", progress: [["ant1-progress-v2", 192], ["ant2-progress-v1", 376], ["anthro-class-v1", 149]], cover: ["#c9682f", "#7a2e12"], path: "anth102/", code: "04d54e00cac73576f630324b220f965184bd1838897ffbed5ba3a89c973972e8",
+      name: "ANTH 102", title: "Biology & Evolution of the Human Species", school: "Queens College", color: "#ff9f0a",
       blurb: "Read & Learn chapters, Exam 1 and Exam 2 drills, primate classification with a drag-and-drop chart, two review games, word roots and a mock exam.",
       stats: "717 questions · 8 reading chapters · 3 drills" }
   ];
