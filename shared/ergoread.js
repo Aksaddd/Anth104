@@ -4,7 +4,7 @@
 //   Reading settings   opened from the Aa button in the reading toolbar (beside Restart and Notes): page (paper / white /
 //                      sepia / night), text size and typeface up front; contrast, line height, width, paragraph gap,
 //                      indent, heading scale and alignment under "More options". The defaults are the recommended
-//                      settings for dense science reading. Saved as "ergoread-settings" (the app's key).
+//                      settings, chosen from reading research (see DEF). Saved as "ergoread-settings" (the app's key).
 //   Word bubble        rest the pointer on a word for 0.8 s (or tap it, where there is no double-tap dictionary) to see what
 //                      it means: the class's own dictionary first, then a general dictionary.
 //   Word bank          save words from the bubble and review them later ("eureka-word-bank").
@@ -14,10 +14,17 @@
 (() => {
   if (window.ErgoRead) return;
   const KEY = "ergoread-settings", BANK = "eureka-word-bank";
-  // The defaults are the recommended settings, tuned for dense science reading (terms, numbers, long explanations):
-  // low-glare paper, a serif face at 19px, about 70 characters a line (the 60 to 75 range that is easiest to track),
-  // open line spacing, paragraphs set apart by space rather than indents, and left-aligned text so word spacing stays even.
-  const DEF = { theme: "paper", contrast: 100, fontSize: 19, lineHeight: 1.6, width: 620, paraGap: 1, indent: 0, headingScale: 1.25, fontFamily: "serif", align: "left" };
+  // The defaults are the recommended settings, chosen from reading research rather than taste:
+  //   line length   about 66 characters. Studies of on-screen reading put the comfortable range near 50 to 75 a line.
+  //   text size     19px. Larger body text (around 18px and up) reads faster on screens than the old 12 to 14px norm.
+  //   line height   1.6, above the 1.5 minimum in the accessibility guidelines (WCAG 1.4.12).
+  //   page          dark text on a light, slightly warm page. Dark-on-light is read faster and more accurately than
+  //                 light-on-dark, and off-white glares less than pure white.
+  //   alignment     left, so the gaps between words stay even (justified text on the web opens uneven gaps).
+  //   paragraphs    set apart by space, no indent.
+  //   typeface      serif by default, but research finds no general winner between serif and sans: the best face
+  //                 differs from reader to reader, which is why the choice is one tap away.
+  const DEF = { theme: "paper", contrast: 100, fontSize: 19, lineHeight: 1.6, width: 570, paraGap: 1, indent: 0, headingScale: 1.25, fontFamily: "serif", align: "left" };
   const FONTS = { serif: 'ui-serif, "New York", "Iowan Old Style", Georgia, "Times New Roman", serif', helvetica: '"Helvetica Neue", Helvetica, Arial, sans-serif', system: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', georgia: 'Georgia, "Times New Roman", serif', inter: 'Inter, system-ui, sans-serif' };
   const THEMES = { paper: { bg: "#fbf8f1", ink: "#2b2b2e", page: "#f4efe4" }, light: { bg: "#ffffff", ink: "#1a1a1a", page: "" }, sepia: { bg: "#f5f0e6", ink: "#433422", page: "#ece5d6" }, dark: { bg: "#1a1a1a", ink: "#e5e5e5", page: "#0f0f10" } };
   const $ = id => document.getElementById(id), esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -59,7 +66,7 @@ body.er-sepia .rd-sec .rd-prose strong,body.er-sepia .rd-sec .rd-prose b{color:#
 .er-word{border-bottom:2px solid #0071e3;border-radius:2px}
 .er-bank{display:flex;flex-direction:column;gap:8px} .er-bank div{border:1px solid #e5e7eb;border-radius:10px;padding:9px 11px;position:relative}
 .er-bank b{font-size:14px} .er-bank p{margin:3px 0 0;color:#4b5563;font-size:12.5px} .er-bank button{position:absolute;top:6px;right:6px;border:0;background:none;color:#9ca3af;cursor:pointer;font-size:13px}
-/* science text: figures that line up with capitals, no ragged last lines, sub and superscripts that don't push lines apart */
+/* figures that line up with capitals, no ragged last lines, sub and superscripts that don't push lines apart */
 .rd-sec .rd-prose{font-variant-numeric:lining-nums;font-kerning:normal;text-wrap:pretty;hyphens:manual}
 .rd-sec .rd-prose sub,.rd-sec .rd-prose sup{line-height:0;font-size:.72em}
 .rd-sec .rd-prose li{line-height:inherit}
@@ -125,7 +132,7 @@ body.er-sepia .rd-sec .rd-prose strong,body.er-sepia .rd-sec .rd-prose b{color:#
             ${SLIDERS.filter(s => s[0] !== "fontSize").map(([k, label, min, max, step, fmt]) => `<div><div class="er-lab">${label}<span id="erv-${k}">${fmt(S[k])}</span></div><input type="range" data-k="${k}" min="${min}" max="${max}" step="${step}" value="${S[k]}" aria-label="${label}"></div>`).join("")}
             <div><div class="er-lab">Text align</div>${btns("align", [["left", "Left"], ["justify", "Justify"]])}</div></div></details>
           <div class="er-foot"><button type="button" class="pri" data-view="bank">Word bank · ${bank.length}</button><button type="button" id="erReset"${isDef() ? " disabled" : ""}>${isDef() ? "✓ Recommended" : "Use recommended"}</button></div>
-          <div class="er-note"><b>Recommended</b> is set up for dense science reading: low-glare paper, about 70 characters a line, open line spacing, and paragraphs set apart. Rest your pointer on any word (or tap it) to see what it means.</div>`}</div>`;
+          <div class="er-note"><b>Recommended</b> follows reading research: dark text on a warm, light page, larger type, about 66 characters a line, open line spacing and left-aligned text. No typeface is best for everyone, so pick the one you read most easily.</div>`}</div>`;
     const md = panel.querySelector(".er-more"); if (md) md.addEventListener("toggle", () => { moreOpen = md.open });
     panel.querySelectorAll("[data-size]").forEach(b => b.onclick = () => { S.fontSize = Math.max(12, Math.min(28, S.fontSize + +b.dataset.size)); save(); apply(); paintPanel() });
     panel.querySelector(".x").onclick = closePanel;
