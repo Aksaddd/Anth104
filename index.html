@@ -48,6 +48,9 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
 .hero .enter:hover{background:var(--accent-hover)}
 .hero.s2 .second{opacity:1;transform:none}
 .hero.s3 .enter{opacity:1;transform:none;visibility:visible}
+.hero .about{margin-top:18px;font:400 17px/1 var(--body);color:#fff;opacity:0;text-decoration:none;transition:opacity .5s ease-out .15s;visibility:hidden}
+.hero .about:hover{text-decoration:underline}
+.hero.s3 .about{opacity:.9;visibility:visible}
 .hero .hint{position:absolute;bottom:34px;left:50%;transform:translateX(-50%);z-index:10;display:flex;flex-direction:column;align-items:center;gap:6px;opacity:.6;animation:gentlePulse 2s ease-in-out infinite;transition:opacity .4s}
 .hero .hint span{font:400 12px/1 var(--body);color:rgba(255,255,255,.75)}
 .hero.s2 .hint{opacity:0;animation:none}
@@ -149,6 +152,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
     <h1>Understanding Takes Time.</h1>
     <p class="second">A calmer way to read, reflect, and remember.</p>
     <button type="button" class="enter" id="enter">Enter Eureka</button>
+    <a class="about" href="about/index.html">What is Eureka? ›</a>
   </div>
   <div class="hint" aria-hidden="true"><span>Click anywhere</span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.75)" stroke-width="1.6"><path d="M12 5v14M5 12l7 7 7-7"/></svg></div>
 </section>
@@ -162,6 +166,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
     <a href="#more" data-nav="more"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l-1 12H7z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg>More to Explore</a>
     <a href="#code" data-nav="code"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0"/></svg>Class Code</a>
     <span class="sp"></span>
+    <a href="about/index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.4"/><path d="M12 11v5M12 8h.01"/></svg>What is Eureka?</a>
     <button type="button" class="nav" id="sideSettings"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8.4"/></svg>Settings</button>
   </aside>
   <main class="main">
@@ -177,7 +182,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
         <div class="msg" id="msg" role="status" hidden></div>
       </form>
     </section>
-    <p class="foot">Eureka · Reading guides, practice and exams for your classes. Your progress is kept on this device.</p>
+    <p class="foot">Eureka · Reading guides, practice and exams for your classes. Your progress is kept on this device. <a href="about/index.html" style="color:var(--accent);text-decoration:none">What is Eureka? ›</a></p>
   </main>
 </div>
 <nav class="tabs" id="tabs" aria-label="Library">
