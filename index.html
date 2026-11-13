@@ -56,6 +56,9 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
 .hero.s2 .hint{opacity:0;animation:none}
 @keyframes gentlePulse{0%,100%{opacity:.4;transform:translateX(-50%) translateY(0)}50%{opacity:.8;transform:translateX(-50%) translateY(5px)}}
 
+/* ---------- the explanation ("What is Eureka?"), on the same night sky, between the hero and the library */
+.aboutwrap{background:linear-gradient(rgba(3,5,10,.5),rgba(3,5,10,.86) 30%,rgba(3,5,10,.94)),#05070d url(assets/hero/eureka-poster.jpg) center top/cover no-repeat;scroll-margin-top:0}
+
 /* ---------- 2. the library (Apple Books) */
 .app{display:grid;grid-template-columns:250px minmax(0,1fr);min-height:100vh;scroll-margin-top:0}
 .side{position:sticky;top:0;align-self:start;height:100vh;height:100dvh;background:var(--side);border-right:1px solid color-mix(in srgb,var(--line) 60%,transparent);padding:22px 14px 18px;display:flex;flex-direction:column;gap:2px}
@@ -206,10 +209,12 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
     <h1>Understanding Takes Time.</h1>
     <p class="second">A calmer way to study, reflect, and remember.</p>
     <button type="button" class="enter" id="enter">Enter Eureka</button>
-    <a class="about" href="about/index.html">What is Eureka? ›</a>
+    <a class="about" href="#about">What is Eureka? ›</a>
   </div>
   <div class="hint" aria-hidden="true"><span>Click anywhere</span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.75)" stroke-width="1.6"><path d="M12 5v14M5 12l7 7 7-7"/></svg></div>
 </section>
+
+<section class="aboutwrap" id="about" aria-label="What is Eureka?"><div id="aboutHost"></div></section>
 
 <div class="app" id="classes">
   <aside class="side" aria-label="Library">
@@ -225,7 +230,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
     <div id="sideCols"></div>
     <button type="button" class="nav addcol" id="sideNewCol"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>New Collection</button>
     <span class="sp"></span>
-    <a href="about/index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.4"/><path d="M12 11v5M12 8h.01"/></svg>What is Eureka?</a>
+    <a href="#about"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.4"/><path d="M12 11v5M12 8h.01"/></svg>What is Eureka?</a>
     <button type="button" class="nav" id="sideSettings"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8.4"/></svg>Settings</button>
   </aside>
   <main class="main">
@@ -250,7 +255,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
         <div class="msg" id="msg" role="status" hidden></div>
       </form>
     </section>
-    <p class="foot">Eureka · Study guides, practice and exams for your classes. Your progress is kept on this device. <a href="about/index.html" style="color:var(--accent);text-decoration:none">What is Eureka? ›</a></p>
+    <p class="foot">Eureka · Study guides, practice and exams for your classes. Your progress is kept on this device. <a href="#about" style="color:var(--accent);text-decoration:none">What is Eureka? ›</a></p>
   </main>
 </div>
 <nav class="tabs" id="tabs" aria-label="Library">
@@ -260,8 +265,10 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
   <a href="#code" data-nav="code"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0"/></svg>Class Code</a>
 </nav>
 
+<script src="shared/about.js"></script>
 <script>
 (() => {
+  window.EurekaAbout.mount(document.getElementById("aboutHost"), { base: "", library: "#classes" });
   // ---------- the hero: timed reveal, and a sky video that never gets in the way
   const hero = document.getElementById("hero"), sky = document.getElementById("sky"), $ = id => document.getElementById(id);
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
