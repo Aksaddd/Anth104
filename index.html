@@ -31,11 +31,17 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
 :is(a,button,input):focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:8px}
 
 /* ---------- 1. hero */
-.hero{position:relative;height:100vh;height:100svh;min-height:520px;overflow:hidden;background:#05070d url(assets/hero/eureka-poster-sm.jpg) center/cover no-repeat;color:#fff;cursor:pointer}
-@media (min-width:700px){.hero{background-image:url(assets/hero/eureka-poster.jpg)}}
+/* One sky for the hero and the explanation under it: .skyfix stays pinned behind both while they scroll over it, so
+   there is no seam between them. The sky only dims gradually as the text arrives, and at the very end it fades into
+   the library's own background (--next) instead of stopping at an edge. */
+.night{position:relative;background:#05070d;--next:var(--fill)}
+body.in .night{--next:var(--bg)}
+.skyfix{position:sticky;top:0;height:100vh;height:100lvh;z-index:0;overflow:hidden;pointer-events:none;background:#05070d url(assets/hero/eureka-poster-sm.jpg) center/cover no-repeat}
+@media (min-width:700px){.skyfix{background-image:url(assets/hero/eureka-poster.jpg)}}
+.hero{position:relative;z-index:1;margin-top:-100vh;margin-top:-100lvh;height:100vh;height:100svh;min-height:520px;overflow:hidden;color:#fff;cursor:pointer}
 .hero.ready{cursor:default}
-.hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.5s ease-in-out;z-index:1;pointer-events:none}
-.hero video.on{opacity:1}
+.skyfix video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.5s ease-in-out}
+.skyfix video.on{opacity:1}
 .hero .veil{position:absolute;inset:0;z-index:2;background:linear-gradient(to bottom,rgba(0,0,0,.3) 0%,rgba(0,0,0,.1) 30%,rgba(0,0,0,.1) 70%,rgba(0,0,0,.5) 100%)}
 .hero .top{position:absolute;top:0;left:0;right:0;z-index:11;display:flex;align-items:center;justify-content:space-between;height:52px;padding:0 22px}
 .hero .mark{font:600 19px/1 var(--display);letter-spacing:-.02em;color:#fff;text-decoration:none;opacity:.95}
@@ -57,7 +63,8 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
 @keyframes gentlePulse{0%,100%{opacity:.4;transform:translateX(-50%) translateY(0)}50%{opacity:.8;transform:translateX(-50%) translateY(5px)}}
 
 /* ---------- the explanation ("What is Eureka?"), on the same night sky, between the hero and the library */
-.aboutwrap{background:linear-gradient(rgba(3,5,10,.5),rgba(3,5,10,.86) 30%,rgba(3,5,10,.94)),#05070d url(assets/hero/eureka-poster.jpg) center top/cover no-repeat;scroll-margin-top:0}
+.aboutwrap{position:relative;z-index:1;scroll-margin-top:0;background:linear-gradient(to bottom,rgba(0,0,0,.5) 0,rgba(2,4,8,.6) 22vh,rgba(3,5,10,.74) 55vh,rgba(3,5,10,.82) 100vh)}
+.aboutwrap::after{content:"";display:block;height:clamp(200px,34vh,340px);background:linear-gradient(to bottom,transparent 0,color-mix(in srgb,var(--next) 6%,transparent) 18%,color-mix(in srgb,var(--next) 22%,transparent) 38%,color-mix(in srgb,var(--next) 52%,transparent) 60%,color-mix(in srgb,var(--next) 82%,transparent) 80%,var(--next) 100%)}
 
 /* ---------- the door to the library: sign in first */
 .gate{min-height:100vh;min-height:100svh;display:grid;place-items:center;padding:60px 20px;background:var(--fill)}
@@ -212,14 +219,15 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
   .tabs svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
   .tabs .on{color:var(--accent)}
 }
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.cover,.hero .second,.hero .enter,.hero video,.tabs{transition:none}.hero .hint,.code.shake{animation:none}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.cover,.hero .second,.hero .enter,.skyfix video,.tabs{transition:none}.hero .hint,.code.shake{animation:none}}
 </style>
 <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
 <script defer src="/_vercel/insights/script.js"></script>
 </head><body>
 
+<div class="night" id="night">
+<div class="skyfix" aria-hidden="true"><video id="sky" muted loop playsinline preload="none" tabindex="-1" disablepictureinpicture disableremoteplayback></video></div>
 <section class="hero" id="hero" aria-label="Eureka">
-  <video id="sky" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1" disablepictureinpicture disableremoteplayback></video>
   <div class="veil" aria-hidden="true"></div>
   <div class="top">
     <a class="mark" href="index.html">Eureka</a>
@@ -235,6 +243,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
 </section>
 
 <section class="aboutwrap" id="about" aria-label="What is Eureka?"><div id="aboutHost"></div></section>
+</div>
 
 <div id="classes">
 <section class="gate" id="gate" aria-labelledby="gateTitle">
@@ -325,7 +334,10 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
   if (document.readyState === "complete") idle(startSky); else addEventListener("load", () => idle(startSky), { once: true });
   let inView = true;
   const playState = () => { if (!sky.src || !sky.isConnected) return; if (inView && !document.hidden) { const p = sky.play(); if (p && p.catch) p.catch(() => { }) } else sky.pause() };
-  if ("IntersectionObserver" in window) new IntersectionObserver(es => { inView = es[0].isIntersecting; playState(); $("tabs").classList.toggle("show", !inView) }, { threshold: .05 }).observe(hero);
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(es => { $("tabs").classList.toggle("show", !es[0].isIntersecting) }, { threshold: .05 }).observe(hero);
+    new IntersectionObserver(es => { inView = es[0].isIntersecting; playState() }).observe($("night"));   // the sky plays while any of the night is on screen
+  }
   document.addEventListener("visibilitychange", playState);
 
   // ---------- the library, and everything a student can do to organize it
@@ -494,7 +506,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
   const SKEY = "a104-session"; let session = null; try { session = JSON.parse(localStorage.getItem(SKEY) || "null") } catch (e) { }
   function setSession(s) { session = s; try { s ? localStorage.setItem(SKEY, JSON.stringify(s)) : localStorage.removeItem(SKEY) } catch (e) { } applyGate() }
   function applyGate() {
-    const inn = !!session; $("gate").hidden = inn; $("app").hidden = !inn; $("tabs").hidden = !inn;
+    const inn = !!session; $("gate").hidden = inn; $("app").hidden = !inn; document.body.classList.toggle("in", inn); $("tabs").hidden = !inn;
     if (inn) { const n = session.name || "Guest"; $("me").innerHTML = `<i>${esc(n.trim()[0] || "G").toUpperCase()}</i><span>${esc(n)}<small>${session.kind === "google" ? "Signed in" : "Guest on this device"}</small></span><button type="button" id="signOut">Sign Out</button>`; $("signOut").onclick = signOut; paint() }
   }
   const gmsg = (text) => { const m = $("gMsg"); m.hidden = !text; m.textContent = text || "" };
