@@ -149,10 +149,10 @@
     const bold = hit.el && hit.el.closest(".rd-prose b, .rd-prose strong"), name = r ? r.term : bold ? bold.textContent.replace(/[.:;,!?]+$/, "").trim() : hit.word;
     let extra = null; const me = card, WBK = window.WordBank;
     // not in the class dictionary: try a general dictionary and show what it says
-    if (WBK && !(r && r.def)) WBK.dictionary(name).then(d => { if (!d || card !== me) return; extra = d; const p = me.querySelector(".lk-def"); p.classList.remove("lk-muted"); p.innerHTML = esc(d.def) + ` <small class="lk-src">${d.pos ? esc(d.pos) + " · " : ""}Dictionary</small>`; const s = me.querySelector(".lk-save"); if (s && !s.disabled) s.textContent = "＋ Save to word bank" });
+    if (WBK && !(r && r.def)) WBK.dictionary(name).then(d => { if (!d || card !== me) return; extra = d; const p = me.querySelector(".lk-def"); p.classList.remove("lk-muted"); p.innerHTML = esc(d.def) + ` <small class="lk-src">${d.pos ? esc(d.pos) + " · " : ""}${esc(d.src || "Dictionary")}</small>`; me.querySelector(".lk-term").textContent = name; const s = me.querySelector(".lk-save"); if (s && !s.disabled) s.textContent = "＋ Save to word bank" });
     const sv = card.querySelector(".lk-save");   // into the word bank, with the sentence it was found in
     if (sv) { if (WBK.has(name)) { sv.disabled = true; sv.textContent = "✓ In your word bank" }
-      sv.onclick = () => { WBK.saveFrom({ word: name, def: r && r.def ? r.def : extra ? extra.def : "", pos: extra ? extra.pos : "", parts: r ? r.parts.map(p => ({ root: p.root, mean: p.mean })) : [], src: r && r.def ? "Class dictionary" : extra ? "Dictionary" : "", context: WBK.sentence(hit.el, hit.word) }); sv.disabled = true; sv.textContent = "✓ In your word bank" } }
+      sv.onclick = () => { WBK.saveFrom({ word: name, def: r && r.def ? r.def : extra ? extra.def : "", pos: extra ? extra.pos : "", parts: r ? r.parts.map(p => ({ root: p.root, mean: p.mean })) : [], src: r && r.def ? "Class dictionary" : extra ? extra.src || "Dictionary" : "", context: WBK.sentence(hit.el, hit.word) }); sv.disabled = true; sv.textContent = "✓ In your word bank" } }
     if (navigator.vibrate) try { navigator.vibrate(12) } catch (e) { }
   }
 

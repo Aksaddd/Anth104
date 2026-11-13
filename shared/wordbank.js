@@ -48,7 +48,7 @@
   // dictionary(word): a general English dictionary (dictionaryapi.dev), for words the class dictionary doesn't have.
   // define(word): the class dictionary first (with its word parts), then the class glossary, then the general one.
   const dcache = {};
-  // Outside sources, tried in order until one answers. Each receives only the word itself.
+  // dictionary(word): the class's pre-built terms first, then outside sources, tried in order until one answers. Each receives only the word itself.
   //   1. dictionaryapi.dev   everyday English words
   //   2. Wiktionary          rarer and technical words, and other languages' words used in English
   //   3. Wikipedia           names, places and multi-word terms ("Papua New Guinea", "Sapir-Whorf hypothesis")
@@ -72,8 +72,26 @@
     const j = await getJSON("https://en.wikipedia.org/api/rest_v1/page/summary/" + encodeURIComponent(title.replace(/ /g, "_")) + "?redirect=true"); if (!j || j.type !== "standard" || !j.extract) return null;
     const first = (j.extract.match(/^.*?[.!?](?=\s|$)/) || [j.extract])[0]; return { word: j.title || title, def: first.length > 320 ? first.slice(0, 317) + "…" : first, pos: "", src: "Wikipedia", parts: [] };
   }
+  // The class's own pre-built definitions (<class>/assets/terms.js): the names, places and terms in its readings that the
+  // course dictionary doesn't cover. Loaded on the first lookup, and tried before any outside source.
+  let termsReady = null, TIDX = null;
+  const tkey = s => norm(s).replace(/[’']/g, "'").replace(/[“”"]/g, "").replace(/[.:;!?]+$/, "").replace(/\s+/g, " ");
+  function terms() {
+    if (termsReady) return termsReady;
+    const C = window.COURSE || {};
+    termsReady = (window.TERMS || !C.base || C.id === "hub" ? Promise.resolve() : new Promise(res => { const s = document.createElement("script"); s.src = C.base + "assets/terms.js"; s.onload = s.onerror = res; document.head.appendChild(s) }))
+      .then(() => { TIDX = new Map(); for (const [k, def] of Object.entries(window.TERMS || {})) { const names = k.split("|"); names.forEach(n => { const kk = tkey(n); if (!TIDX.has(kk)) TIDX.set(kk, { word: names[0], def }) }) } });
+    return termsReady;
+  }
+  async function classTerm(word) {
+    await terms(); if (!TIDX || !TIDX.size) return null;
+    const k = tkey(word), tries = [k].concat(/ /.test(k) ? [k.split(",")[0].trim(), k.replace(/^(the|a|an) /, "")] : lemmas(k), /'s$/.test(k) ? [k.slice(0, -2)] : []);
+    for (const f of tries) { const e = TIDX.get(f); if (e) return { word: /[|]/.test(word) ? e.word : String(word).trim().replace(/[.:;!?]+$/, ""), def: e.def, pos: "", src: "Class dictionary", parts: [] } }
+    return null;
+  }
   async function dictionary(word) {
     const raw = String(word || "").trim().replace(/[.:;!?]+$/, ""), k = norm(raw); if (k in dcache) return dcache[k]; if (k.length < 2 || k.length > 80) return (dcache[k] = null);
+    const own = await classTerm(raw); if (own) return (dcache[k] = own);
     const single = /^[a-zà-ɏ'’-]+$/.test(k), named = /[A-Z]/.test(raw.slice(0, 1)) || /[ ,]/.test(raw);
     let out = null;
     if (single) { for (const f of lemmas(k)) { out = await fromDictionary(f); if (out) break } }
@@ -272,5 +290,5 @@
   // save a word from wherever it was looked up, and say so
   function saveFrom(w) { const was = has(w.word), e = add(w); if (e) toast(was ? `“${e.word}” is already in your word bank` : `Saved “${e.word}”`, "Open word bank", () => open()); return e }
 
-  window.WordBank = { add, remove, update, has, get, grade, due, sentence, saveFrom, define, dictionary, open, close, all: () => bank.slice(), count: () => bank.length, on: f => { subs.push(f) } };
+  window.WordBank = { add, remove, update, has, get, grade, due, sentence, saveFrom, define, dictionary, classTerm, open, close, all: () => bank.slice(), count: () => bank.length, on: f => { subs.push(f) } };
 })();
