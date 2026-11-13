@@ -1,8 +1,10 @@
 // ErgoRead · the reader from the Eureka app (EurekaDemo1: ErgoReadPanel, InteractiveText, WordInfoBubble, WordBankPanel,
 // useFlowProgress), rebuilt for these static Read & Learn pages. Loaded on every class's read/ page.
 //
-//   Reading settings   theme (light / sepia / dark), text contrast, font size, line height, content width, paragraph gap,
-//                      first-line indent, heading scale, font and alignment. Saved as "ergoread-settings" (the app's key).
+//   Reading settings   opened from the Aa button in the reading toolbar (beside Restart and Notes): page (paper / white /
+//                      sepia / night), text size and typeface up front; contrast, line height, width, paragraph gap,
+//                      indent, heading scale and alignment under "More options". The defaults are the recommended
+//                      settings for dense science reading. Saved as "ergoread-settings" (the app's key).
 //   Word bubble        rest the pointer on a word for 0.8 s (or tap it, where there is no double-tap dictionary) to see what
 //                      it means: the class's own dictionary first, then a general dictionary.
 //   Word bank          save words from the bubble and review them later ("eureka-word-bank").
@@ -12,7 +14,10 @@
 (() => {
   if (window.ErgoRead) return;
   const KEY = "ergoread-settings", BANK = "eureka-word-bank";
-  const DEF = { theme: "paper", contrast: 100, fontSize: 18, lineHeight: 1.6, width: 700, paraGap: 1.2, indent: 0, headingScale: 1.3, fontFamily: "serif", align: "left" };   // paper and a serif face: the look of a printed page
+  // The defaults are the recommended settings, tuned for dense science reading (terms, numbers, long explanations):
+  // low-glare paper, a serif face at 19px, about 70 characters a line (the 60 to 75 range that is easiest to track),
+  // open line spacing, paragraphs set apart by space rather than indents, and left-aligned text so word spacing stays even.
+  const DEF = { theme: "paper", contrast: 100, fontSize: 19, lineHeight: 1.6, width: 620, paraGap: 1, indent: 0, headingScale: 1.25, fontFamily: "serif", align: "left" };
   const FONTS = { serif: 'ui-serif, "New York", "Iowan Old Style", Georgia, "Times New Roman", serif', helvetica: '"Helvetica Neue", Helvetica, Arial, sans-serif', system: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', georgia: 'Georgia, "Times New Roman", serif', inter: 'Inter, system-ui, sans-serif' };
   const THEMES = { paper: { bg: "#fbf8f1", ink: "#2b2b2e", page: "#f4efe4" }, light: { bg: "#ffffff", ink: "#1a1a1a", page: "" }, sepia: { bg: "#f5f0e6", ink: "#433422", page: "#ece5d6" }, dark: { bg: "#1a1a1a", ink: "#e5e5e5", page: "#0f0f10" } };
   const $ = id => document.getElementById(id), esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -32,9 +37,6 @@ body.er-reading .wrap{max-width:var(--er-width)}
 body.er-reading.er-sepia{background:#ece5d6} body.er-reading.er-dark{background:#0f0f10}
 body.er-sepia .rd-sec .rd-prose strong,body.er-sepia .rd-sec .rd-prose b{color:#2f2416} body.er-dark .rd-sec .rd-prose strong,body.er-dark .rd-sec .rd-prose b{color:#fff}
 .er-bar{position:fixed;top:0;left:0;height:3px;width:0;z-index:60;background:#0071e3;transition:width .12s linear;border-radius:0 3px 3px 0}
-.er-fab{position:fixed;left:max(16px,env(safe-area-inset-left,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));z-index:44;display:inline-flex;align-items:center;gap:7px;border:1px solid #e5e7eb;background:#fff;color:#1a1a1a;border-radius:980px;padding:9px 14px;font:600 13.5px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.1)}
-.er-fab:hover{border-color:#0071e3;color:#0071e3} .er-fab b{font:700 15px Georgia,serif}
-[data-theme="dark"] .er-fab{background:#1c1c1e;color:#f5f5f7;border-color:#38383a}
 .er-panel{position:fixed;left:max(16px,env(safe-area-inset-left,0px));bottom:68px;z-index:70;width:min(320px,calc(100vw - 32px));max-height:min(78vh,640px);overflow:auto;background:#fff;color:#1a1a1a;border:1px solid #e5e7eb;border-radius:18px;box-shadow:0 20px 50px rgba(0,0,0,.18);font:13px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;animation:erUp .18s ease}
 @keyframes erUp{from{opacity:0;transform:translateY(8px)}}
 .er-head{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid #f3f4f6;position:sticky;top:0;background:#fff;z-index:1}
@@ -57,6 +59,37 @@ body.er-sepia .rd-sec .rd-prose strong,body.er-sepia .rd-sec .rd-prose b{color:#
 .er-word{border-bottom:2px solid #0071e3;border-radius:2px}
 .er-bank{display:flex;flex-direction:column;gap:8px} .er-bank div{border:1px solid #e5e7eb;border-radius:10px;padding:9px 11px;position:relative}
 .er-bank b{font-size:14px} .er-bank p{margin:3px 0 0;color:#4b5563;font-size:12.5px} .er-bank button{position:absolute;top:6px;right:6px;border:0;background:none;color:#9ca3af;cursor:pointer;font-size:13px}
+/* science text: figures that line up with capitals, no ragged last lines, sub and superscripts that don't push lines apart */
+.rd-sec .rd-prose{font-variant-numeric:lining-nums;font-kerning:normal;text-wrap:pretty;hyphens:manual}
+.rd-sec .rd-prose sub,.rd-sec .rd-prose sup{line-height:0;font-size:.72em}
+.rd-sec .rd-prose li{line-height:inherit}
+/* the Aa button lives in the reading toolbar, beside Restart and Notes */
+.rd-tool.er-aa b{background:none;color:inherit;padding:0;font:700 14px/1 ui-serif,"New York",Georgia,serif}
+.rd-tool.er-aa[aria-expanded="true"]{background:var(--accent,#0071e3);color:#fff}
+/* the panel drops from that button and uses the page's own colors, so it follows light and dark */
+.er-panel{--p:var(--paper,#fff);--i:var(--ink,#1d1d1f);--m:var(--muted,#6e6e73);--l:var(--line,#d2d2d7);--s:var(--fill,var(--sunk,#f5f5f7));--a:var(--accent,#0071e3);
+  left:auto;bottom:auto;background:var(--p);color:var(--i);border:0;border-radius:20px;box-shadow:0 18px 60px rgba(0,0,0,.24),0 0 0 .5px rgba(0,0,0,.14);font:13px/1.4 var(--body,-apple-system,BlinkMacSystemFont,sans-serif);letter-spacing:-.01em}
+.er-head{background:var(--p);border-bottom-color:var(--l)}.er-head .ic{background:color-mix(in srgb,var(--a) 12%,transparent);color:var(--a)}.er-head p{color:var(--m)}.er-head .x{color:var(--m)}.er-head .x:hover{background:var(--s)}
+.er-lab{color:var(--i)}.er-lab span{color:var(--m)}
+.er-row button{border-color:var(--l);background:var(--p);color:var(--i);border-radius:10px}
+.er-row button[aria-pressed="true"]{border-color:var(--a);background:color-mix(in srgb,var(--a) 10%,var(--p));color:var(--a)}
+.er-sw button{display:flex;flex-direction:column;align-items:center;gap:6px;border:0!important;background:none!important;padding:0!important;color:var(--m)!important;font-size:11.5px}
+.er-sw button i{width:38px;height:38px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(128,128,128,.35);display:grid;place-items:center;font:700 14px/1 ui-serif,Georgia,serif;font-style:normal}
+.er-sw button[aria-pressed="true"]{color:var(--a)!important;font-weight:600}.er-sw button[aria-pressed="true"] i{box-shadow:0 0 0 2px var(--p),0 0 0 4px var(--a)}
+.er-size{display:flex;align-items:center;background:var(--s);border-radius:12px;overflow:hidden}
+.er-size button{flex:1;border:0;background:none;color:var(--i);cursor:pointer;padding:9px 0;font:600 14px/1 ui-serif,Georgia,serif}.er-size button:last-child{font-size:20px}
+.er-size button:hover{background:color-mix(in srgb,var(--i) 8%,transparent)}.er-size span{flex:none;width:64px;text-align:center;font-size:12px;color:var(--m);font-variant-numeric:tabular-nums;border-left:1px solid var(--l);border-right:1px solid var(--l)}
+.er-more{border-top:1px solid var(--l);padding-top:12px}.er-more>summary{cursor:pointer;font-weight:600;font-size:12.5px;color:var(--a);list-style:none}.er-more>summary::-webkit-details-marker{display:none}
+.er-more>summary::after{content:" ›"}.er-more[open]>summary::after{content:" ⌄"}
+.er-more>div{display:flex;flex-direction:column;gap:14px;margin-top:14px}
+.er-panel input[type=range]{accent-color:var(--a)}
+.er-foot button{border-color:var(--l);background:var(--p);color:var(--i);border-radius:10px}.er-foot button:hover{background:var(--s);border-color:var(--l)}
+.er-foot .pri{color:var(--a);border-color:color-mix(in srgb,var(--a) 35%,var(--l));background:color-mix(in srgb,var(--a) 10%,var(--p))}
+.er-note{background:var(--s);color:var(--m);border-radius:10px}
+.er-bank div{border-color:var(--l)}.er-bank p{color:var(--m)}
+.er-bub{background:var(--paper,#fff);color:var(--ink,#1a1a1a);border-color:var(--line,#e5e7eb)}.er-bub h3 small,.er-bub .src{color:var(--muted,#6b7280)}
+.er-bub .acts button.sec{background:var(--fill,#f3f4f6);color:var(--ink,#374151)}
+@media (max-width:560px){.er-panel{left:8px!important;right:8px!important;top:auto!important;bottom:8px!important;width:auto;max-height:72vh}}
 @media (prefers-reduced-motion:reduce){.er-panel,.er-bub{animation:none}.er-bar{transition:none}}
 `; document.head.appendChild(st);
 
@@ -77,19 +110,24 @@ body.er-sepia .rd-sec .rd-prose strong,body.er-sepia .rd-sec .rd-prose b{color:#
   // ---------- the panel
   const SLIDERS = [["contrast", "Text Contrast", 50, 100, 5, v => v + "%"], ["fontSize", "Font Size", 12, 28, 1, v => v + "px"], ["lineHeight", "Line Height", 1, 2.5, .05, v => (+v).toFixed(2)],
     ["width", "Content Width", 400, 1000, 20, v => v + "px"], ["paraGap", "Paragraph Gap", .5, 4, .1, v => (+v).toFixed(1) + "em"], ["indent", "First-Line Indent", 0, 4, .25, v => (+v).toFixed(2) + "em"], ["headingScale", "Heading Scale", 1, 2.5, .05, v => (+v).toFixed(2) + "×"]];
-  let panel = null, view = "settings";
+  let panel = null, view = "settings", moreOpen = false;
+  const isDef = () => Object.keys(DEF).every(k => S[k] === DEF[k]);
   function paintPanel() {
     if (!panel) return;
     const btns = (key, opts) => `<div class="er-row">${opts.map(([v, l, sty]) => `<button type="button" data-set="${key}" data-v="${v}" aria-pressed="${S[key] === v}" style="${sty || ""}">${l}</button>`).join("")}</div>`;
     panel.innerHTML = `<div class="er-head"><span class="ic" aria-hidden="true">Aa</span><div><h2>${view === "bank" ? "Word Bank" : "ErgoRead"}</h2><p>${view === "bank" ? bank.length + (bank.length === 1 ? " word saved" : " words saved") : "Reading settings"}</p></div><button type="button" class="x" aria-label="Close">✕</button></div>
       <div class="er-body">${view === "bank"
         ? (bank.length ? `<div class="er-bank">${bank.map((w, i) => `<div><b>${esc(w.word)}</b><p>${esc(w.def)}</p><button type="button" data-rm="${i}" aria-label="Remove ${esc(w.word)}">✕</button></div>`).join("")}</div>` : `<div class="er-note">No words yet. Rest your pointer on a word in a passage (or tap it) and choose “Save to word bank”.</div>`) + `<div class="er-foot"><button type="button" data-view="settings">← Reading settings</button></div>`
-        : `<div><div class="er-lab">Theme</div>${btns("theme", [["paper", "Paper", "background:#fbf8f1;color:#2b2b2e"], ["light", "Light", "background:#fff;color:#1a1a1a"], ["sepia", "Sepia", "background:#f5f0e6;color:#433422"], ["dark", "Dark", "background:#1a1a1a;color:#e5e5e5"]])}</div>
-          ${SLIDERS.map(([k, label, min, max, step, fmt]) => `<div><div class="er-lab">${label}<span id="erv-${k}">${fmt(S[k])}</span></div><input type="range" data-k="${k}" min="${min}" max="${max}" step="${step}" value="${S[k]}" aria-label="${label}"></div>`).join("")}
-          <div><div class="er-lab">Font</div>${btns("fontFamily", [["serif", "Serif"], ["helvetica", "Helvetica"], ["system", "System"], ["georgia", "Georgia"], ["inter", "Inter"]])}</div>
-          <div><div class="er-lab">Text Align</div>${btns("align", [["left", "Left"], ["justify", "Justify"]])}</div>
-          <div class="er-foot"><button type="button" class="pri" data-view="bank">Word bank · ${bank.length}</button><button type="button" id="erReset">Reset to defaults</button></div>
-          <div class="er-note">Tip: rest your pointer on any word in a passage for a moment to see what it means.</div>`}</div>`;
+        : `<div><div class="er-lab">Page</div><div class="er-row er-sw">${[["paper", "Paper", "#fbf8f1", "#2b2b2e"], ["light", "White", "#fff", "#1a1a1a"], ["sepia", "Sepia", "#f5f0e6", "#433422"], ["dark", "Night", "#1a1a1a", "#e5e5e5"]].map(([v, l, bg, ink]) => `<button type="button" data-set="theme" data-v="${v}" aria-pressed="${S.theme === v}"><i style="background:${bg};color:${ink}">Aa</i>${l}</button>`).join("")}</div></div>
+          <div><div class="er-lab">Text size</div><div class="er-size"><button type="button" data-size="-1" aria-label="Smaller text">A</button><span id="erv-fontSize">${S.fontSize}px</span><button type="button" data-size="1" aria-label="Larger text">A</button></div></div>
+          <div><div class="er-lab">Typeface</div>${btns("fontFamily", [["serif", "Serif"], ["system", "Sans"], ["georgia", "Georgia"], ["helvetica", "Helvetica"]])}</div>
+          <details class="er-more"${moreOpen ? " open" : ""}><summary>More options</summary><div>
+            ${SLIDERS.filter(s => s[0] !== "fontSize").map(([k, label, min, max, step, fmt]) => `<div><div class="er-lab">${label}<span id="erv-${k}">${fmt(S[k])}</span></div><input type="range" data-k="${k}" min="${min}" max="${max}" step="${step}" value="${S[k]}" aria-label="${label}"></div>`).join("")}
+            <div><div class="er-lab">Text align</div>${btns("align", [["left", "Left"], ["justify", "Justify"]])}</div></div></details>
+          <div class="er-foot"><button type="button" class="pri" data-view="bank">Word bank · ${bank.length}</button><button type="button" id="erReset"${isDef() ? " disabled" : ""}>${isDef() ? "✓ Recommended" : "Use recommended"}</button></div>
+          <div class="er-note"><b>Recommended</b> is set up for dense science reading: low-glare paper, about 70 characters a line, open line spacing, and paragraphs set apart. Rest your pointer on any word (or tap it) to see what it means.</div>`}</div>`;
+    const md = panel.querySelector(".er-more"); if (md) md.addEventListener("toggle", () => { moreOpen = md.open });
+    panel.querySelectorAll("[data-size]").forEach(b => b.onclick = () => { S.fontSize = Math.max(12, Math.min(28, S.fontSize + +b.dataset.size)); save(); apply(); paintPanel() });
     panel.querySelector(".x").onclick = closePanel;
     panel.querySelectorAll("[data-set]").forEach(b => b.onclick = () => { S[b.dataset.set] = b.dataset.v; save(); apply(); paintPanel() });
     panel.querySelectorAll("input[type=range]").forEach(i => i.oninput = () => { const k = i.dataset.k; S[k] = +i.value; const f = SLIDERS.find(x => x[0] === k)[5]; $("erv-" + k).textContent = f(S[k]); save(); apply() });
@@ -97,21 +135,33 @@ body.er-sepia .rd-sec .rd-prose strong,body.er-sepia .rd-sec .rd-prose b{color:#
     panel.querySelectorAll("[data-rm]").forEach(b => b.onclick = () => { bank.splice(+b.dataset.rm, 1); saveBank(); paintPanel() });
     if ($("erReset")) $("erReset").onclick = () => { S = Object.assign({}, DEF); save(); apply(); paintPanel() };
   }
-  function openPanel(v) { view = v || "settings"; if (!panel) { panel = document.createElement("div"); panel.className = "er-panel"; panel.setAttribute("role", "dialog"); panel.setAttribute("aria-label", "ErgoRead reading settings"); document.body.appendChild(panel) } paintPanel() }
-  function closePanel() { if (panel) { panel.remove(); panel = null } }
+  function openPanel(v) { view = v || "settings"; if (!panel) { panel = document.createElement("div"); panel.className = "er-panel"; panel.setAttribute("role", "dialog"); panel.setAttribute("aria-label", "ErgoRead reading settings"); document.body.appendChild(panel) } paintPanel(); place(); markBtn() }
+  // the panel hangs under the Aa button (on a phone it is a sheet at the bottom)
+  function place() { const b = document.querySelector(".er-aa"); if (!panel || !b) return; const r = b.getBoundingClientRect(), w = Math.min(330, innerWidth - 32); panel.style.width = w + "px"; panel.style.left = Math.max(16, Math.min(innerWidth - w - 16, r.right - w)) + "px"; panel.style.top = Math.max(12, Math.min(r.bottom + 10, innerHeight - 220)) + "px"; panel.style.maxHeight = "calc(100vh - " + (Math.max(12, r.bottom + 10) + 16) + "px)" }
+  function markBtn() { const b = document.querySelector(".er-aa"); if (b) b.setAttribute("aria-expanded", !!panel) }
+  addEventListener("resize", place); addEventListener("scroll", place, { passive: true });
+  document.addEventListener("pointerdown", e => { if (panel && !panel.contains(e.target) && !e.target.closest(".er-aa")) closePanel() });
+  function closePanel() { if (panel) { panel.remove(); panel = null } markBtn() }
   addEventListener("keydown", e => { if (e.key === "Escape") { closePanel(); closeBubble() } });
 
   // ---------- reading progress + the ErgoRead button (only while a chapter is open)
   const bar = document.createElement("div"); bar.className = "er-bar"; bar.setAttribute("aria-hidden", "true");
-  const fab = document.createElement("button"); fab.type = "button"; fab.className = "er-fab"; fab.innerHTML = `<b aria-hidden="true">Aa</b>ErgoRead`; fab.setAttribute("aria-label", "ErgoRead reading settings"); fab.onclick = () => panel ? closePanel() : openPanel();
+  // the Aa button is added to the reading toolbar (.rd-sticky) each time a chapter is drawn
+  function addButton() {
+    const bar2 = document.querySelector(".rd-sticky"); if (!bar2 || bar2.querySelector(".er-aa")) return;
+    const b = document.createElement("button"); b.type = "button"; b.className = "rd-tool er-aa"; b.title = "ErgoRead: page, text size and typeface"; b.setAttribute("aria-label", "ErgoRead reading settings"); b.setAttribute("aria-haspopup", "dialog"); b.setAttribute("aria-expanded", "false");
+    b.innerHTML = `<b aria-hidden="true">Aa</b>`; b.onclick = () => panel ? closePanel() : openPanel();
+    bar2.insertBefore(b, bar2.querySelector(".rd-tool"));
+  }
   function progress() { const h = document.documentElement.scrollHeight - innerHeight; bar.style.width = (document.querySelector(".rd-sec") && h > 0 ? Math.min(100, Math.max(0, scrollY / h * 100)) : 0) + "%" }
   function sync() {
     const on = !!document.querySelector(".rd-sec");
-    if (on && !fab.isConnected) { document.body.appendChild(bar); document.body.appendChild(fab) }
-    if (!on && fab.isConnected) { fab.remove(); bar.remove(); closePanel(); closeBubble() }
-    apply(); progress();
-    new MutationObserver(apply).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });   // paper follows the site theme
+    if (on && !bar.isConnected) document.body.appendChild(bar);
+    if (!on && bar.isConnected) { bar.remove(); closePanel(); closeBubble() }
+    if (on) addButton();
+    apply(); progress(); markBtn();
   }
+  new MutationObserver(apply).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });   // paper follows the site theme
   addEventListener("scroll", progress, { passive: true }); addEventListener("resize", progress);
 
   // ---------- the word bubble
