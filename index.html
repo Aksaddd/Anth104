@@ -121,12 +121,61 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
 [data-theme="dark"] .msg.ok{color:#5fe08a}[data-theme="dark"] .msg.no{color:#ff8079}
 .code.shake{animation:shake .4s}@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 .foot{margin-top:46px;padding-top:18px;border-top:1px solid var(--line);color:var(--faint);font-size:12px;line-height:1.5}
+/* organizing the library: scope chips, toolbar (search, sort, view), book menu, list view, drag to reorder */
+.side .cnt{margin-left:auto;font:400 13px/1 var(--body);color:var(--faint);font-variant-numeric:tabular-nums}
+.side .addcol{color:var(--accent)}
+.side #sideCols{display:flex;flex-direction:column;gap:2px;overflow:auto;min-height:0}
+.chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px 0 14px;margin:0 -2px}.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:0;cursor:pointer;font:500 14px/1 var(--body);letter-spacing:-.01em;color:var(--ink);background:var(--fill);border-radius:980px;padding:9px 14px;white-space:nowrap}
+[data-theme="dark"] .chip{background:#2c2c2e}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.chip.add{color:var(--accent);background:transparent;box-shadow:inset 0 0 0 1px var(--line)}
+.tools{display:flex;align-items:center;gap:10px;margin-bottom:22px;flex-wrap:wrap}
+.tools .search{flex:1;min-width:170px;position:relative}
+.tools .search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;fill:none;stroke:var(--faint);stroke-width:2;stroke-linecap:round}
+.tools input[type=search]{width:100%;font:400 15px/1 var(--body);padding:10px 12px 10px 36px;border-radius:10px;border:0;background:var(--fill);color:var(--ink);-webkit-appearance:none}
+[data-theme="dark"] .tools input[type=search]{background:#2c2c2e}
+.tools input[type=search]:focus{outline:3px solid color-mix(in srgb,var(--accent) 30%,transparent)}
+.tools select{font:500 14px/1 var(--body);color:var(--accent);background:transparent;border:0;padding:9px 4px;cursor:pointer}
+.seg{display:inline-flex;background:var(--fill);border-radius:9px;padding:2px}[data-theme="dark"] .seg{background:#2c2c2e}
+.seg button{border:0;background:none;cursor:pointer;border-radius:7px;padding:6px 9px;color:var(--faint);display:grid;place-items:center}
+.seg button svg{width:17px;height:17px;fill:currentColor}
+.seg button[aria-pressed="true"]{background:var(--paper);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.14)}
+.scopehead{display:flex;align-items:center;gap:10px;margin:-6px 0 14px;color:var(--faint);font-size:14px}
+.scopehead button{border:0;background:none;color:var(--accent);cursor:pointer;font:400 14px/1 var(--body);padding:4px 0}
+.scopehead .danger{color:#d70015}[data-theme="dark"] .scopehead .danger{color:#ff453a}
+.book{position:relative}.book a,.row a{text-decoration:none;color:inherit;display:block}.book a .cover,.row a .cover{color:#fff}
+.book .more{border:0;background:none;cursor:pointer;color:var(--faint);font:700 17px/1 var(--body);letter-spacing:1px;padding:4px 6px;margin:-4px -6px;border-radius:8px}
+.book .more:hover,.row .more:hover{background:var(--fill);color:var(--ink)}
+.book .star{position:absolute;left:6%;top:4%;z-index:2;width:1.5em;height:1.5em;border-radius:50%;background:rgba(0,0,0,.34);display:grid;place-items:center;font-size:15px}
+.book .star svg{width:.8em;height:.8em;fill:#ffd60a}
+.book .donebadge{font:700 10px/1 var(--body);color:#fff;background:#34c759;border-radius:4px;padding:4px 6px}
+.book[draggable="true"]{cursor:grab}.book.dragging{opacity:.35}.book.over .cover{outline:3px solid var(--accent);outline-offset:3px}
+.rows{display:flex;flex-direction:column}
+.row{display:grid;grid-template-columns:46px minmax(0,1fr) auto auto;gap:14px;align-items:center;padding:12px 0;border-top:1px solid color-mix(in srgb,var(--line) 70%,transparent);text-decoration:none;color:inherit;position:relative}
+.row:first-child{border-top:0}
+.row .cover{font-size:4.6px;border-radius:2px 4px 4px 2px;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.row b{display:block;font:500 16px/1.25 var(--body);letter-spacing:-.018em}.row small{display:block;color:var(--faint);font-size:13px;margin-top:2px}
+.row .pbar{width:120px;height:4px;border-radius:980px;background:var(--fill);overflow:hidden}.row .pbar i{display:block;height:100%;background:var(--accent);border-radius:inherit}
+.row .more{border:0;background:none;cursor:pointer;color:var(--faint);font:700 17px/1 var(--body);padding:6px 8px;border-radius:8px}
+.row.dragging{opacity:.35}.row.over{box-shadow:inset 0 2px 0 var(--accent)}
+.menu{position:fixed;z-index:60;min-width:230px;max-width:280px;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:saturate(180%) blur(24px);-webkit-backdrop-filter:saturate(180%) blur(24px);border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,.24),0 0 0 .5px rgba(0,0,0,.12);padding:6px;animation:menuIn .14s ease}
+@keyframes menuIn{from{opacity:0;transform:scale(.96)}}
+.menu button{display:flex;align-items:center;justify-content:space-between;gap:14px;width:100%;border:0;background:none;text-align:left;cursor:pointer;color:var(--ink);font:400 15px/1.2 var(--body);letter-spacing:-.016em;padding:10px 12px;border-radius:9px}
+.menu button:hover,.menu button:focus-visible{background:color-mix(in srgb,var(--ink) 8%,transparent);outline:none}
+.menu button.danger{color:#d70015}[data-theme="dark"] .menu button.danger{color:#ff453a}
+.menu hr{border:0;border-top:1px solid color-mix(in srgb,var(--line) 70%,transparent);margin:5px 6px}
+.menu .lab{font:600 12px/1 var(--body);color:var(--faint);padding:8px 12px 5px}
+.menu .tick{color:var(--accent);font-weight:600}
+.toast{position:fixed;left:50%;bottom:92px;transform:translateX(-50%);z-index:70;background:#1d1d1f;color:#fff;border-radius:980px;padding:11px 18px;font:500 14px/1 var(--body);box-shadow:0 8px 28px rgba(0,0,0,.3);display:flex;gap:14px;align-items:center;animation:menuIn .18s ease}
+.toast button{border:0;background:none;color:#64b5ff;font:600 14px/1 var(--body);cursor:pointer;padding:0}
 /* phones: tab bar instead of the sidebar */
 .tabs{display:none}
 @media (max-width:820px){
   .app{display:block}.side{display:none}
   .main{padding:22px 18px 104px}
   .shelf{grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:24px 18px}
+  .row .pbar{display:none}.tools select{order:3}
   .cont{grid-template-columns:104px minmax(0,1fr);gap:16px;padding:18px;border-radius:18px}.cont .cover{font-size:11px}.cont h4{font-size:21px}.cont p{display:none}
   .code{grid-template-columns:1fr;padding:20px;border-radius:18px}
   .tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(4,1fr);padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));background:color-mix(in srgb,var(--bg) 78%,transparent);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-top:.5px solid var(--line);transform:translateY(110%);transition:transform .3s ease}
@@ -165,6 +214,11 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
     <a href="#library" data-nav="library"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4v16M9 4v16M13 5l5 15"/></svg>All Classes</a>
     <a href="#more" data-nav="more"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l-1 12H7z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg>More to Explore</a>
     <a href="#code" data-nav="code"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0"/></svg>Class Code</a>
+    <a href="#library" data-scope="fav"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8L3.6 9.7l5.8-.8z"/></svg>Favorites<span class="cnt" id="cntFav"></span></a>
+    <a href="#library" data-scope="done"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.4"/><path d="M8.4 12.4l2.4 2.4 4.8-5.4"/></svg>Finished<span class="cnt" id="cntDone"></span></a>
+    <span class="lab">My Collections</span>
+    <div id="sideCols"></div>
+    <button type="button" class="nav addcol" id="sideNewCol"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>New Collection</button>
     <span class="sp"></span>
     <a href="about/index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.4"/><path d="M12 11v5M12 8h.01"/></svg>What is Eureka?</a>
     <button type="button" class="nav" id="sideSettings"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8.4"/></svg>Settings</button>
@@ -173,7 +227,16 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
     <p class="date" id="date"></p>
     <h2 class="big" id="now">Reading Now</h2>
     <section class="sec" style="margin-top:20px" aria-labelledby="hCont"><div id="cont"></div></section>
-    <section class="sec" id="library" aria-labelledby="hLib"><header><h3 id="hLib">Your Library</h3><span id="libCount"></span></header><div id="mine"></div></section>
+    <section class="sec" id="library" aria-labelledby="hLib"><header><h3 id="hLib">Your Library</h3><span id="libCount"></span></header>
+      <div class="chips" id="chips" role="toolbar" aria-label="Show"></div>
+      <div class="tools">
+        <label class="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><input type="search" id="q" placeholder="Search your library" aria-label="Search your library"></label>
+        <select id="sort" aria-label="Sort by"><option value="recent">Sort: Recent</option><option value="title">Sort: Title</option><option value="progress">Sort: Progress</option><option value="manual">Sort: Manually</option></select>
+        <div class="seg" role="group" aria-label="View"><button type="button" id="vGrid" aria-label="Grid view"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.6"/><rect x="13" y="4" width="7" height="7" rx="1.6"/><rect x="4" y="13" width="7" height="7" rx="1.6"/><rect x="13" y="13" width="7" height="7" rx="1.6"/></svg></button><button type="button" id="vList" aria-label="List view"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="2.6" rx="1.3"/><rect x="4" y="10.7" width="16" height="2.6" rx="1.3"/><rect x="4" y="16.4" width="16" height="2.6" rx="1.3"/></svg></button></div>
+      </div>
+      <div class="scopehead" id="scopeHead" hidden></div>
+      <div id="mine"></div>
+    </section>
     <section class="sec" id="more" aria-labelledby="hMore"><header><h3 id="hMore">More to Explore</h3><span>Opens with a class code</span></header><div id="store"></div></section>
     <section class="sec" id="code" aria-labelledby="hCode">
       <form class="code" id="join" autocomplete="off">
@@ -216,37 +279,156 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
   if ("IntersectionObserver" in window) new IntersectionObserver(es => { inView = es[0].isIntersecting; playState(); $("tabs").classList.toggle("show", !inView) }, { threshold: .05 }).observe(hero);
   document.addEventListener("visibilitychange", playState);
 
-  // ---------- the library
-  const P = window.Platform, LAST = "a104-last-class";
+  // ---------- the library, and everything a student can do to organize it
+  // Saved as a104-library-v1: { sort, view, order[], fav[], done[], hidden[], opened{id:ms}, cols[{id,name,items[]}] }
+  const P = window.Platform, LAST = "a104-last-class", LKEY = "a104-library-v1";
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const want = new URLSearchParams(location.search).get("join");   // sent here by a class page that needs its code
+  let L = {}; try { L = JSON.parse(localStorage.getItem(LKEY) || "{}") || {} } catch (e) { }
+  L = Object.assign({ sort: "recent", view: "grid", order: [], fav: [], done: [], hidden: [], opened: {}, cols: [] }, L);
+  const saveL = () => { try { localStorage.setItem(LKEY, JSON.stringify(L)) } catch (e) { } };
+  let scope = "all", query = "";
+  const has = (list, id) => list.includes(id), toggle = (list, id) => { const i = list.indexOf(id); i < 0 ? list.push(id) : list.splice(i, 1) };
+  const col = id => L.cols.find(c => c.id === id);
   // how far along a class is: questions answered at least once across its drills
   function progress(c) {
     let done = 0, total = 0;
     (c.progress || []).forEach(([key, n]) => { total += n; try { const d = JSON.parse(localStorage.getItem(key) || "null"); if (d && d.stats) done += Math.min(n, Object.keys(d.stats).length) } catch (e) { } });
     return total ? Math.round(100 * done / total) : 0;
   }
+  const opened = c => { let last = null; try { last = localStorage.getItem(LAST) } catch (e) { } return Math.max(L.opened[c.id] || 0, last === c.id ? 1 : 0) };
+  const mineAll = () => P.COURSES.filter(c => P.has(c.id));
+  function ordered(list) {
+    const a = list.slice();
+    if (L.sort === "title") a.sort((x, y) => x.title.localeCompare(y.title));
+    else if (L.sort === "progress") a.sort((x, y) => progress(y) - progress(x));
+    else if (L.sort === "manual") a.sort((x, y) => { const i = L.order.indexOf(x.id), j = L.order.indexOf(y.id); return (i < 0 ? 1e3 : i) - (j < 0 ? 1e3 : j) });
+    else a.sort((x, y) => opened(y) - opened(x));
+    return a;
+  }
+  function inScope(c) {
+    if (scope === "hidden") return has(L.hidden, c.id);
+    if (has(L.hidden, c.id)) return false;
+    if (scope === "fav") return has(L.fav, c.id);
+    if (scope === "done") return has(L.done, c.id);
+    if (scope.startsWith("col:")) { const k = col(scope.slice(4)); return !!k && has(k.items, c.id) }
+    return true;
+  }
   const cover = (c, locked) => `<span class="cover${locked ? " locked" : ""}" style="--c1:${c.cover[0]};--c2:${c.cover[1]}">${locked ? `<span class="lock" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2h1a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2zm2 0h6V8a3 3 0 0 0-6 0z"/></svg></span>` : ""}<span class="k">${esc(c.name)}</span><span class="t">${esc(c.title)}</span><span class="p">Eureka</span></span>`;
-  function book(c, open) {
+  const STAR = `<span class="star" aria-label="Favorite"><svg viewBox="0 0 24 24"><path d="M12 3.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8L3.6 9.7l5.8-.8z"/></svg></span>`;
+  function book(c) {
+    const pct = progress(c), done = has(L.done, c.id);
+    return `<div class="book" data-id="${c.id}" draggable="true"><a href="${c.path}index.html" data-open="${c.id}" aria-label="Open ${esc(c.title)}" draggable="false">${has(L.fav, c.id) ? STAR : ""}${cover(c)}</a>
+      <span class="under">${done ? `<span class="donebadge">FINISHED</span>` : pct ? `<span class="pct">${pct}%</span>` : `<span class="new">NEW</span>`}<button type="button" class="more" data-menu="${c.id}" aria-haspopup="menu" aria-label="More options for ${esc(c.title)}">•••</button></span>
+      <a class="ttl" href="${c.path}index.html" data-open="${c.id}" style="color:inherit;text-decoration:none" draggable="false">${esc(c.title)}</a><span class="by">${esc(c.name)} · ${esc(c.school)}</span></div>`;
+  }
+  function rowOf(c) {
     const pct = progress(c);
-    return open
-      ? `<a class="book" href="${c.path}index.html" data-open="${c.id}">${cover(c)}<span class="under">${pct ? `<span class="pct">${pct}%</span>` : `<span class="new">NEW</span>`}<span class="pct" aria-hidden="true">•••</span></span><span class="ttl">${esc(c.title)}</span><span class="by">${esc(c.name)} · ${esc(c.school)}</span></a>`
-      : `<button type="button" class="book" data-lock="${c.id}">${cover(c, true)}<span class="under"><span class="get">GET</span></span><span class="ttl">${esc(c.title)}</span><span class="by">${esc(c.name)} · ${esc(c.school)}</span></button>`;
+    return `<div class="row" data-id="${c.id}" draggable="true"><a href="${c.path}index.html" data-open="${c.id}" draggable="false" aria-hidden="true" tabindex="-1">${cover(c)}</a>
+      <a href="${c.path}index.html" data-open="${c.id}" style="color:inherit;text-decoration:none;min-width:0" draggable="false"><b>${has(L.fav, c.id) ? "★ " : ""}${esc(c.title)}</b><small>${esc(c.name)} · ${has(L.done, c.id) ? "Finished" : pct ? pct + "% complete" : "Not started"}</small></a>
+      <span class="pbar" aria-hidden="true"><i style="width:${pct}%"></i></span><button type="button" class="more" data-menu="${c.id}" aria-haspopup="menu" aria-label="More options for ${esc(c.title)}">•••</button></div>`;
   }
+  function locked(c) { return `<button type="button" class="book" data-lock="${c.id}">${cover(c, true)}<span class="under"><span class="get">GET</span></span><span class="ttl">${esc(c.title)}</span><span class="by">${esc(c.name)} · ${esc(c.school)}</span></button>` }
+  const scopeName = () => scope === "all" ? "Your Library" : scope === "fav" ? "Favorites" : scope === "done" ? "Finished" : scope === "hidden" ? "Hidden" : (col(scope.slice(4)) || {}).name || "Your Library";
+
   function paint() {
-    const mine = P.COURSES.filter(c => P.has(c.id)), more = P.COURSES.filter(c => !P.has(c.id));
-    let last = null; try { last = localStorage.getItem(LAST) } catch (e) { }
-    const cur = mine.find(c => c.id === last) || mine.slice().sort((a, b) => progress(b) - progress(a))[0];
+    const mine = mineAll(), more = P.COURSES.filter(c => !P.has(c.id)), visible = mine.filter(c => !has(L.hidden, c.id));
+    if (scope.startsWith("col:") && !col(scope.slice(4))) scope = "all"; if (scope === "hidden" && !L.hidden.length) scope = "all";
+    // Continue
+    const cur = visible.slice().sort((a, b) => opened(b) - opened(a) || progress(b) - progress(a))[0];
     $("cont").innerHTML = cur ? (() => { const pct = progress(cur); return `<a class="cont" href="${cur.path}index.html" data-open="${cur.id}">${cover(cur)}<span><span class="k2">${pct ? "Continue" : "Start reading"}</span><h4>${esc(cur.title)}</h4><p>${esc(cur.blurb)}</p>
-        <span class="bar" aria-hidden="true"><i style="width:${Math.max(pct, 2)}%"></i></span><span class="sm">${pct}% complete · ${esc(cur.stats)}</span><span class="row"><span class="pill">${pct ? "Continue" : "Open"}</span></span></span></a>` })()
+        <span class="bar" aria-hidden="true"><i style="width:${Math.max(pct, 2)}%"></i></span><span class="sm">${pct}% complete · ${esc(cur.stats)}</span><span class="row" style="display:flex;border:0;padding:0"><span class="pill">${pct ? "Continue" : "Open"}</span></span></span></a>` })()
       : `<div class="empty"><b>Your library is empty</b>Add a class with its class code and it will appear here.</div>`;
-    $("mine").innerHTML = mine.length ? `<div class="shelf">${mine.map(c => book(c, true)).join("")}</div>` : `<div class="empty">No classes yet. <a href="#code" style="color:var(--accent);text-decoration:none">Enter a class code ›</a></div>`;
-    $("libCount").textContent = mine.length ? (mine.length === 1 ? "1 class" : mine.length + " classes") : "";
-    $("more").hidden = !more.length; if (more.length) $("store").innerHTML = `<div class="shelf">${more.map(c => book(c, false)).join("")}</div>`;
+    // chips + sidebar
+    const count = s => { const keep = scope; scope = s; const n = mine.filter(inScope).length; scope = keep; return n };
+    const SC = [["all", "All"], ["fav", "Favorites"], ["done", "Finished"]].concat(L.cols.map(k => ["col:" + k.id, k.name])).concat(L.hidden.length ? [["hidden", "Hidden"]] : []);
+    $("chips").innerHTML = SC.map(([s, n]) => `<button type="button" class="chip" data-scope="${esc(s)}" aria-pressed="${scope === s}">${esc(n)}${s !== "all" ? ` · ${count(s)}` : ""}</button>`).join("") + `<button type="button" class="chip add" id="newCol">＋ New Collection</button>`;
+    $("sideCols").innerHTML = L.cols.map(k => `<a href="#library" data-scope="col:${k.id}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7a2 2 0 0 1 2-2h4l2 2h6a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/></svg>${esc(k.name)}<span class="cnt">${k.items.filter(id => P.has(id)).length}</span></a>`).join("");
+    $("cntFav").textContent = count("fav") || ""; $("cntDone").textContent = count("done") || "";
+    document.querySelectorAll(".side [data-scope]").forEach(a => a.classList.toggle("on", a.dataset.scope === scope));
+    // the shelf
+    const q = query.trim().toLowerCase();
+    const shown = ordered(mine.filter(inScope)).filter(c => !q || (c.title + " " + c.name + " " + c.school + " " + c.blurb).toLowerCase().includes(q));
+    $("hLib").textContent = scopeName(); $("libCount").textContent = shown.length === 1 ? "1 class" : shown.length + " classes";
+    $("sort").value = L.sort; $("vGrid").setAttribute("aria-pressed", L.view === "grid"); $("vList").setAttribute("aria-pressed", L.view === "list");
+    const k = scope.startsWith("col:") ? col(scope.slice(4)) : null;
+    $("scopeHead").hidden = !k && scope !== "hidden";
+    $("scopeHead").innerHTML = k ? `<span>Collection</span><button type="button" id="renCol">Rename</button><button type="button" class="danger" id="delCol">Delete Collection</button>` : scope === "hidden" ? `<span>Hidden classes stay unlocked. Use ••• to put one back in your library.</span>` : "";
+    $("mine").innerHTML = shown.length ? (L.view === "list" ? `<div class="rows">${shown.map(rowOf).join("")}</div>` : `<div class="shelf">${shown.map(book).join("")}</div>`)
+      : `<div class="empty">${!mine.length ? `No classes yet. <a href="#code" style="color:var(--accent);text-decoration:none">Enter a class code ›</a>` : q ? `Nothing in ${esc(scopeName())} matches “${esc(query)}”.` : scope === "fav" ? `<b>No favorites yet</b>Open a class's ••• menu and choose Add to Favorites.` : scope === "done" ? `<b>Nothing finished yet</b>Mark a class as finished from its ••• menu when the semester ends.` : k ? `<b>This collection is empty</b>Open a class's ••• menu and add it to “${esc(k.name)}”.` : "Nothing here."}</div>`;
+    $("more").hidden = !more.length; if (more.length) $("store").innerHTML = `<div class="shelf">${more.map(locked).join("")}</div>`;
     document.querySelectorAll("[data-nav='more']").forEach(a => { a.hidden = !more.length });
-    document.querySelectorAll("[data-lock]").forEach(b => b.onclick = () => ask(P.course(b.dataset.lock)));
-    document.querySelectorAll("[data-open]").forEach(a => a.addEventListener("click", () => { try { localStorage.setItem(LAST, a.dataset.open) } catch (e) { } }));
+    wire();
   }
+  function wire() {
+    document.querySelectorAll("[data-lock]").forEach(b => b.onclick = () => ask(P.course(b.dataset.lock)));
+    document.querySelectorAll("[data-open]").forEach(a => a.addEventListener("click", () => { L.opened[a.dataset.open] = Date.now(); saveL(); try { localStorage.setItem(LAST, a.dataset.open) } catch (e) { } }));
+    document.querySelectorAll("[data-scope]").forEach(b => b.onclick = e => { scope = b.dataset.scope; paint(); if (b.tagName === "A") { e.preventDefault(); $("library").scrollIntoView({ behavior: reduce ? "auto" : "smooth" }) } });
+    document.querySelectorAll("[data-menu]").forEach(b => b.onclick = e => { e.preventDefault(); e.stopPropagation(); openMenu(b, b.dataset.menu) });
+    if ($("newCol")) $("newCol").onclick = () => newCollection();
+    if ($("renCol")) $("renCol").onclick = () => { const k = col(scope.slice(4)), n = prompt("Rename collection:", k.name); if (n && n.trim()) { k.name = n.trim().slice(0, 40); saveL(); paint() } };
+    if ($("delCol")) $("delCol").onclick = () => { const k = col(scope.slice(4)); if (!confirm(`Delete the collection “${k.name}”? The classes in it stay in your library.`)) return; L.cols = L.cols.filter(x => x !== k); scope = "all"; saveL(); paint() };
+    // drag to reorder (switches the sort to "Manually")
+    let drag = null;
+    $("mine").querySelectorAll("[data-id]").forEach(el => {
+      el.addEventListener("dragstart", e => { drag = el.dataset.id; el.classList.add("dragging"); e.dataTransfer.effectAllowed = "move"; try { e.dataTransfer.setData("text/plain", drag) } catch (x) { } });
+      el.addEventListener("dragend", () => { el.classList.remove("dragging"); $("mine").querySelectorAll(".over").forEach(o => o.classList.remove("over")); drag = null });
+      el.addEventListener("dragover", e => { if (!drag || drag === el.dataset.id) return; e.preventDefault(); el.classList.add("over") });
+      el.addEventListener("dragleave", () => el.classList.remove("over"));
+      el.addEventListener("drop", e => { e.preventDefault(); if (drag && drag !== el.dataset.id) moveTo(drag, el.dataset.id) });
+    });
+  }
+  // put class `id` where class `before` is, keeping everyone else's order
+  function moveTo(id, before) {
+    const ids = ordered(mineAll()).map(c => c.id).filter(x => x !== id), i = ids.indexOf(before);
+    ids.splice(i < 0 ? ids.length : i, 0, id); L.order = ids; L.sort = "manual"; saveL(); paint();
+  }
+  function nudge(id, by) {
+    const ids = ordered(mineAll().filter(inScope)).map(c => c.id), all = ordered(mineAll()).map(c => c.id), i = ids.indexOf(id), j = i + by; if (j < 0 || j >= ids.length) return;
+    const a = all.indexOf(id), b = all.indexOf(ids[j]);[all[a], all[b]] = [all[b], all[a]]; L.order = all; L.sort = "manual"; saveL(); paint();
+  }
+  function newCollection(addId) {
+    const n = prompt("Name your collection (for example “This semester” or “Science”):", ""); if (!n || !n.trim()) return;
+    const k = { id: "k" + Date.now().toString(36), name: n.trim().slice(0, 40), items: addId ? [addId] : [] }; L.cols.push(k); saveL(); scope = "col:" + k.id; paint(); toast(`Created “${k.name}”`);
+  }
+  // ----- the ••• menu on every class
+  let menu = null;
+  function closeMenu() { if (menu) { menu.remove(); menu = null; document.removeEventListener("pointerdown", outside, true) } }
+  const outside = e => { if (menu && !menu.contains(e.target)) closeMenu() };
+  function openMenu(btn, id) {
+    closeMenu(); const c = P.course(id), fav = has(L.fav, id), done = has(L.done, id), hid = has(L.hidden, id);
+    menu = document.createElement("div"); menu.className = "menu"; menu.setAttribute("role", "menu"); menu.setAttribute("aria-label", "Options for " + c.title);
+    menu.innerHTML = `<button type="button" role="menuitem" data-a="open">Open<span>›</span></button><hr>
+      <button type="button" role="menuitem" data-a="fav">${fav ? "Remove from Favorites" : "Add to Favorites"}<span>${fav ? "★" : "☆"}</span></button>
+      <button type="button" role="menuitem" data-a="done">${done ? "Mark as Still Studying" : "Mark as Finished"}<span>${done ? "↺" : "✓"}</span></button>
+      <hr><div class="lab">Add to Collection</div>
+      ${L.cols.map(k => `<button type="button" role="menuitemcheckbox" aria-checked="${has(k.items, id)}" data-col="${k.id}">${esc(k.name)}<span class="tick">${has(k.items, id) ? "✓" : ""}</span></button>`).join("")}
+      <button type="button" role="menuitem" data-a="newcol" style="color:var(--accent)">New Collection…<span>＋</span></button>
+      <hr><button type="button" role="menuitem" data-a="left">Move Earlier<span>←</span></button><button type="button" role="menuitem" data-a="right">Move Later<span>→</span></button>
+      <hr><button type="button" role="menuitem" data-a="hide" class="${hid ? "" : "danger"}">${hid ? "Show in Library" : "Hide from Library"}<span>${hid ? "＋" : "−"}</span></button>`;
+    document.body.appendChild(menu);
+    const r = btn.getBoundingClientRect(), w = menu.offsetWidth, h = menu.offsetHeight;
+    menu.style.left = Math.max(10, Math.min(innerWidth - w - 10, r.right - w)) + "px"; menu.style.top = (r.bottom + h + 12 > innerHeight ? Math.max(10, r.top - h - 6) : r.bottom + 6) + "px";
+    menu.querySelectorAll("button").forEach(b => b.onclick = () => {
+      const a = b.dataset.a, k = b.dataset.col && col(b.dataset.col);
+      if (k) { toggle(k.items, id); saveL(); closeMenu(); paint(); toast(has(k.items, id) ? `Added to “${k.name}”` : `Removed from “${k.name}”`); return }
+      closeMenu();
+      if (a === "open") { L.opened[id] = Date.now(); saveL(); try { localStorage.setItem(LAST, id) } catch (e) { } location.href = c.path + "index.html" }
+      else if (a === "fav") { toggle(L.fav, id); saveL(); paint(); toast(has(L.fav, id) ? "Added to Favorites" : "Removed from Favorites") }
+      else if (a === "done") { toggle(L.done, id); saveL(); paint(); toast(has(L.done, id) ? "Marked as finished" : "Back in progress") }
+      else if (a === "newcol") newCollection(id);
+      else if (a === "left") nudge(id, -1); else if (a === "right") nudge(id, 1);
+      else if (a === "hide") { toggle(L.hidden, id); saveL(); paint(); if (has(L.hidden, id)) toast(`${c.name} is hidden`, () => { toggle(L.hidden, id); saveL(); paint() }) }
+    });
+    menu.querySelector("button").focus(); setTimeout(() => document.addEventListener("pointerdown", outside, true), 0);
+  }
+  addEventListener("keydown", e => { if (e.key === "Escape") closeMenu() }); addEventListener("scroll", closeMenu, { passive: true });
+  let toastEl = null, toastT = 0;
+  function toast(text, undo) { if (toastEl) toastEl.remove(); clearTimeout(toastT); toastEl = document.createElement("div"); toastEl.className = "toast"; toastEl.setAttribute("role", "status"); toastEl.innerHTML = `<span>${esc(text)}</span>${undo ? `<button type="button">Undo</button>` : ""}`; document.body.appendChild(toastEl); if (undo) toastEl.querySelector("button").onclick = () => { undo(); toastEl.remove() }; toastT = setTimeout(() => toastEl && toastEl.remove(), undo ? 5000 : 2200) }
+  $("q").oninput = e => { query = e.target.value; const pos = e.target.selectionStart; paint(); $("q").focus(); try { $("q").setSelectionRange(pos, pos) } catch (x) { } };
+  $("sort").onchange = e => { if (e.target.value === "manual" && !L.order.length) L.order = ordered(mineAll()).map(c => c.id); L.sort = e.target.value; saveL(); paint() };
+  $("vGrid").onclick = () => { L.view = "grid"; saveL(); paint() }; $("vList").onclick = () => { L.view = "list"; saveL(); paint() };
+  $("sideNewCol").onclick = () => newCollection();
   const input = $("code-in");
   function say(text, ok) { const m = $("msg"); m.hidden = false; m.className = "msg " + (ok ? "ok" : "no"); m.textContent = text }
   function ask(c) { $("hCode").textContent = `Enter the class code for ${c.name}`; $("code").scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" }); input.focus({ preventScroll: true }) }
@@ -254,7 +436,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
     e.preventDefault(); const v = input.value; if (!v.trim()) { input.focus(); return }
     $("joinBtn").disabled = true; const c = await P.join(v); $("joinBtn").disabled = false;
     if (!c) { say("That code didn't match a class. Check it with your professor or classmate and try again.", false); $("join").classList.remove("shake"); void $("join").offsetWidth; $("join").classList.add("shake"); return }
-    input.value = ""; say(`${c.name} was added to your library. Opening it…`, true); try { localStorage.setItem(LAST, c.id) } catch (e) { } paint();
+    input.value = ""; say(`${c.name} was added to your library. Opening it…`, true); L.opened[c.id] = Date.now(); L.hidden = L.hidden.filter(x => x !== c.id); saveL(); try { localStorage.setItem(LAST, c.id) } catch (e) { } paint();
     setTimeout(() => { location.href = c.path + "index.html" }, 800);
   };
   $("sideSettings").onclick = () => $("settingsBtn").click();
