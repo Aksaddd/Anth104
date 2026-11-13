@@ -25,3 +25,102 @@
 .new-tag[hidden]{display:none}
 @keyframes newShine{from{background-position:130% 0}to{background-position:-130% 0}}
 @media (prefers-reduced-motion:reduce){.new-tag{animation:none;background-position:0 0}}
+
+/* ---------- The class bar (shared/classbar.js): the same bar on every page of a class, as in the library walkthrough.
+   Class name on the left, the parts of the class on the right, the current one in a dark pill. */
+html.cb .gnav,html.cb .gnav-space,html.cb .st-btn,html.cb-noback a.back{display:none!important}
+html.cb:not(.cb-on) body{padding-top:53px}
+.cbar{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--paper,#fff) 82%,transparent);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);border-bottom:.5px solid var(--line,#d2d2d7);padding-top:env(safe-area-inset-top,0px)}
+html.cb:not([data-portal="home"]) .cbar{position:relative}
+.cbar-in{max-width:1080px;margin:0 auto;padding:0 20px;height:52px;display:flex;align-items:center;gap:14px}
+.cbar .cb-name{font:700 19px/1 var(--display);letter-spacing:-.02em;color:var(--ink,#1d1d1f);text-decoration:none;white-space:nowrap;margin-right:auto}
+.cb-links{display:flex;align-items:center;gap:4px;min-width:0}
+.cb-links>a,.cb-more>summary{font:400 13px/1 var(--body);letter-spacing:-.01em;color:var(--muted,#6e6e73);text-decoration:none;white-space:nowrap;padding:8px 11px;border-radius:980px;cursor:pointer;transition:color .2s,background .2s}
+.cb-links>a:hover,.cb-more>summary:hover{color:var(--ink,#1d1d1f)}
+.cb-links>a.on,.cb-more>summary.on{color:#fff;background:#1d1d1f;font-weight:600}
+[data-theme="dark"] .cb-links>a.on,[data-theme="dark"] .cb-more>summary.on{color:#1d1d1f;background:#f5f5f7}
+.cb-links>a.cb-comp{color:var(--ink,#1d1d1f);font-weight:500}.cb-comp[hidden]{display:none}
+.cb-more{position:relative}
+.cb-more>summary{list-style:none;display:flex;align-items:center;gap:5px}.cb-more>summary::-webkit-details-marker{display:none}
+.cb-more>summary::after{content:"";width:5px;height:5px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:translateY(-2px) rotate(45deg)}
+.cb-more>div{position:absolute;right:0;top:calc(100% + 8px);min-width:190px;background:var(--paper,#fff);border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,.2),0 0 0 .5px rgba(0,0,0,.12);padding:6px;display:flex;flex-direction:column;z-index:50}
+.cb-more>div a{font:400 14px/1 var(--body);color:var(--ink,#1d1d1f);text-decoration:none;padding:10px 12px;border-radius:9px;white-space:nowrap}
+.cb-more>div a:hover{background:var(--sunk,#f5f5f7)}.cb-more>div a.on{font-weight:600;color:var(--accent,#0071e3)}
+.cb-set{flex:none;width:34px;height:34px;border-radius:50%;border:0;background:none;color:var(--muted,#6e6e73);cursor:pointer;display:grid;place-items:center}
+.cb-set:hover{color:var(--ink,#1d1d1f);background:var(--sunk,#f5f5f7)}
+.cb-set svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6}
+.cbar :is(a,button,summary):focus-visible{outline:2px solid var(--accent,#0071e3);outline-offset:2px}
+@media (max-width:820px){
+  .cbar-in{height:auto;flex-wrap:wrap;gap:8px 10px;padding:9px 14px 0}
+  .cbar .eureka span{display:none}.cbar .eureka{padding:8px!important}
+  .cb-links{order:5;flex:0 0 calc(100% + 28px);margin:0 -14px;padding:0 10px 8px;overflow-x:auto;scrollbar-width:none}.cb-links::-webkit-scrollbar{display:none}
+  .cb-more{position:static;display:flex}.cb-more>summary{display:none}
+  .cb-more>div{position:static;flex-direction:row;gap:4px;padding:0;background:none;box-shadow:none;min-width:0}
+  .cb-more>div a{font:400 13px/1 var(--body);color:var(--muted,#6e6e73);padding:8px 11px;border-radius:980px}.cb-more>div a.on{color:#fff;background:#1d1d1f;font-weight:600}
+  [data-theme="dark"] .cb-more>div a.on{color:#1d1d1f;background:#f5f5f7}
+  html.cb:not(.cb-on) body{padding-top:93px}
+}
+/* the bar spans the window on pages whose body has side padding */
+html.cb{overflow-x:clip}
+html.cb.cb-on body{padding-top:0!important}
+html.cb:not([data-portal="home"]) .cbar{width:100vw;margin-left:calc(50% - 50vw);margin-bottom:22px}
+html.cb .hero p:has(>.eureka){display:none}
+
+/* ---------- Each part of a class has its own look, the one shown in the library walkthrough. */
+
+/* Readings: a printed page. Cream paper and a serif face come from ErgoRead's "Paper" theme (the default; a student can
+   change it under Aa); here the page around the passages joins in. */
+body.er-paper{background:#f4efe4}
+body.er-paper .rd-sec{box-shadow:none;border:1px solid #e9e1cf}
+body.er-paper .rd-sec>h2{font-family:ui-serif,"New York","Iowan Old Style",Georgia,serif;letter-spacing:-.01em}
+body.er-paper .rd-sticky{background:color-mix(in srgb,#f4efe4 88%,transparent)}
+body.er-paper .rd-bar{background:#e6dfcf}
+body.er-paper .rd-prose b{background:linear-gradient(transparent 58%,#ffe9a6 0)}
+body.er-paper .rd-check,body.er-paper .rd-q.card{background:#fff;border-color:#e9e1cf}
+
+/* Drill: the question on the left, the subjects and their progress alongside it (wide screens). */
+html[data-portal="drill"] .tab[aria-selected="true"]{background:var(--accent-soft,#e8f1fc)}
+html[data-portal="drill"] .tab[aria-selected="true"] b{color:var(--accent,#0071e3)}
+html[data-portal="drill"] .tab[aria-selected="true"] .tcount{color:var(--muted,#6e6e73)}
+html[data-portal="drill"] .tab[aria-selected="true"] .mini{background:var(--lv-new,#e0e0e5)}
+@media (min-width:1100px){
+  html[data-portal="drill"] .wrap:has(>nav#tabs){max-width:1040px;display:grid;grid-template-columns:minmax(0,1fr) 300px;column-gap:32px;row-gap:0;align-items:start}
+  html[data-portal="drill"] .wrap:has(>nav#tabs)>*{grid-column:1;margin-bottom:16px;min-width:0}
+  html[data-portal="drill"] .wrap:has(>nav#tabs)>[hidden]{margin:0}
+  html[data-portal="drill"] .wrap:has(>nav#tabs)>header{grid-column:1/-1}
+  html[data-portal="drill"] .wrap:has(>nav#tabs)>#tabsBar{grid-column:2;grid-row:2;margin-bottom:10px}
+  html[data-portal="drill"] .wrap:has(>nav#tabs)>nav#tabs{grid-column:2;grid-row:3/span 40;grid-template-columns:1fr;gap:2px;position:sticky;top:14px;max-height:calc(100vh - 28px);overflow:auto;scrollbar-width:thin}
+  html[data-portal="drill"] .wrap:has(>nav#tabs)>nav#tabs .tab{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 10px;align-items:baseline;padding:10px 12px}
+  html[data-portal="drill"] .wrap:has(>nav#tabs)>nav#tabs .tab .mini{grid-column:1/-1;grid-row:2}
+  html[data-portal="drill"] .wrap:has(>nav#tabs)>nav#tabs .tab .tcount{grid-column:2;grid-row:1;font-size:11px;white-space:nowrap}
+  html[data-portal="drill"] .wrap:has(>nav#tabs)>#tabsBar.collapsed{grid-column:1;grid-row:auto}
+}
+
+/* Mock exam: the exam room is dark while an exam is open, with a square for every question; the result opens on a ring. */
+html[data-portal="mock"] #app:has(>#ebar){background:#1d1d1f;border-radius:26px;padding:22px 24px 26px}
+html[data-portal="mock"] #app:has(>#ebar) .ebar{color:#f5f5f7;margin-bottom:14px}
+html[data-portal="mock"] #app:has(>#ebar) .ebar .row1{background:#1d1d1f;border-bottom-color:rgba(255,255,255,.14)}
+html[data-portal="mock"] #app:has(>#ebar) .ebar .info{color:#98989f}html[data-portal="mock"] #app:has(>#ebar) .ebar .info b{color:#fff}
+html[data-portal="mock"] #app:has(>#ebar) .ebar .chip{background:rgba(255,255,255,.12);color:#f5f5f7;border-color:transparent}
+html[data-portal="mock"] #app:has(>#ebar) .gridbox summary{color:#64b5ff}
+html[data-portal="mock"] #app:has(>#ebar) .legend2{color:#98989f}
+html[data-portal="mock"] .grid100{grid-template-columns:repeat(auto-fill,minmax(34px,1fr));gap:6px}
+html[data-portal="mock"] .gq{height:auto;aspect-ratio:1;border-radius:8px;font:600 11px/1 var(--body)}
+html[data-portal="mock"] #app:has(>#ebar) .gq:not(.ans):not(.flag){background:rgba(255,255,255,.1);color:rgba(255,255,255,.55)}
+html[data-portal="mock"] #app:has(>#ebar) .gq.ans{background:#30d158;color:#04310f}
+html[data-portal="mock"] #app:has(>#ebar) .gq.cur{outline-color:#fff}
+html[data-portal="mock"] #app:has(>#ebar) .legend2>span:first-child>i{background:#30d158!important}html[data-portal="mock"] #app:has(>#ebar) .legend2>span:last-child>i{background:rgba(255,255,255,.16)!important}
+html[data-portal="mock"] .gq.right{background:#30d158;color:#04310f}html[data-portal="mock"] .gq.wrongq{background:#ff453a;color:#fff}
+html[data-portal="mock"] .score:has(.verdict.low) .ring{--rc:#ff453a}html[data-portal="mock"] .score:has(.verdict.near) .ring{--rc:#ff9f0a}
+html[data-portal="mock"] .score .ring{position:relative;flex:none;width:118px;height:118px;border-radius:50%;display:grid;place-items:center;
+  background:radial-gradient(closest-side,var(--paper,#fff) 80%,transparent 81%),conic-gradient(var(--rc,#30d158) calc(var(--pct) * 1%),var(--line,#e5e5ea) 0)}
+html[data-portal="mock"] .score .ring b{font:700 26px/1 var(--display);letter-spacing:-.02em}
+html:not([data-portal="mock"]) .score .ring{display:none}
+
+/* Discussion: the question in a tinted card, responses as speech bubbles beside each student's initial. */
+html[data-portal="discuss"] article.q{background:color-mix(in srgb,var(--accent,#0071e3) 9%,var(--paper,#fff));border:0;box-shadow:none;border-radius:22px}
+html[data-portal="discuss"] .resp{background:var(--paper,#fff);border:0;border-radius:6px 22px 22px 22px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+html[data-portal="discuss"] .resp.me{background:color-mix(in srgb,var(--accent,#0071e3) 10%,var(--paper,#fff))}
+html[data-portal="discuss"] .av:not(img){background:linear-gradient(135deg,#30b0c7,#0071e3);color:#fff}
+html[data-portal="discuss"] .resp.me .av:not(img){background:linear-gradient(135deg,#ff9f0a,#ff375f)}
+html[data-portal="discuss"] a.pc{border:0;box-shadow:0 1px 2px rgba(0,0,0,.06);border-radius:20px}

@@ -121,6 +121,7 @@
   const KEY = "bio-mock-v1", HIST = "bio-mock-history-v1";
   const $ = id => document.getElementById(id);
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const rich = s => esc(s).replace(/&lt;(\/?(?:i|b|em|strong|sub|sup))&gt;/g, "<$1>");   // questions may carry italics and the like
   const shuffle = a => { a = a.slice(); for (let k = a.length - 1; k > 0; k--) { const j = Math.random() * (k + 1) | 0; [a[k], a[j]] = [a[j], a[k]] } return a };
   const byId = Object.fromEntries(BANK.map(q => [q.id, q]));
   const mmss = s => { const h = Math.floor(s / 3600), m = Math.floor(s / 60) % 60, x = s % 60; return (h ? h + ":" + String(m).padStart(2, "0") : m) + ":" + String(x).padStart(2, "0") };
@@ -215,7 +216,7 @@
     const it = E.items[E.pos], q = byId[it.id], a = E.ans[E.pos], last = E.pos === E.items.length - 1;
     $("qcard").className = "card enter";
     $("qcard").innerHTML = `<div class="meta"><span class="meta-l">${basedBadge(q.src)}${isProf(q.src) ? `<span class="prof" title="This question comes straight from the professor's course materials">★ From the professor</span>` : ""}<span class="origin">Source: ${esc(q.src)}</span><span>${esc(q.subject)}</span></span><span>${E.pos + 1} / ${E.items.length}</span></div>
-      <p class="q">${esc(q.q)}</p>
+      <p class="q">${rich(q.q)}</p>
       ${q.img ? `<figure class="fig"><button type="button" class="zoom" data-src="${q.img[0]}" aria-label="Enlarge image"><img src="${q.img[0]}" alt="${esc(q.img[1])}"></button><figcaption>Tap to zoom</figcaption></figure>` : ""}
       <div class="opts">${it.opts.map((t, j) => `<button class="opt${a === j ? " sel" : ""}" data-j="${j}" aria-pressed="${a === j}"><span class="bub">${"ABCDE"[j]}</span><span>${esc(t)}</span></button>`).join("")}</div>
       <div class="nav">
@@ -266,7 +267,7 @@
     const hist = read(HIST, []), prev = hist.length > 1 ? hist[hist.length - 2] : null;
     const list = rows.filter(r => filter === "all" || (filter === "wrong" ? !r.ok : E.flag[r.k]));
     $("app").innerHTML = `<section class="panel">
-        <div class="score"><div class="big">${E.score}<small>/${n}</small></div>
+        <div class="score"><div class="ring" style="--pct:${pct}" aria-hidden="true"><b>${pct}%</b></div><div class="big">${E.score}<small>/${n}</small></div>
           <div><div class="verdict ${band(pct)}">${pct}% correct</div><div class="sub">${[showTimer ? "Time " + mmss(E.secs || 0) : "", prev ? `Last exam ${prev.pct}%` : ""].filter(Boolean).join(" · ")}</div></div></div>
         <div class="scale" role="img" aria-label="Score ${pct}%"><i style="width:${pct}%;background:var(--lv-${pct >= PASS ? "mastered" : pct >= 80 ? "shaky" : "learning"})"></i></div>
         <div class="nav" style="justify-content:flex-start;gap:10px"><button class="btn" id="again"><span>Take a new exam</span></button><button class="btn ghost" id="toSet"><span>Exam settings</span></button><a class="btn ghost" href="../drill/index.html#progress" style="text-decoration:none"><span>Practice in the drills</span></a></div>
@@ -279,7 +280,7 @@
         <div class="filters"><button class="chip" data-f="wrong" aria-pressed="${filter === "wrong"}">Missed (${rows.filter(r => !r.ok).length})</button><button class="chip" data-f="flag" aria-pressed="${filter === "flag"}">Flagged (${E.flag.filter(Boolean).length})</button>${E.flag.some(Boolean) ? `<a class="chip" href="../review/index.html" style="text-decoration:none">Flagged ones are in your Review list →</a>` : ""}<button class="chip" data-f="all" aria-pressed="${filter === "all"}">All ${n}</button></div>
         <div class="rev">${list.length ? list.map(r => `<article class="rcard ${r.ok ? "good" : "bad"}" id="r${r.k}">
             <div class="meta"><span class="meta-l">${basedBadge(r.q.src)}${isProf(r.q.src) ? `<span class="prof" title="This question comes straight from the professor's course materials">★ From the professor</span>` : ""}<span class="origin">Source: ${esc(r.q.src)}</span><span>${esc(r.q.subject)}</span></span><span>Q${r.k + 1}</span></div>
-            <p class="q">${esc(r.q.q)}</p>
+            <p class="q">${rich(r.q.q)}</p>
             ${r.q.img ? `<figure class="fig"><img src="${r.q.img[0]}" alt="${esc(r.q.img[1])}"></figure>` : ""}
             <div class="mini-opts">${r.it.opts.map((t, j) => `<div class="${t === r.q.ok ? "r" : j === r.a ? "w" : ""}">${"ABCDE"[j]}. ${esc(t)}${t === r.q.ok ? " ✓" : j === r.a ? " (your answer)" : ""}</div>`).join("")}${r.a === null ? `<div class="w">Not answered</div>` : ""}</div>
             ${r.q.ex || (!r.ok && r.a !== null) ? `<div class="explain ${r.ok ? "good" : "bad"}">${r.q.ex ? `<span class="exwhy"><b>Why:</b> ${esc(r.q.ex)}</span>` : ""}${!r.ok && r.a !== null ? whyNot(r.it.opts[r.a]) : ""}</div>` : ""}

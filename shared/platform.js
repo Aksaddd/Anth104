@@ -43,7 +43,9 @@
   }
   function leave(id) { try { localStorage.setItem(KEY, JSON.stringify(unlocked().filter(x => x !== id))) } catch (e) { } }
   // on a class's pages: no code entered yet → back to the front page, which asks for it
-  function guard(id) { if (!has(id)) location.replace(BASE + "index.html?join=" + encodeURIComponent(id)); else try { localStorage.setItem("a104-last-class", id) } catch (e) { } }   // the library's "Continue" shows the class opened last
+  // every class page gets the same bar across the top (shared/classbar.js); "cb" hides the old bars straight away
+  function classBar() { document.documentElement.classList.add("cb"); const s = document.createElement("script"); s.src = BASE + "shared/classbar.js"; document.head.appendChild(s) }
+  function guard(id) { if (!has(id)) location.replace(BASE + "index.html?join=" + encodeURIComponent(id)); else { try { localStorage.setItem("a104-last-class", id) } catch (e) { } classBar() } }   // the library's "Continue" shows the class opened last
   // Credit lines: any element with data-credit="<class id>" is filled with the class's acknowledgment (or left empty).
   const creditOf = c => c && c.professor ? `Built from the course taught by ${c.professor} at ${c.school}. Their curriculum and materials made this possible.` : "";
   function credits() { document.querySelectorAll("[data-credit]").forEach(el => { const text = creditOf(COURSES.find(c => c.id === el.dataset.credit)); el.textContent = text; el.hidden = !text }) }

@@ -12,9 +12,9 @@
 (() => {
   if (window.ErgoRead) return;
   const KEY = "ergoread-settings", BANK = "eureka-word-bank";
-  const DEF = { theme: "light", contrast: 100, fontSize: 18, lineHeight: 1.6, width: 700, paraGap: 1.2, indent: 0, headingScale: 1.3, fontFamily: "system", align: "left" };
-  const FONTS = { helvetica: '"Helvetica Neue", Helvetica, Arial, sans-serif', system: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', georgia: 'Georgia, "Times New Roman", serif', inter: 'Inter, system-ui, sans-serif' };
-  const THEMES = { light: { bg: "#ffffff", ink: "#1a1a1a", page: "" }, sepia: { bg: "#f5f0e6", ink: "#433422", page: "#ece5d6" }, dark: { bg: "#1a1a1a", ink: "#e5e5e5", page: "#0f0f10" } };
+  const DEF = { theme: "paper", contrast: 100, fontSize: 18, lineHeight: 1.6, width: 700, paraGap: 1.2, indent: 0, headingScale: 1.3, fontFamily: "serif", align: "left" };   // paper and a serif face: the look of a printed page
+  const FONTS = { serif: 'ui-serif, "New York", "Iowan Old Style", Georgia, "Times New Roman", serif', helvetica: '"Helvetica Neue", Helvetica, Arial, sans-serif', system: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', georgia: 'Georgia, "Times New Roman", serif', inter: 'Inter, system-ui, sans-serif' };
+  const THEMES = { paper: { bg: "#fbf8f1", ink: "#2b2b2e", page: "#f4efe4" }, light: { bg: "#ffffff", ink: "#1a1a1a", page: "" }, sepia: { bg: "#f5f0e6", ink: "#433422", page: "#ece5d6" }, dark: { bg: "#1a1a1a", ink: "#e5e5e5", page: "#0f0f10" } };
   const $ = id => document.getElementById(id), esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   let S = Object.assign({}, DEF); try { S = Object.assign(S, JSON.parse(localStorage.getItem(KEY) || "{}")) } catch (e) { }
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)) } catch (e) { } };
@@ -63,14 +63,15 @@ body.er-sepia .rd-sec .rd-prose strong,body.er-sepia .rd-sec .rd-prose b{color:#
   // ---------- apply settings
   function apply() {
     const r = document.documentElement.style, T = THEMES[S.theme] || THEMES.light, on = !!document.querySelector(".rd-sec");
-    const themed = S.theme !== "light";
+    const rootEl = document.documentElement, siteDark = rootEl.dataset.theme === "dark" || (!rootEl.dataset.theme && matchMedia("(prefers-color-scheme: dark)").matches);
+    const themed = S.theme !== "light" && !(S.theme === "paper" && siteDark);   // paper gives way to the site's dark theme
     r.setProperty("--er-font", FONTS[S.fontFamily] || FONTS.system); r.setProperty("--er-size", S.fontSize + "px"); r.setProperty("--er-lh", S.lineHeight);
     r.setProperty("--er-align", S.align); r.setProperty("--er-gap", S.paraGap + "em"); r.setProperty("--er-indent", S.indent + "em"); r.setProperty("--er-hs", S.headingScale);
     r.setProperty("--er-width", S.width + "px");
     if (themed) { r.setProperty("--er-bg", T.bg); r.setProperty("--er-ink", T.ink) } else { r.removeProperty("--er-bg"); r.removeProperty("--er-ink") }
     // text contrast: mix the ink toward the page behind it
     r.setProperty("--er-text", S.contrast >= 100 ? (themed ? T.ink : "var(--ink)") : `color-mix(in srgb, ${themed ? T.ink : "var(--ink)"} ${S.contrast}%, ${themed ? T.bg : "var(--paper)"})`);
-    document.body.classList.toggle("er-reading", on); document.body.classList.toggle("er-sepia", on && S.theme === "sepia"); document.body.classList.toggle("er-dark", on && S.theme === "dark");
+    document.body.classList.toggle("er-reading", on); document.body.classList.toggle("er-sepia", on && S.theme === "sepia"); document.body.classList.toggle("er-dark", on && S.theme === "dark"); document.body.classList.toggle("er-paper", on && themed && S.theme === "paper");
   }
 
   // ---------- the panel
@@ -83,9 +84,9 @@ body.er-sepia .rd-sec .rd-prose strong,body.er-sepia .rd-sec .rd-prose b{color:#
     panel.innerHTML = `<div class="er-head"><span class="ic" aria-hidden="true">Aa</span><div><h2>${view === "bank" ? "Word Bank" : "ErgoRead"}</h2><p>${view === "bank" ? bank.length + (bank.length === 1 ? " word saved" : " words saved") : "Reading settings"}</p></div><button type="button" class="x" aria-label="Close">✕</button></div>
       <div class="er-body">${view === "bank"
         ? (bank.length ? `<div class="er-bank">${bank.map((w, i) => `<div><b>${esc(w.word)}</b><p>${esc(w.def)}</p><button type="button" data-rm="${i}" aria-label="Remove ${esc(w.word)}">✕</button></div>`).join("")}</div>` : `<div class="er-note">No words yet. Rest your pointer on a word in a passage (or tap it) and choose “Save to word bank”.</div>`) + `<div class="er-foot"><button type="button" data-view="settings">← Reading settings</button></div>`
-        : `<div><div class="er-lab">Theme</div>${btns("theme", [["light", "Light", "background:#fff;color:#1a1a1a"], ["sepia", "Sepia", "background:#f5f0e6;color:#433422"], ["dark", "Dark", "background:#1a1a1a;color:#e5e5e5"]])}</div>
+        : `<div><div class="er-lab">Theme</div>${btns("theme", [["paper", "Paper", "background:#fbf8f1;color:#2b2b2e"], ["light", "Light", "background:#fff;color:#1a1a1a"], ["sepia", "Sepia", "background:#f5f0e6;color:#433422"], ["dark", "Dark", "background:#1a1a1a;color:#e5e5e5"]])}</div>
           ${SLIDERS.map(([k, label, min, max, step, fmt]) => `<div><div class="er-lab">${label}<span id="erv-${k}">${fmt(S[k])}</span></div><input type="range" data-k="${k}" min="${min}" max="${max}" step="${step}" value="${S[k]}" aria-label="${label}"></div>`).join("")}
-          <div><div class="er-lab">Font</div>${btns("fontFamily", [["helvetica", "Helvetica"], ["system", "System"], ["georgia", "Georgia"], ["inter", "Inter"]])}</div>
+          <div><div class="er-lab">Font</div>${btns("fontFamily", [["serif", "Serif"], ["helvetica", "Helvetica"], ["system", "System"], ["georgia", "Georgia"], ["inter", "Inter"]])}</div>
           <div><div class="er-lab">Text Align</div>${btns("align", [["left", "Left"], ["justify", "Justify"]])}</div>
           <div class="er-foot"><button type="button" class="pri" data-view="bank">Word bank · ${bank.length}</button><button type="button" id="erReset">Reset to defaults</button></div>
           <div class="er-note">Tip: rest your pointer on any word in a passage for a moment to see what it means.</div>`}</div>`;
@@ -109,6 +110,7 @@ body.er-sepia .rd-sec .rd-prose strong,body.er-sepia .rd-sec .rd-prose b{color:#
     if (on && !fab.isConnected) { document.body.appendChild(bar); document.body.appendChild(fab) }
     if (!on && fab.isConnected) { fab.remove(); bar.remove(); closePanel(); closeBubble() }
     apply(); progress();
+    new MutationObserver(apply).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });   // paper follows the site theme
   }
   addEventListener("scroll", progress, { passive: true }); addEventListener("resize", progress);
 
