@@ -1,0 +1,60 @@
+/* Eureka house style, loaded last on every page. A pristine, editorial look: black on warm white, a fine serif for
+   display type, small letter-spaced capitals, hairlines instead of shadows, square black buttons.
+   It only re-colors and re-shapes what the pages already have (through their own CSS variables); layouts are untouched.
+   The dark theme keeps each page's own dark colors; only the display type carries over. */
+@import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..600;1,6..96,400..600&display=swap");
+:root{
+  --serif:"Didot","Bodoni 72","Bodoni MT","Bodoni Moda","Playfair Display",Georgia,"Times New Roman",serif;
+  --display:var(--serif);
+}
+:root:not([data-theme="dark"]){
+  --bg:#faf9f7; --paper:#ffffff; --ink:#0b0b0c; --muted:#6f6b66; --line:#e4e0d9; --fill:#f1eee9; --sunk:#f6f4f0;
+  --accent:#0b0b0c; --accent-hover:#2b2b2e; --accent-ink:#ffffff; --accent-soft:#f1eee9; --link:#0b0b0c;
+  --hover-fill:#e9e5de; --opt-hover:#faf9f7; --sq-new:#e9e5de;
+  --radius:4px; --shadow:0 0 0 1px #e4e0d9; --shadow-hover:0 0 0 1px #0b0b0c;
+}
+/* display type: headings in the serif, light weight, generous size */
+h1,.hero h1,.titlerow h1{font-family:var(--serif);font-weight:400;letter-spacing:-.01em}
+.hero h1 .grad{background:none!important;-webkit-background-clip:border-box!important;background-clip:border-box!important;-webkit-text-fill-color:currentColor;color:inherit!important;font-style:italic}
+.card h3,.cc h3,.rd-sec>h2,.wk h2+*,.sec{font-family:var(--serif);font-weight:500}
+/* small capitals for labels */
+.eyebrow,.rd-step,.wkh,h2.sec,.wk h2,.st-cap{letter-spacing:.2em!important;text-transform:uppercase;font-weight:500!important}
+.eyebrow{font-size:11.5px!important;color:var(--muted)!important}
+/* buttons: square, black, capitals */
+:root:not([data-theme="dark"]) :is(.go,.plink,.btn,.pill,.open,.cta,.df-go){border-radius:2px!important;letter-spacing:.14em;text-transform:uppercase;font-size:11.5px!important;font-weight:600!important}
+:root:not([data-theme="dark"]) :is(.go,.plink:not(.ghost),.df-go){background:#0b0b0c!important;color:#fff!important}
+:root:not([data-theme="dark"]) :is(.go,.plink,.df-go){padding:13px 22px!important}
+:root:not([data-theme="dark"]) .plink.ghost{background:transparent!important;color:#0b0b0c!important;box-shadow:inset 0 0 0 1px #0b0b0c}
+:root:not([data-theme="dark"]) .more,:root:not([data-theme="dark"]) .golink{color:#0b0b0c!important;text-decoration:underline;text-underline-offset:5px;text-decoration-thickness:1px;letter-spacing:.02em}
+/* surfaces: hairlines, almost-square corners, no drop shadows */
+:root:not([data-theme="dark"]) :is(.card,.wk,.rd-sec,.rd-ch,.pc,.box,.q,.resp,.acct,.none,.exampanel){border-radius:4px!important;box-shadow:none!important;border:1px solid var(--line)}
+:root:not([data-theme="dark"]) :is(.card,.rd-ch,.pc):hover{border-color:#0b0b0c}
+:root:not([data-theme="dark"]) .gnav{background:rgba(250,249,247,.86)!important;border-bottom:1px solid var(--line)!important}
+:root:not([data-theme="dark"]) .gnav nav a,:root:not([data-theme="dark"]) .gnav-links a{letter-spacing:.08em;text-transform:uppercase;font-size:11px!important}
+:root:not([data-theme="dark"]) .gnav .brand{font-family:var(--serif);font-weight:500;font-size:19px;letter-spacing:.02em}
+/* the Eureka button: back to the course directory */
+.eureka{background:#0b0b0c!important;color:#fff!important;border-radius:2px!important;box-shadow:none!important;font:600 10.5px/1 var(--body,-apple-system,sans-serif)!important;letter-spacing:.24em!important;text-transform:uppercase;padding:9px 12px 9px 10px!important}
+[data-theme="dark"] .eureka{background:#f5f5f7!important;color:#0b0b0c!important}[data-theme="dark"] .eureka svg{fill:#0b0b0c!important}
+/* module icons and accents: monochrome */
+:root:not([data-theme="dark"]) .ico{background:#0b0b0c!important;border-radius:2px!important;box-shadow:none!important}
+:root:not([data-theme="dark"]) .beta-chip{background:transparent!important;color:#0b0b0c!important;box-shadow:inset 0 0 0 1px #0b0b0c;border-radius:1px!important;letter-spacing:.14em}
+:root:not([data-theme="dark"]) .disc-feature{background:#fff!important;border:1px solid #0b0b0c!important;border-radius:4px!important;box-shadow:none!important}
+:root:not([data-theme="dark"]) .df-ico{background:#0b0b0c!important;border-radius:2px!important}
+:root:not([data-theme="dark"]) .df-top b{font-family:var(--serif);font-weight:500;font-size:24px}
+:root:not([data-theme="dark"]) .df-new{color:#0b0b0c!important;border-color:#0b0b0c!important;border-radius:1px!important;border-width:1px!important;letter-spacing:.14em;text-transform:uppercase;font-size:9.5px!important}
+:root:not([data-theme="dark"]) .df-note{background:var(--fill)!important;border-radius:2px!important}:root:not([data-theme="dark"]) .df-note b{color:#0b0b0c!important}
+:root:not([data-theme="dark"]) .navtip{border-radius:2px!important;background:#0b0b0c!important}
+:root:not([data-theme="dark"]) .tab[aria-selected="true"]{background:#0b0b0c}
+::selection{background:#0b0b0c;color:#fff}
+
+/* Companions: quiet, except for one shiny tag on the dashboard. (The pets themselves keep their own playful colors.) */
+#cafeDoor,#safariDoor{display:none!important}
+.comp-link{position:relative;white-space:nowrap}
+.new-tag{display:inline-block;margin-left:7px;padding:3px 7px 2px;border-radius:1px;font:700 9px/1.2 -apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#3a2a08;vertical-align:1px;
+  background:linear-gradient(110deg,#c9a24a 0%,#c9a24a 30%,#fff3c4 47%,#fffbe8 50%,#fff3c4 53%,#c9a24a 70%,#c9a24a 100%);background-size:260% 100%;animation:newShine 2.8s linear infinite;box-shadow:0 0 0 1px rgba(160,120,30,.35),0 2px 10px rgba(201,162,74,.45)}
+.new-tag[hidden]{display:none}
+@keyframes newShine{from{background-position:130% 0}to{background-position:-130% 0}}
+@media (prefers-reduced-motion:reduce){.new-tag{animation:none;background-position:50% 0}}
+/* the Companions link leads the bar so its tag is always in view */
+.gnav nav .comp-link{order:-1}
+:root:not([data-theme="dark"]) .gnav nav{gap:16px}

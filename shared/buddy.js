@@ -1181,7 +1181,7 @@ html:not(.bb-showlv) .bb-pal .bb-lv,html:not(.bb-showlv) .bb-dock .bb-lv,html:no
   function paintDock0() {
     let d = $("bbDock");
     let ad = $("bbAdopt");
-    const want = hiddenOff() ? "" : !hasPetHere() ? "adopt" : resting() ? "pick" : "";
+    const want = hiddenOff() || !hasPetHere() ? "" : resting() ? "pick" : "";   // adopting starts from the dashboard's Companions link, not from a prompt here
     if (ad && ad.dataset.kind !== want) { ad.remove(); ad = null }
     if (want && !ad) {
       ad = document.createElement("div"); ad.id = "bbAdopt"; ad.className = "bb-adopt"; ad.dataset.kind = want;
@@ -2376,5 +2376,5 @@ html:not(.bb-showlv) .bb-pal .bb-lv,html:not(.bb-showlv) .bb-dock .bb-lv,html:no
     return { count: R.length, cats: pick.map((r, i) => ({ mine: !!r.mine, nick: r.nick || "", name: breedName(r.breed, r.color),
       svg: art(stageOf(r.pts | 0), r.equip || { badges: [] }, { breed: r.breed, color: r.color, collar: r.collar || "navy", w: r.weight || 1, eyes: eyes[i % eyes.length], pose: i === 2 ? "lie" : "sit", plain: !r.mine }) })) };
   }
-  window.BioBuddy = { openCafe: () => openCafe(), openSafari: () => openCafe("safari"), safariOpen, cafeWindow, showLv, setShowLv, size: userScale, setSize, anchored, setAnchored, enabled: () => !off(), setEnabled, soundOn, setSound, open: openCard, openShop, openBadges, syncBadges, play: a => setAct(a), activity: () => act, art, STAGES, state: load, level };
+  window.BioBuddy = { hasPet: hasPetHere, openCafe: () => openCafe(), openSafari: () => openCafe("safari"), safariOpen, cafeWindow, showLv, setShowLv, size: userScale, setSize, anchored, setAnchored, enabled: () => !off(), setEnabled, soundOn, setSound, open: openCard, openShop, openBadges, syncBadges, play: a => setAct(a), activity: () => act, art, STAGES, state: load, level };
 })();
