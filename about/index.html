@@ -258,6 +258,13 @@ body.demo-only .dots,body.demo-only .vidlink{display:none}
   <p class="note">What each class includes depends on the material it was built from. Practice questions are written as a study aid from the class's own material; they are not the professor's exam questions.</p>
 </div></section>
 
+<section id="thanks" hidden><div class="inner center">
+  <p class="eyebrow">With thanks</p>
+  <h2>The professors whose courses<br>made this possible.</h2>
+  <p class="lede">Every class on Eureka is built from a professor's own curriculum and materials. The teaching is theirs.</p>
+  <div class="inside" id="thanksList" style="margin-top:40px"></div>
+</div></section>
+
 <section class="center"><div class="inner">
   <h2>Understanding takes time.<br>Finding the material shouldn't.</h2>
   <p class="lede">Have a class code? Your class is waiting in the library.</p>
@@ -301,6 +308,9 @@ body.demo-only .dots,body.demo-only .vidlink{display:none}
   const idle = window.requestIdleCallback || (f => setTimeout(f, 300));
   if (document.readyState === "complete") idle(startSky); else addEventListener("load", () => idle(startSky), { once: true });
   document.addEventListener("visibilitychange", () => { if (!sky.src || !sky.isConnected) return; if (document.hidden) sky.pause(); else { const p = sky.play(); if (p && p.catch) p.catch(() => { }) } });
+  // acknowledgments: one card per class that names its professor (the section stays hidden until one does)
+  const named = (window.Platform ? window.Platform.COURSES : []).filter(c => c.professor);
+  if (named.length) { document.getElementById("thanks").hidden = false; document.getElementById("thanksList").innerHTML = named.map(c => `<div><b>${c.professor.replace(/[&<>]/g, "")}</b><span>${c.name} · ${c.title}<br>${c.school}</span></div>`).join("") }
   window.EurekaDemo = { show, play, pause, restart: () => { pause(); show(0); playing = true; next() }, total: SC.reduce((a, s) => a + s[1], 0) };
 })();
 </script>

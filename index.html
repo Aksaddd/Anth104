@@ -79,6 +79,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
 .cover::before{content:"";position:absolute;inset:0 auto 0 0;width:7%;background:linear-gradient(90deg,rgba(0,0,0,.28),rgba(255,255,255,.22) 45%,rgba(0,0,0,.12) 70%,transparent)}
 .cover::after{content:"";position:absolute;inset:0;background:radial-gradient(120% 80% at 80% 0%,rgba(255,255,255,.3),transparent 55%);pointer-events:none}
 .cover .k small{display:block;margin-top:.5em;font-size:.82em;font-weight:500;letter-spacing:.02em;text-transform:none;opacity:.82}
+.cover .au{position:relative;font:500 .6em/1.25 var(--body);letter-spacing:.01em;opacity:.9;margin-top:.55em}
 .cover .a{position:relative;display:block;width:86%;margin:4% auto 6% 0;flex:1;min-height:0}
 .cover.art{justify-content:flex-start;padding:10% 10% 9% 14%}
 .cover.art .t{font-size:1.02em;margin-top:auto}.cover.art .p{margin-top:.9em}
@@ -344,21 +345,21 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
       <circle cx="120" cy="38" r="19" fill="#ffd166" opacity=".28"/><circle cx="120" cy="38" r="11" fill="#ffd166"/>
       <g fill="#7a2e12" opacity=".55"><circle cx="36" cy="56" r="3"/><circle cx="80" cy="80" r="3"/><circle cx="164" cy="68" r="3"/></g>`
   };
-  const cover = (c, locked) => `<span class="cover${locked ? " locked" : ""}${ART[c.id] ? " art" : ""}" style="--c1:${c.cover[0]};--c2:${c.cover[1]}">${locked ? `<span class="lock" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2h1a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2zm2 0h6V8a3 3 0 0 0-6 0z"/></svg></span>` : ""}<span class="k">${esc(c.name)}<small>${esc(c.school)}</small></span>${ART[c.id] ? `<svg class="a" viewBox="0 0 200 200" aria-hidden="true">${ART[c.id]}</svg>` : ""}<span class="t">${esc(c.title)}</span><span class="p">Eureka</span></span>`;
+  const cover = (c, locked) => `<span class="cover${locked ? " locked" : ""}${ART[c.id] ? " art" : ""}" style="--c1:${c.cover[0]};--c2:${c.cover[1]}">${locked ? `<span class="lock" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2h1a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2zm2 0h6V8a3 3 0 0 0-6 0z"/></svg></span>` : ""}<span class="k">${esc(c.name)}<small>${esc(c.school)}</small></span>${ART[c.id] ? `<svg class="a" viewBox="0 0 200 200" aria-hidden="true">${ART[c.id]}</svg>` : ""}<span class="t">${esc(c.title)}</span>${c.professor ? `<span class="au">${esc(c.professor)}</span>` : ""}<span class="p">Eureka</span></span>`;
   const STAR = `<span class="star" aria-label="Favorite"><svg viewBox="0 0 24 24"><path d="M12 3.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8L3.6 9.7l5.8-.8z"/></svg></span>`;
   function book(c) {
     const pct = progress(c), done = has(L.done, c.id);
     return `<div class="book" data-id="${c.id}" draggable="true"><a href="${c.path}index.html" data-open="${c.id}" aria-label="Open ${esc(c.title)}" draggable="false">${has(L.fav, c.id) ? STAR : ""}${cover(c)}</a>
       <span class="under">${done ? `<span class="donebadge">FINISHED</span>` : pct ? `<span class="pct">${pct}%</span>` : `<span class="new">NEW</span>`}<button type="button" class="more" data-menu="${c.id}" aria-haspopup="menu" aria-label="More options for ${esc(c.title)}">•••</button></span>
-      <a class="ttl" href="${c.path}index.html" data-open="${c.id}" style="color:inherit;text-decoration:none" draggable="false">${esc(c.title)}</a><span class="by">${esc(c.name)} · ${esc(c.school)}</span></div>`;
+      <a class="ttl" href="${c.path}index.html" data-open="${c.id}" style="color:inherit;text-decoration:none" draggable="false">${esc(c.title)}</a><span class="by">${esc(c.name)} · ${esc(c.school)}${c.professor ? `<br>${esc(c.professor)}` : ""}</span></div>`;
   }
   function rowOf(c) {
     const pct = progress(c);
     return `<div class="row" data-id="${c.id}" draggable="true"><a href="${c.path}index.html" data-open="${c.id}" draggable="false" aria-hidden="true" tabindex="-1">${cover(c)}</a>
-      <a href="${c.path}index.html" data-open="${c.id}" style="color:inherit;text-decoration:none;min-width:0" draggable="false"><b>${has(L.fav, c.id) ? "★ " : ""}${esc(c.title)}</b><small>${esc(c.name)} · ${has(L.done, c.id) ? "Finished" : pct ? pct + "% complete" : "Not started"}</small></a>
+      <a href="${c.path}index.html" data-open="${c.id}" style="color:inherit;text-decoration:none;min-width:0" draggable="false"><b>${has(L.fav, c.id) ? "★ " : ""}${esc(c.title)}</b><small>${esc(c.name)}${c.professor ? " · " + esc(c.professor) : ""} · ${has(L.done, c.id) ? "Finished" : pct ? pct + "% complete" : "Not started"}</small></a>
       <span class="pbar" aria-hidden="true"><i style="width:${pct}%"></i></span><button type="button" class="more" data-menu="${c.id}" aria-haspopup="menu" aria-label="More options for ${esc(c.title)}">•••</button></div>`;
   }
-  function locked(c) { return `<button type="button" class="book" data-lock="${c.id}">${cover(c, true)}<span class="under"><span class="get">GET</span></span><span class="ttl">${esc(c.title)}</span><span class="by">${esc(c.name)} · ${esc(c.school)}</span></button>` }
+  function locked(c) { return `<button type="button" class="book" data-lock="${c.id}">${cover(c, true)}<span class="under"><span class="get">GET</span></span><span class="ttl">${esc(c.title)}</span><span class="by">${esc(c.name)} · ${esc(c.school)}${c.professor ? `<br>${esc(c.professor)}` : ""}</span></button>` }
   const scopeName = () => scope === "all" ? "Your Library" : scope === "fav" ? "Favorites" : scope === "done" ? "Finished" : scope === "hidden" ? "Hidden" : (col(scope.slice(4)) || {}).name || "Your Library";
 
   function paint() {
@@ -367,7 +368,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
     // Continue
     const cur = visible.slice().sort((a, b) => opened(b) - opened(a) || progress(b) - progress(a))[0];
     $("cont").innerHTML = cur ? (() => { const pct = progress(cur); return `<a class="cont" href="${cur.path}index.html" data-open="${cur.id}">${cover(cur)}<span><span class="k2">${pct ? "Continue" : "Start reading"}</span><h4>${esc(cur.title)}</h4><p>${esc(cur.blurb)}</p>
-        <span class="bar" aria-hidden="true"><i style="width:${Math.max(pct, 2)}%"></i></span><span class="sm">${pct}% complete · ${esc(cur.stats)}</span><span class="row" style="display:flex;border:0;padding:0"><span class="pill">${pct ? "Continue" : "Open"}</span></span></span></a>` })()
+        <span class="bar" aria-hidden="true"><i style="width:${Math.max(pct, 2)}%"></i></span><span class="sm">${cur.professor ? esc(cur.professor) + " · " : ""}${esc(cur.school)} · ${pct}% complete</span><span class="row" style="display:flex;border:0;padding:0"><span class="pill">${pct ? "Continue" : "Open"}</span></span></span></a>` })()
       : `<div class="empty"><b>Your library is empty</b>Add a class with its class code and it will appear here.</div>`;
     // chips + sidebar
     const count = s => { const keep = scope; scope = s; const n = mine.filter(inScope).length; scope = keep; return n };
@@ -378,7 +379,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
     document.querySelectorAll(".side [data-scope]").forEach(a => a.classList.toggle("on", a.dataset.scope === scope));
     // the shelf
     const q = query.trim().toLowerCase();
-    const shown = ordered(mine.filter(inScope)).filter(c => !q || (c.title + " " + c.name + " " + c.school + " " + c.blurb).toLowerCase().includes(q));
+    const shown = ordered(mine.filter(inScope)).filter(c => !q || (c.title + " " + c.name + " " + c.school + " " + (c.professor || "") + " " + c.blurb).toLowerCase().includes(q));
     $("hLib").textContent = scopeName(); $("libCount").textContent = shown.length === 1 ? "1 class" : shown.length + " classes";
     $("sort").value = L.sort; $("vGrid").setAttribute("aria-pressed", L.view === "grid"); $("vList").setAttribute("aria-pressed", L.view === "list");
     const k = scope.startsWith("col:") ? col(scope.slice(4)) : null;
