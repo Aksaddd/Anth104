@@ -11,6 +11,7 @@
     opts = opts || {}; const base = opts.base || "", lib = opts.library || "#classes";
     const root = host.attachShadow({ mode: "open" });
     root.innerHTML = "<style>" + CSS + "</style>" + HTML.split("%LIB%").join(lib).split("%BASE%").join(base);
+    if (window.EurekaTour) window.EurekaTour.attach(root, { library: lib });   // the library and companions walkthroughs (shared/tour.js)
     const $ = id => root.getElementById(id), stage = $("stage"), cap = $("cap"), dots = $("dots");
     const SC = [[1, 3600, "It starts as a pile."], [2, 3800, "Eureka sorts it by week and topic."], [3, 4600, "Each idea becomes a short passage and a question."], [4, 5600, "Students practice, and every answer explains itself."]];
     const only = !!opts.only; if (only) host.classList.add("only");

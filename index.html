@@ -59,6 +59,26 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
 /* ---------- the explanation ("What is Eureka?"), on the same night sky, between the hero and the library */
 .aboutwrap{background:linear-gradient(rgba(3,5,10,.5),rgba(3,5,10,.86) 30%,rgba(3,5,10,.94)),#05070d url(assets/hero/eureka-poster.jpg) center top/cover no-repeat;scroll-margin-top:0}
 
+/* ---------- the door to the library: sign in first */
+.gate{min-height:100vh;min-height:100svh;display:grid;place-items:center;padding:60px 20px;background:var(--fill)}
+.gatecard{width:min(460px,100%);background:var(--paper);border-radius:28px;padding:38px 34px 30px;text-align:center;box-shadow:0 20px 60px -20px rgba(0,0,0,.25),0 0 0 1px color-mix(in srgb,var(--line) 50%,transparent)}
+.gatecovers{display:flex;justify-content:center;margin:0 0 24px;height:150px}
+.gatecovers .cover{width:100px;font-size:5.4px;flex:none;margin:0 -14px}
+.gatecovers .cover:nth-child(1){transform:rotate(-8deg) translateY(8px)}.gatecovers .cover:nth-child(2){z-index:1;transform:translateY(-4px)}.gatecovers .cover:nth-child(3){transform:rotate(8deg) translateY(8px)}
+.gatecard h2{margin:0;font:700 28px/1.12 var(--display);letter-spacing:-.028em}
+.gatecard>p{margin:10px auto 0;color:var(--muted);font-size:15.5px;line-height:1.45;max-width:36ch}
+.gbtn{margin-top:24px;display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:980px;padding:13px 20px;font:500 16px/1 var(--body);cursor:pointer}
+.gbtn:hover{background:var(--fill)}.gbtn:disabled{opacity:.6;cursor:default}.gbtn svg{width:19px;height:19px}
+.gmsg{font-size:14px!important;border-radius:12px;padding:10px 14px;background:rgba(255,159,10,.14);color:#8a5200!important;max-width:none!important;margin-top:14px!important;text-align:left}
+[data-theme="dark"] .gmsg{color:#ffb340!important}
+.gguest{margin-top:10px;width:100%;border:0;background:var(--accent);color:#fff;border-radius:980px;padding:13px 20px;font:500 16px/1 var(--body);cursor:pointer}
+.gsmall{font-size:13px!important;color:var(--faint)!important;margin-top:18px!important}.gsmall a{color:var(--accent);text-decoration:none}
+.side .me{display:flex;align-items:center;gap:10px;padding:8px 10px;font-size:14px;min-width:0}
+.side .me i{flex:none;width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#ff9f0a,#ff375f);color:#fff;display:grid;place-items:center;font:700 13px var(--body);font-style:normal}
+.side .me span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.side .me small{display:block;color:var(--faint);font-size:12px}
+.side .me button{margin-left:auto;border:0;background:none;color:var(--accent);font:400 13px/1 var(--body);cursor:pointer;padding:4px 0;white-space:nowrap}
+[hidden]{display:none!important}
+
 /* ---------- 2. the library (Apple Books) */
 .app{display:grid;grid-template-columns:250px minmax(0,1fr);min-height:100vh;scroll-margin-top:0}
 .side{position:sticky;top:0;align-self:start;height:100vh;height:100dvh;background:var(--side);border-right:1px solid color-mix(in srgb,var(--line) 60%,transparent);padding:22px 14px 18px;display:flex;flex-direction:column;gap:2px}
@@ -216,7 +236,19 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
 
 <section class="aboutwrap" id="about" aria-label="What is Eureka?"><div id="aboutHost"></div></section>
 
-<div class="app" id="classes">
+<div id="classes">
+<section class="gate" id="gate" aria-labelledby="gateTitle">
+  <div class="gatecard">
+    <div class="gatecovers" id="gateCovers" aria-hidden="true"></div>
+    <h2 id="gateTitle">Sign in to open your library</h2>
+    <p>Your classes, your progress and the way you've arranged them are kept with your account, so they follow you to any device.</p>
+    <button type="button" class="gbtn" id="gSign"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.800-6.800C35.800 2.400 30.300 0 24 0 14.600 0 6.500 5.400 2.600 13.200l7.900 6.200C12.400 13.600 17.700 9.500 24 9.500z"/><path fill="#4285F4" d="M46.100 24.500c0-1.600-.1-3.100-.4-4.500H24v9h12.400c-.5 2.900-2.200 5.300-4.600 6.900l7.200 5.600c4.200-3.900 7.100-9.700 7.100-17z"/><path fill="#FBBC05" d="M10.500 28.600c-.5-1.400-.8-3-.8-4.600s.3-3.200.8-4.600l-7.900-6.200C.9 16.500 0 20.100 0 24s.9 7.500 2.600 10.800l7.900-6.200z"/><path fill="#34A853" d="M24 48c6.500 0 11.900-2.100 15.900-5.800l-7.200-5.600c-2.200 1.500-5 2.400-8.700 2.400-6.300 0-11.600-4.100-13.500-9.900l-7.900 6.200C6.500 42.600 14.600 48 24 48z"/></svg>Sign in with Google</button>
+    <p class="gmsg" id="gMsg" role="status" hidden></p>
+    <button type="button" class="gguest" id="gGuest" hidden>Continue as a guest for now</button>
+    <p class="gsmall">New here? Signing in creates your account. <a href="#about" id="gPeek">See what's inside first ›</a></p>
+  </div>
+</section>
+<div class="app" id="app" hidden>
   <aside class="side" aria-label="Library">
     <a class="brand" href="#classes">Eureka</a>
     <a href="#now" class="on" data-nav="now"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5C5.5 4.5 8.5 4.5 12 6.5v13c-3.5-2-6.5-2-9-1z"/><path d="M21 5.5c-2.5-1-5.5-1-9 1v13c3.5-2 6.5-2 9-1z"/></svg>Studying Now</a>
@@ -230,6 +262,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
     <div id="sideCols"></div>
     <button type="button" class="nav addcol" id="sideNewCol"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>New Collection</button>
     <span class="sp"></span>
+    <div class="me" id="me"></div>
     <a href="#about"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.4"/><path d="M12 11v5M12 8h.01"/></svg>What is Eureka?</a>
     <button type="button" class="nav" id="sideSettings"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8.4"/></svg>Settings</button>
   </aside>
@@ -258,13 +291,17 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
     <p class="foot">Eureka · Study guides, practice and exams for your classes. Your progress is kept on this device. <a href="#about" style="color:var(--accent);text-decoration:none">What is Eureka? ›</a></p>
   </main>
 </div>
-<nav class="tabs" id="tabs" aria-label="Library">
+</div>
+<nav class="tabs" id="tabs" aria-label="Library" hidden>
   <a href="#now" class="on" data-nav="now"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5C5.5 4.5 8.5 4.5 12 6.5v13c-3.5-2-6.5-2-9-1z"/><path d="M21 5.5c-2.5-1-5.5-1-9 1v13c3.5-2 6.5-2 9-1z"/></svg>Studying Now</a>
   <a href="#library" data-nav="library"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4v16M9 4v16M13 5l5 15"/></svg>Library</a>
   <a href="#more" data-nav="more"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l-1 12H7z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg>Explore</a>
   <a href="#code" data-nav="code"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0"/></svg>Class Code</a>
 </nav>
 
+<script src="shared/covers.js"></script>
+<script src="shared/companion-art.js"></script>
+<script src="shared/tour.js"></script>
 <script src="shared/about.js"></script>
 <script>
 (() => {
@@ -326,33 +363,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
     if (scope.startsWith("col:")) { const k = col(scope.slice(4)); return !!k && has(k.items, c.id) }
     return true;
   }
-  // Cover art: an original illustration for each class, drawn in a 200 × 200 box (a class without one gets a plain cover).
-  //   a104  language: speech bubbles in several scripts      bio  plants, fungi and signals: a mushroom, a fern, a sprout, the sun
-  //   a102  human evolution: a family tree (cladogram) with one tip picked out
-  const SERIF = `font-family="ui-serif,'New York','Iowan Old Style',Georgia,serif"`;
-  const ART = {
-    a104: `<path d="M30 38h72a14 14 0 0 1 14 14v36a14 14 0 0 1-14 14H64l-19 17v-17H30a14 14 0 0 1-14-14V52a14 14 0 0 1 14-14z" fill="#ff7a59"/>
-      <text x="66" y="83" font-size="38" font-weight="700" text-anchor="middle" fill="#fff" ${SERIF}>Aa</text>
-      <path d="M96 84h74a14 14 0 0 1 14 14v38a14 14 0 0 1-14 14h-15v17l-19-17H96a14 14 0 0 1-14-14V98a14 14 0 0 1 14-14z" fill="#ffc94d"/>
-      <text x="133" y="132" font-size="36" font-weight="700" text-anchor="middle" fill="#0c1f57" ${SERIF}>文</text>
-      <path d="M130 18h42a10 10 0 0 1 10 10v22a10 10 0 0 1-10 10h-23l-11 10V60h-8a10 10 0 0 1-10-10V28a10 10 0 0 1 10-10z" fill="#f6efe0"/>
-      <text x="151" y="49" font-size="26" font-weight="700" text-anchor="middle" fill="#24439c" ${SERIF}>ñ</text>
-      <path d="M26 132h40a10 10 0 0 1 10 10v20a10 10 0 0 1-10 10H50l-10 10v-10H26a10 10 0 0 1-10-10v-20a10 10 0 0 1 10-10z" fill="#5fd0c5"/>
-      <text x="46" y="162" font-size="26" font-weight="700" text-anchor="middle" fill="#0c1f57" ${SERIF}>ع</text>`,
-    bio: `<circle cx="158" cy="38" r="13" fill="#ffd166"/><g fill="none" stroke="#ffd166" stroke-width="2.6" stroke-linecap="round" stroke-dasharray="1 7"><path d="M132 38a26 26 0 0 0 26 26"/><path d="M118 38a40 40 0 0 0 40 40"/></g>
-      <g fill="none" stroke="#f3ead2" stroke-width="3.4" stroke-linecap="round"><path d="M42 178Q56 124 46 62"/></g>
-      <g fill="#8fd19e">${[[48, 78, -62, 15], [44, 98, 58, 17], [52, 116, -60, 18], [46, 136, 60, 18], [56, 152, -58, 16], [48, 64, 40, 11]].map(([x, y, r, l]) => `<ellipse cx="${x + (r < 0 ? 12 : -12)}" cy="${y - 6}" rx="${l}" ry="5.4" transform="rotate(${r < 0 ? -28 : 28} ${x + (r < 0 ? 12 : -12)} ${y - 6})"/>`).join("")}</g>
-      <path d="M97 106Q93 140 100 176H126Q133 140 129 106Z" fill="#f3ead2"/><path d="M99 118h28" stroke="#d9cdb0" stroke-width="2.4"/>
-      <path d="M64 108Q64 60 113 60Q162 60 162 108Q113 96 64 108Z" fill="#e4572e"/>
-      <g fill="#fff3d6"><circle cx="92" cy="84" r="6.4"/><circle cx="118" cy="74" r="5"/><circle cx="140" cy="90" r="6"/><circle cx="110" cy="94" r="3.4"/><circle cx="78" cy="98" r="3"/></g>
-      <g stroke="#f3ead2" stroke-width="3" stroke-linecap="round" fill="none"><path d="M160 178v-26"/></g><path d="M160 156q-14-2-16-16q14 0 16 16zM160 162q14-2 16-16q-14 0-16 16z" fill="#8fd19e"/>
-      <path d="M22 178h160" stroke="#f3ead2" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="2 8" opacity=".7"/>`,
-    a102: `<g fill="none" stroke="#f6e7cf" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M100 184V152M58 152H142M58 152V118M142 152V118M36 118H80M120 118H164M36 118V62M80 118V86M120 118V46M164 118V74"/></g>
-      <g fill="#f6e7cf"><circle cx="36" cy="56" r="8"/><circle cx="80" cy="80" r="8"/><circle cx="164" cy="68" r="8"/></g>
-      <circle cx="120" cy="38" r="19" fill="#ffd166" opacity=".28"/><circle cx="120" cy="38" r="11" fill="#ffd166"/>
-      <g fill="#7a2e12" opacity=".55"><circle cx="36" cy="56" r="3"/><circle cx="80" cy="80" r="3"/><circle cx="164" cy="68" r="3"/></g>`
-  };
-  const cover = (c, locked) => `<span class="cover${locked ? " locked" : ""}${ART[c.id] ? " art" : ""}" style="--c1:${c.cover[0]};--c2:${c.cover[1]}">${locked ? `<span class="lock" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2h1a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2zm2 0h6V8a3 3 0 0 0-6 0z"/></svg></span>` : ""}<span class="k">${esc(c.name)}<small>${esc(c.school)}</small></span>${ART[c.id] ? `<svg class="a" viewBox="0 0 200 200" aria-hidden="true">${ART[c.id]}</svg>` : ""}<span class="t">${esc(c.title)}</span>${c.professor ? `<span class="au">${esc(c.professor)}</span>` : ""}<span class="p">Eureka</span></span>`;
+  const cover = window.EurekaCovers.cover;
   const STAR = `<span class="star" aria-label="Favorite"><svg viewBox="0 0 24 24"><path d="M12 3.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8L3.6 9.7l5.8-.8z"/></svg></span>`;
   function book(c) {
     const pct = progress(c), done = has(L.done, c.id);
@@ -477,15 +488,44 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
     input.value = ""; say(`${c.name} was added to your library. Opening it…`, true); L.opened[c.id] = Date.now(); L.hidden = L.hidden.filter(x => x !== c.id); saveL(); try { localStorage.setItem(LAST, c.id) } catch (e) { } paint();
     setTimeout(() => { location.href = c.path + "index.html" }, 800);
   };
+  // ---------- the door: the library opens once the student has signed in
+  // The session is remembered on this device (a104-session). Google sign-in goes through shared/account.js. While that is
+  // still being set up, a failed sign-in offers "continue as a guest" so nobody is locked out; remove that when it's ready.
+  const SKEY = "a104-session"; let session = null; try { session = JSON.parse(localStorage.getItem(SKEY) || "null") } catch (e) { }
+  function setSession(s) { session = s; try { s ? localStorage.setItem(SKEY, JSON.stringify(s)) : localStorage.removeItem(SKEY) } catch (e) { } applyGate() }
+  function applyGate() {
+    const inn = !!session; $("gate").hidden = inn; $("app").hidden = !inn; $("tabs").hidden = !inn;
+    if (inn) { const n = session.name || "Guest"; $("me").innerHTML = `<i>${esc(n.trim()[0] || "G").toUpperCase()}</i><span>${esc(n)}<small>${session.kind === "google" ? "Signed in" : "Guest on this device"}</small></span><button type="button" id="signOut">Sign Out</button>`; $("signOut").onclick = signOut; paint() }
+  }
+  const gmsg = (text) => { const m = $("gMsg"); m.hidden = !text; m.textContent = text || "" };
+  function fail(text) { $("gSign").disabled = false; gmsg((text || "Google sign-in didn't go through.") + " Sign-in is still being set up for this site, so you can continue as a guest for now. Your progress stays on this device."); $("gGuest").hidden = false }
+  async function account() { for (let n = 0; n < 40 && !window.BioAccount; n++) await new Promise(r => setTimeout(r, 100)); return window.BioAccount || null }
+  async function signIn() {
+    $("gSign").disabled = true; gmsg("Opening Google sign-in…"); $("gGuest").hidden = true;
+    const A = await account(); if (!A || !A.configured()) return fail("Google sign-in isn't available right now.");
+    let settled = false; const done = ok => { if (settled) return; settled = true; ok ? gmsg("") : fail() };
+    A.on(() => { const i = A.info(); if (i.user) { done(true); setSession({ kind: "google", name: i.user.name || i.user.email || "Signed in" }) } else if (i.status && /error/.test(i.status.state || i.status.kind || "") ) done(false) });
+    try { await A.signIn() } catch (e) { done(false) }
+    setTimeout(() => { if (!session) done(false) }, 8000);
+  }
+  async function signOut() { const A = window.BioAccount; try { if (A && session && session.kind === "google") await A.signOut() } catch (e) { } setSession(null); $("classes").scrollIntoView() }
+  $("gSign").onclick = signIn;
+  $("gGuest").onclick = () => setSession({ kind: "guest", name: "Guest" });
+  $("gPeek").onclick = e => { const r = $("aboutHost").shadowRoot, el = r && r.getElementById("yourlibrary"); if (el) { e.preventDefault(); el.scrollIntoView({ behavior: reduce ? "auto" : "smooth" }) } };
+  $("gateCovers").innerHTML = P.COURSES.slice(0, 3).map(c => cover(c)).join("");
+  // someone already signed in with Google on this device is let straight in; a Google session that has ended is closed
+  account().then(A => { if (!A || !A.configured()) return; const sync = () => { const i = A.info(); if (i.user && !session) setSession({ kind: "google", name: i.user.name || i.user.email || "Signed in" }); else if (i.ready && !i.user && session && session.kind === "google") setSession(null) }; A.on(sync); sync() });
   $("sideSettings").onclick = () => $("settingsBtn").click();
   $("date").textContent = new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
   // sidebar / tab bar: highlight the section in view
   const navs = document.querySelectorAll("[data-nav]"), setOn = id => navs.forEach(a => a.classList.toggle("on", a.dataset.nav === id));
   if ("IntersectionObserver" in window) { const io = new IntersectionObserver(es => { es.forEach(en => { if (en.isIntersecting) setOn(en.target.id === "now" ? "now" : en.target.id) }) }, { rootMargin: "-30% 0px -60% 0px" });["now", "library", "more", "code"].forEach(id => io.observe($(id))) }
-  paint();
+  applyGate();
   // arriving from a class (its Eureka button, or a page that needs its code): go straight to the library
-  if (want && P.course(want) && !P.has(want)) { reveal(); ask(P.course(want)); say(`${P.course(want).name} needs its class code. Enter it to open the class.`, false) }
+  if (want && P.course(want) && !P.has(want)) { reveal(); if (session) { ask(P.course(want)); say(`${P.course(want).name} needs its class code. Enter it to open the class.`, false) } else $("classes").scrollIntoView() }
   else if (location.hash) reveal();
+  // the explanation above is drawn after the page loads, which moves everything below it: go to the requested section again
+  if (location.hash.length > 1) { const el = document.getElementById(location.hash.slice(1)); if (el) { let hands = false; ["wheel", "touchstart", "keydown"].forEach(ev => addEventListener(ev, () => { hands = true }, { once: true, passive: true })); const go = () => { if (!hands) el.scrollIntoView({ behavior: "instant" }) }; go(); addEventListener("load", go, { once: true }); [150, 500, 1200].forEach(ms => setTimeout(go, ms)) } }
 })();
 </script>
 </body></html>
