@@ -55,7 +55,16 @@ body.demo-only .gnav,body.demo-only footer,body.demo-only .sky{display:none}body
   }
   const idle = window.requestIdleCallback || (f => setTimeout(f, 300));
   if (document.readyState === "complete") idle(startSky); else addEventListener("load", () => idle(startSky), { once: true });
-  document.addEventListener("visibilitychange", () => { if (!sky.src || !sky.isConnected) return; if (document.hidden) sky.pause(); else { const p = sky.play(); if (p && p.catch) p.catch(() => { }) } });
+  // Keep the sky moving. Browsers pause a background video on their own now and then (a stall while it buffers, the
+  // seam of the loop, power saving, an autoplay block until the first touch), so whenever it is found paused or ended
+  // while the page is visible, it is started again. It rests only when the tab is hidden or the sky is not on the page.
+  const skyOn = () => !!sky.src && sky.isConnected && !document.hidden && sky.offsetParent !== null;
+  const keepSky = () => { if (!skyOn()) return; if (sky.ended) sky.currentTime = 0; if (sky.paused || sky.ended) { const p = sky.play(); if (p && p.catch) p.catch(() => { }) } };
+  ["pause", "ended", "stalled", "suspend", "waiting", "canplay"].forEach(ev => sky.addEventListener(ev, () => setTimeout(keepSky, 60)));
+  setInterval(keepSky, 1500);
+  ["scroll", "touchstart", "pointerdown", "keydown"].forEach(ev => addEventListener(ev, keepSky, { passive: true }));
+  addEventListener("pageshow", keepSky); addEventListener("focus", keepSky);
+  document.addEventListener("visibilitychange", () => { if (document.hidden) { if (sky.src) sky.pause() } else keepSky() });
 })();
 </script>
 </body></html>

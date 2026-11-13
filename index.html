@@ -375,13 +375,17 @@ body.in .night{display:none}
   }
   const idle = window.requestIdleCallback || (f => setTimeout(f, 300));
   if (document.readyState === "complete") idle(startSky); else addEventListener("load", () => idle(startSky), { once: true });
-  let inView = true;
-  const playState = () => { if (!sky.src || !sky.isConnected) return; if (inView && !document.hidden) { const p = sky.play(); if (p && p.catch) p.catch(() => { }) } else sky.pause() };
-  if ("IntersectionObserver" in window) {
-    new IntersectionObserver(es => { $("tabs").classList.toggle("show", !es[0].isIntersecting) }, { threshold: .05 }).observe(hero);
-    new IntersectionObserver(es => { inView = es[0].isIntersecting; playState() }).observe($("night"));   // the sky plays while any of the night is on screen
-  }
-  document.addEventListener("visibilitychange", playState);
+  if ("IntersectionObserver" in window) new IntersectionObserver(es => { $("tabs").classList.toggle("show", !es[0].isIntersecting) }, { threshold: .05 }).observe(hero);
+  // Keep the sky moving. Browsers pause a background video on their own now and then (a stall while it buffers, the
+  // seam of the loop, power saving, an autoplay block until the first touch), so whenever it is found paused or ended
+  // while the page is visible, it is started again. It rests only when the tab is hidden or the sky is not on the page.
+  const skyOn = () => !!sky.src && sky.isConnected && !document.hidden && sky.offsetParent !== null;
+  const keepSky = () => { if (!skyOn()) return; if (sky.ended) sky.currentTime = 0; if (sky.paused || sky.ended) { const p = sky.play(); if (p && p.catch) p.catch(() => { }) } };
+  ["pause", "ended", "stalled", "suspend", "waiting", "canplay"].forEach(ev => sky.addEventListener(ev, () => setTimeout(keepSky, 60)));
+  setInterval(keepSky, 1500);
+  ["scroll", "touchstart", "pointerdown", "keydown"].forEach(ev => addEventListener(ev, keepSky, { passive: true }));
+  addEventListener("pageshow", keepSky); addEventListener("focus", keepSky);
+  document.addEventListener("visibilitychange", () => { if (document.hidden) { if (sky.src) sky.pause() } else keepSky() });
 
   // ---------- the library, and everything a student can do to organize it
   // Saved as a104-library-v1: { sort, view, order[], fav[], done[], hidden[], opened{id:ms}, cols[{id,name,items[]}] }
