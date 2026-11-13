@@ -124,3 +124,4 @@ html[data-portal="discuss"] .resp.me{background:color-mix(in srgb,var(--accent,#
 html[data-portal="discuss"] .av:not(img){background:linear-gradient(135deg,#30b0c7,#0071e3);color:#fff}
 html[data-portal="discuss"] .resp.me .av:not(img){background:linear-gradient(135deg,#ff9f0a,#ff375f)}
 html[data-portal="discuss"] a.pc{border:0;box-shadow:0 1px 2px rgba(0,0,0,.06);border-radius:20px}
+.cb-wb b{display:inline-block;margin-left:7px;min-width:18px;padding:0 5px;border-radius:980px;background:#ff3b30;color:#fff;font:600 11px/18px var(--body);text-align:center}.cb-wb b:empty{display:none}

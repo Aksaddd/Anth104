@@ -137,14 +137,22 @@
       ${r.def ? `<p class="lk-def">${esc(r.def)}</p>` : `<p class="lk-def lk-muted">No definition yet, but here are its roots:</p>`}
       ${r.parts.length ? `<div class="lk-cap">Word parts</div><div class="lk-parts">${r.parts.map((p, i) => `${i ? `<span class="lk-plus">+</span>` : ""}<span class="lk-part"><b>${esc(p.root)}</b><i>${esc(p.mean)}</i>${p.origin ? `<small>${esc(p.origin)}</small>` : ""}</span>`).join("")}</div>` : ""}
       ${r.lit ? `<p class="lk-lit">Literally: “${esc(r.lit)}”</p>` : ""}
-      <a class="lk-more" href="${BASE}roots/index.html">All word roots →</a>`
-      : `<div class="lk-top"><b class="lk-term">${esc(hit.word)}</b><button type="button" class="lk-x" aria-label="Close">✕</button></div><p class="lk-def lk-muted">This word isn't in the course dictionary. Double-tap a course term (like ${((window.COURSE && window.COURSE.terms) || ["heteroglossia", "indexicality"]).map(x => `<i>${x}</i>`).join(" or ")}) to see its meaning and roots.</p>`;
+      <div class="lk-foot">${window.WordBank ? `<button type="button" class="lk-save"${window.WordBank.has(r.term) ? " disabled" : ""}>${window.WordBank.has(r.term) ? "✓ In your word bank" : "＋ Save to word bank"}</button>` : ""}<a class="lk-more" href="${BASE}roots/index.html">All word roots →</a></div>`
+      : `<div class="lk-top"><b class="lk-term">${esc(hit.word)}</b><button type="button" class="lk-x" aria-label="Close">✕</button></div><p class="lk-def lk-muted">This word isn't in the course dictionary. Double-tap a course term (like ${((window.COURSE && window.COURSE.terms) || ["heteroglossia", "indexicality"]).map(x => `<i>${x}</i>`).join(" or ")}) to see its meaning and roots.</p>${window.WordBank ? `<div class="lk-foot"><button type="button" class="lk-save"${window.WordBank.has(hit.word) ? " disabled" : ""}>${window.WordBank.has(hit.word) ? "✓ In your word bank" : "＋ Save it anyway"}</button></div>` : ""}`;
     document.body.appendChild(card);
     const W = Math.min(360, innerWidth - 20), h = card.offsetHeight;
     let left = Math.min(Math.max(10, rc.left + rc.width / 2 - W / 2), innerWidth - W - 10);
     let top = rc.bottom + 10; if (top + h > innerHeight - 10) top = Math.max(10, rc.top - h - 10);
     card.style.left = left + "px"; card.style.top = top + "px"; card.style.width = W + "px";
     card.querySelector(".lk-x").onclick = close;
+    // a key term the class dictionary doesn't have is saved whole ("Pounded Rice Ritual"), not one word of it
+    const bold = hit.el && hit.el.closest(".rd-prose b, .rd-prose strong"), name = r ? r.term : bold ? bold.textContent.replace(/[.:;,!?]+$/, "").trim() : hit.word;
+    let extra = null; const me = card, WBK = window.WordBank;
+    // not in the class dictionary: try a general dictionary and show what it says
+    if (WBK && !(r && r.def)) WBK.dictionary(name).then(d => { if (!d || card !== me) return; extra = d; const p = me.querySelector(".lk-def"); p.classList.remove("lk-muted"); p.innerHTML = esc(d.def) + ` <small class="lk-src">${d.pos ? esc(d.pos) + " · " : ""}Dictionary</small>`; const s = me.querySelector(".lk-save"); if (s && !s.disabled) s.textContent = "＋ Save to word bank" });
+    const sv = card.querySelector(".lk-save");   // into the word bank, with the sentence it was found in
+    if (sv) { if (WBK.has(name)) { sv.disabled = true; sv.textContent = "✓ In your word bank" }
+      sv.onclick = () => { WBK.saveFrom({ word: name, def: r && r.def ? r.def : extra ? extra.def : "", pos: extra ? extra.pos : "", parts: r ? r.parts.map(p => ({ root: p.root, mean: p.mean })) : [], src: r && r.def ? "Class dictionary" : extra ? "Dictionary" : "", context: WBK.sentence(hit.el, hit.word) }); sv.disabled = true; sv.textContent = "✓ In your word bank" } }
     if (navigator.vibrate) try { navigator.vibrate(12) } catch (e) { }
   }
 
@@ -155,7 +163,7 @@
   addEventListener("pointerup", async e => {
     if (e.button || card && card.contains(e.target)) return;
     // links, enabled buttons and form fields keep their own taps (an answered option is disabled, so it can be looked up)
-    if (e.target.closest("a,button:not(:disabled),input,textarea,select,label,.lk-card,#bbPal,#bbDock,.bb-shop,.bb-greet,.pl-pin,.pl-cell,.pl-chip,[contenteditable]")) { last = null; return }
+    if (e.target.closest("a,button:not(:disabled),input,textarea,select,label,.lk-card,.wb-veil,.wb-toast,#bbPal,#bbDock,.bb-shop,.bb-greet,.pl-pin,.pl-cell,.pl-chip,[contenteditable]")) { last = null; return }
     const now = Date.now(), x = e.clientX, y = e.clientY;
     if (!last || now - last.t > 380 || Math.hypot(x - last.x, y - last.y) > 28) { last = { t: now, x, y }; return }
     last = null;
@@ -181,6 +189,9 @@
 .lk-part b{color:var(--accent,#0071e3);font-size:15.5px}.lk-part i{font-style:normal;font-size:13.5px}.lk-part small{font-size:11.5px;color:var(--muted,#6e6e73)}
 .lk-plus{align-self:center;color:var(--muted,#6e6e73);font-weight:600}
 .lk-lit{margin:10px 0 0;font-size:14px;color:var(--muted,#6e6e73)}
+.lk-src{color:var(--muted,#6e6e73);font-size:12px;white-space:nowrap}
+.lk-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:10px}.lk-foot .lk-more{margin-top:0}
+.lk-save{border:0;background:var(--accent,#0071e3);color:#fff;border-radius:980px;padding:8px 14px;font:600 13.5px -apple-system,sans-serif;cursor:pointer}.lk-save:disabled{background:var(--fill,#e8e8ed);color:var(--good,#248a3d);cursor:default}
 .lk-more{display:inline-block;margin-top:8px;font:500 13px -apple-system,sans-serif;color:var(--accent,#0071e3);text-decoration:none}
 .lk-hl{position:fixed;z-index:299;border-radius:6px;background:rgba(255,214,10,.35);pointer-events:none;animation:lkIn .15s ease}
 .lk-tip{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:120;background:#1d1d1f;color:#fff;border-radius:14px;padding:10px 14px;font:500 14px/1.35 -apple-system,sans-serif;max-width:min(92vw,420px);box-shadow:0 8px 24px rgba(0,0,0,.25);display:flex;gap:10px;align-items:center;animation:lkIn .25s ease}

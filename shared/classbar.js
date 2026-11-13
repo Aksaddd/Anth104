@@ -38,12 +38,16 @@
       <a class="eureka" href="${P.BASE}index.html#classes" title="Back to your library on Eureka"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg><span>Eureka</span></a>
       <a class="cb-name" href="${base}index.html"${home ? ' aria-current="page"' : ""}>${esc(C.name)}</a>
       <nav class="cb-links" aria-label="${esc(C.name)}">${home ? '<a href="#companions" class="cb-comp" hidden>Companions<span class="new-tag">New</span></a>' : ""}${set.main.map(link).join("")}
-        <details class="cb-more"><summary${inMore ? ' class="on"' : ""}>${inMore ? esc(cur[0]) : "More"}</summary><div>${set.more.map(link).join("")}</div></details></nav>
+        <details class="cb-more"><summary${inMore ? ' class="on"' : ""}>${inMore ? esc(cur[0]) : "More"}</summary><div>${set.more.map(link).join("")}<a href="#wordbank" class="cb-wb">Word Bank<b></b></a></div></details></nav>
       <button type="button" class="cb-set" aria-label="Settings" aria-haspopup="dialog">${GEAR}</button>
     </div>`;
     document.body.prepend(bar); root.classList.add("cb-on");
     // Settings: the shared sheet where there is one, otherwise the page's own settings button
     bar.querySelector(".cb-set").onclick = () => { const own = document.getElementById("gnavSet") || document.querySelector(".gnav #settingsBtn, .st-btn"); if (window.BioSettings && window.BioSettings.open) window.BioSettings.open(); else if (own) own.click() };
+    // the Word Bank opens over whatever page you are on (shared/wordbank.js), with the number of words due for review
+    const wb = bar.querySelector(".cb-wb"), wbCount = () => { const W = window.WordBank; wb.querySelector("b").textContent = W && W.due().length ? W.due().length : "" };
+    wb.onclick = e => { e.preventDefault(); if (window.WordBank) window.WordBank.open() };
+    const hook = () => { if (!window.WordBank) return setTimeout(hook, 300); window.WordBank.on(wbCount); wbCount() }; hook();
     // More closes when you click away or press Escape
     const more = bar.querySelector(".cb-more");
     // on a phone the bar scrolls sideways and everything under More is simply laid out in it

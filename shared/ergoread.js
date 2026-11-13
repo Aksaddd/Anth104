@@ -7,13 +7,14 @@
 //                      settings, chosen from reading research (see DEF). Saved as "ergoread-settings" (the app's key).
 //   Word bubble        rest the pointer on a word for 0.8 s (or tap it, where there is no double-tap dictionary) to see what
 //                      it means: the class's own dictionary first, then a general dictionary.
-//   Word bank          save words from the bubble and review them later ("eureka-word-bank").
+//   Word bank          the bubble saves into the Word Bank (shared/wordbank.js), which the Words button in the reading
+//                      toolbar opens.
 //   Reading progress   a thin bar across the top that fills as you read down the chapter.
 //
 // It styles the passages (.rd-sec, .rd-prose) through CSS variables; nothing else on the page changes.
 (() => {
   if (window.ErgoRead) return;
-  const KEY = "ergoread-settings", BANK = "eureka-word-bank";
+  const KEY = "ergoread-settings";
   // The defaults are the recommended settings, chosen from reading research rather than taste:
   //   line length   about 66 characters. Studies of on-screen reading put the comfortable range near 50 to 75 a line.
   //   text size     19px. Larger body text (around 18px and up) reads faster on screens than the old 12 to 14px norm.
@@ -30,8 +31,7 @@
   const $ = id => document.getElementById(id), esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   let S = Object.assign({}, DEF); try { S = Object.assign(S, JSON.parse(localStorage.getItem(KEY) || "{}")) } catch (e) { }
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)) } catch (e) { } };
-  let bank = []; try { bank = JSON.parse(localStorage.getItem(BANK) || "[]") || [] } catch (e) { }
-  const saveBank = () => { try { localStorage.setItem(BANK, JSON.stringify(bank)) } catch (e) { } };
+  const WB = () => window.WordBank, bankCount = () => WB() ? WB().count() : 0;   // the word bank itself lives in shared/wordbank.js
 
   // ---------- styles
   const st = document.createElement("style"); st.textContent = `
@@ -73,6 +73,7 @@ body.er-sepia .rd-sec .rd-prose strong,body.er-sepia .rd-sec .rd-prose b{color:#
 /* the Aa button lives in the reading toolbar, beside Restart and Notes */
 .rd-tool.er-aa b{background:none;color:inherit;padding:0;font:700 14px/1 ui-serif,"New York",Georgia,serif}
 .rd-tool.er-aa[aria-expanded="true"]{background:var(--accent,#0071e3);color:#fff}
+.rd-tool.er-words i{font:italic 700 13px/1 ui-serif,Georgia,serif}
 /* the panel drops from that button and uses the page's own colors, so it follows light and dark */
 .er-panel{--p:var(--paper,#fff);--i:var(--ink,#1d1d1f);--m:var(--muted,#6e6e73);--l:var(--line,#d2d2d7);--s:var(--fill,var(--sunk,#f5f5f7));--a:var(--accent,#0071e3);
   left:auto;bottom:auto;background:var(--p);color:var(--i);border:0;border-radius:20px;box-shadow:0 18px 60px rgba(0,0,0,.24),0 0 0 .5px rgba(0,0,0,.14);font:13px/1.4 var(--body,-apple-system,BlinkMacSystemFont,sans-serif);letter-spacing:-.01em}
@@ -125,24 +126,22 @@ body:has(.er-panel) .lk-tip{display:none}   /* the first-visit tip steps aside w
   function paintPanel() {
     if (!panel) return;
     const btns = (key, opts) => `<div class="er-row">${opts.map(([v, l, sty]) => `<button type="button" data-set="${key}" data-v="${v}" aria-pressed="${S[key] === v}" style="${sty || ""}">${l}</button>`).join("")}</div>`;
-    panel.innerHTML = `<div class="er-head"><span class="ic" aria-hidden="true">Aa</span><div><h2>${view === "bank" ? "Word Bank" : "ErgoRead"}</h2><p>${view === "bank" ? bank.length + (bank.length === 1 ? " word saved" : " words saved") : "Reading settings"}</p></div><button type="button" class="x" aria-label="Close">✕</button></div>
-      <div class="er-body">${view === "bank"
-        ? (bank.length ? `<div class="er-bank">${bank.map((w, i) => `<div><b>${esc(w.word)}</b><p>${esc(w.def)}</p><button type="button" data-rm="${i}" aria-label="Remove ${esc(w.word)}">✕</button></div>`).join("")}</div>` : `<div class="er-note">No words yet. Rest your pointer on a word in a passage (or tap it) and choose “Save to word bank”.</div>`) + `<div class="er-foot"><button type="button" data-view="settings">← Reading settings</button></div>`
+    panel.innerHTML = `<div class="er-head"><span class="ic" aria-hidden="true">Aa</span><div><h2>ErgoRead</h2><p>Reading settings</p></div><button type="button" class="x" aria-label="Close">✕</button></div>
+      <div class="er-body">${view === "bank" ? ""
         : `<div><div class="er-lab">Page</div><div class="er-row er-sw">${[["paper", "Paper", "#fbf8f1", "#2b2b2e"], ["light", "White", "#fff", "#1a1a1a"], ["sepia", "Sepia", "#f5f0e6", "#433422"], ["dark", "Night", "#1a1a1a", "#e5e5e5"]].map(([v, l, bg, ink]) => `<button type="button" data-set="theme" data-v="${v}" aria-pressed="${S.theme === v}"><i style="background:${bg};color:${ink}">Aa</i>${l}</button>`).join("")}</div></div>
           <div><div class="er-lab">Text size</div><div class="er-size"><button type="button" data-size="-1" aria-label="Smaller text">A</button><span id="erv-fontSize">${S.fontSize}px</span><button type="button" data-size="1" aria-label="Larger text">A</button></div></div>
           <div><div class="er-lab">Typeface</div>${btns("fontFamily", [["serif", "Serif"], ["system", "Sans"], ["georgia", "Georgia"], ["helvetica", "Helvetica"]])}</div>
           <details class="er-more"${moreOpen ? " open" : ""}><summary>More options</summary><div>
             ${SLIDERS.filter(s => s[0] !== "fontSize").map(([k, label, min, max, step, fmt]) => `<div><div class="er-lab">${label}<span id="erv-${k}">${fmt(S[k])}</span></div><input type="range" data-k="${k}" min="${min}" max="${max}" step="${step}" value="${S[k]}" aria-label="${label}"></div>`).join("")}
             <div><div class="er-lab">Text align</div>${btns("align", [["left", "Left"], ["justify", "Justify"]])}</div></div></details>
-          <div class="er-foot"><button type="button" class="pri" data-view="bank">Word bank · ${bank.length}</button><button type="button" id="erReset"${isDef() ? " disabled" : ""}>${isDef() ? "✓ Recommended" : "Use recommended"}</button></div>
+          <div class="er-foot"><button type="button" class="pri" id="erBank">Word bank · ${bankCount()}</button><button type="button" id="erReset"${isDef() ? " disabled" : ""}>${isDef() ? "✓ Recommended" : "Use recommended"}</button></div>
           <div class="er-note"><b>Recommended</b> follows reading research: dark text on a warm, light page, larger type, about 66 characters a line, open line spacing and left-aligned text. No typeface is best for everyone, so pick the one you read most easily.</div>`}</div>`;
     const md = panel.querySelector(".er-more"); if (md) md.addEventListener("toggle", () => { moreOpen = md.open });
     panel.querySelectorAll("[data-size]").forEach(b => b.onclick = () => { S.fontSize = Math.max(12, Math.min(28, S.fontSize + +b.dataset.size)); save(); apply(); paintPanel() });
     panel.querySelector(".x").onclick = closePanel;
     panel.querySelectorAll("[data-set]").forEach(b => b.onclick = () => { S[b.dataset.set] = b.dataset.v; save(); apply(); paintPanel() });
     panel.querySelectorAll("input[type=range]").forEach(i => i.oninput = () => { const k = i.dataset.k; S[k] = +i.value; const f = SLIDERS.find(x => x[0] === k)[5]; $("erv-" + k).textContent = f(S[k]); save(); apply() });
-    panel.querySelectorAll("[data-view]").forEach(b => b.onclick = () => { view = b.dataset.view; paintPanel() });
-    panel.querySelectorAll("[data-rm]").forEach(b => b.onclick = () => { bank.splice(+b.dataset.rm, 1); saveBank(); paintPanel() });
+    if ($("erBank")) $("erBank").onclick = () => { closePanel(); if (WB()) WB().open() };
     if ($("erReset")) $("erReset").onclick = () => { S = Object.assign({}, DEF); save(); apply(); paintPanel() };
   }
   function openPanel(v) { view = v || "settings"; if (!panel) { panel = document.createElement("div"); panel.className = "er-panel"; panel.setAttribute("role", "dialog"); panel.setAttribute("aria-label", "ErgoRead reading settings"); document.body.appendChild(panel) } paintPanel(); place(); markBtn() }
@@ -170,7 +169,11 @@ body:has(.er-panel) .lk-tip{display:none}   /* the first-visit tip steps aside w
     const b = document.createElement("button"); b.type = "button"; b.className = "rd-tool er-aa"; b.title = "ErgoRead: page, text size and typeface"; b.setAttribute("aria-label", "ErgoRead reading settings"); b.setAttribute("aria-haspopup", "dialog"); b.setAttribute("aria-expanded", "false");
     b.innerHTML = `<b aria-hidden="true">Aa</b>`; b.onclick = () => panel ? closePanel() : openPanel();
     bar2.insertBefore(b, bar2.querySelector(".rd-tool"));
+    const w = document.createElement("button"); w.type = "button"; w.className = "rd-tool er-words"; w.title = "Your word bank: the words you saved, and practice"; w.innerHTML = `<i aria-hidden="true">Az</i><span>Words</span><b></b>`;
+    w.onclick = () => { closePanel(); if (WB()) WB().open() }; bar2.appendChild(w); wordsBadge();
   }
+  function wordsBadge() { const b = document.querySelector(".er-words b"); if (b) b.textContent = bankCount() || "" }
+  (function hook() { if (!WB()) return setTimeout(hook, 300); WB().on(() => { wordsBadge(); if (panel) paintPanel() }); wordsBadge() })();
   function progress() { const h = document.documentElement.scrollHeight - innerHeight; bar.style.width = (document.querySelector(".rd-sec") && h > 0 ? Math.min(100, Math.max(0, scrollY / h * 100)) : 0) + "%" }
   function sync() {
     const on = !!document.querySelector(".rd-sec");
@@ -200,6 +203,8 @@ body:has(.er-panel) .lk-tip{display:none}   /* the first-visit tip steps aside w
   // the class's own dictionary first (assets/lexicon.js and glossary.js, when the page has them), then a general dictionary
   async function lookup(word) {
     const k = word.toLowerCase(); if (cache[k]) return cache[k];
+    if (WB()) { const d = await WB().define(word); return (cache[k] = d || { word, def: "", pos: "", src: "" }) }   // class dictionary, class glossary, then a general dictionary
+    if (window.BioLookup) { try { const r = await window.BioLookup.find(word); if (r && r.def) return (cache[k] = { word: r.term, def: r.def, pos: "", src: "Class dictionary", parts: (r.parts || []).map(p => ({ root: p.root, mean: p.mean })) }) } catch (e) { } }
     const L = window.LEXICON || {}, forms = [k, k.replace(/s$/, ""), k.replace(/es$/, ""), k.replace(/ies$/, "y")];
     for (const f of forms) if (L[f]) return (cache[k] = { word: f, def: L[f][0], pos: "", src: "Class dictionary" });
     if (window.GLOSS && window.GLOSS.look) { try { const g = window.GLOSS.look(word); if (g) return (cache[k] = { word: k, def: typeof g === "string" ? g : g.def || g.text || String(g), pos: "", src: "Class glossary" }) } catch (e) { } }
@@ -217,11 +222,11 @@ body:has(.er-panel) .lk-tip{display:none}   /* the first-visit tip steps aside w
     const place = () => { if (!bub) return; const w = bub.offsetWidth, h = bub.offsetHeight, x = Math.max(12, Math.min(innerWidth - w - 12, hit.rect.left + hit.rect.width / 2 - w / 2)), above = hit.rect.top - h - 10; bub.style.left = x + "px"; bub.style.top = (above > 8 ? above : hit.rect.bottom + 10) + "px" };
     place();
     const me = bub, info = await lookup(hit.word); if (bub !== me) return;
-    const saved = bank.some(w => w.word === info.word);
-    bub.innerHTML = `<h3>${esc(info.word)}${info.pos ? `<small>${esc(info.pos)}</small>` : ""}</h3>${info.def ? `<p>${esc(info.def)}</p><div class="src">${esc(info.src)}</div>
-      <div class="acts"><button type="button" id="erSave"${saved ? " disabled" : ""}>${saved ? "✓ In your word bank" : "＋ Save to word bank"}</button><button type="button" class="sec" id="erClose">Close</button></div>` : `<p style="color:#6b7280">No definition found for this word.</p>`}`;
+    const saved = WB() && WB().has(info.word), can = !!WB();
+    bub.innerHTML = `<h3>${esc(info.word)}${info.pos ? `<small>${esc(info.pos)}</small>` : ""}</h3>${info.def ? `<p>${esc(info.def)}</p><div class="src">${esc(info.src)}</div>` : `<p style="color:var(--muted,#6b7280)">No definition found. You can still save it and write the meaning yourself.</p>`}
+      <div class="acts">${can ? `<button type="button" id="erSave"${saved ? " disabled" : ""}>${saved ? "✓ In your word bank" : info.def ? "＋ Save to word bank" : "＋ Save it anyway"}</button>` : ""}<button type="button" class="sec" id="erClose">Close</button></div>`;
     place();
-    if ($("erSave")) $("erSave").onclick = () => { if (!bank.some(w => w.word === info.word)) { bank.unshift({ word: info.word, def: info.def, at: Date.now() }); saveBank() } $("erSave").disabled = true; $("erSave").textContent = "✓ In your word bank"; if (panel) paintPanel() };
+    if ($("erSave")) $("erSave").onclick = () => { WB().saveFrom({ word: info.word, def: info.def, pos: info.pos, src: info.src, parts: info.parts || [], context: WB().sentence(hit.el, hit.word) }); $("erSave").disabled = true; $("erSave").textContent = "✓ In your word bank" };
     if ($("erClose")) $("erClose").onclick = closeBubble;
   }
   const hoverable = matchMedia("(hover:hover) and (pointer:fine)").matches;
@@ -248,5 +253,5 @@ body:has(.er-panel) .lk-tip{display:none}   /* the first-visit tip steps aside w
   // the read page repaints its #view as you move through a chapter: keep in step with it
   const start = () => { const v = $("view") || document.body; new MutationObserver(sync).observe(v, { childList: true, subtree: false }); addEventListener("hashchange", () => setTimeout(sync, 0)); sync() };
   if (document.readyState === "loading") addEventListener("DOMContentLoaded", start); else start();
-  window.ErgoRead = { open: openPanel, close: closePanel, settings: () => Object.assign({}, S), wordBank: () => bank.slice() };
+  window.ErgoRead = { open: openPanel, close: closePanel, settings: () => Object.assign({}, S), wordBank: () => WB() ? WB().all() : [] };
 })();
