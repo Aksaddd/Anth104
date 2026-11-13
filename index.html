@@ -3,7 +3,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Eureka · Understanding takes time</title>
-<meta name="description" content="Eureka: a calmer way to read, reflect, and remember. Reading guides, practice and exams for your classes. Enter your class code to open your class.">
+<meta name="description" content="Eureka: a calmer way to study, reflect, and remember. Study guides, practice and exams for your classes. Enter your class code to open your class.">
 <meta name="theme-color" content="#05070d">
 <link rel="preload" as="image" href="assets/hero/eureka-poster.jpg" media="(min-width:700px)">
 <link rel="preload" as="image" href="assets/hero/eureka-poster-sm.jpg" media="(max-width:699px)">
@@ -13,7 +13,7 @@
 <style>
 /* The front page.
    1. Hero (from the Eureka app's landing page): a night sky behind "Understanding Takes Time".
-   2. The library, laid out like Apple Books: a sidebar (Reading Now, Library, More Classes, Class Code) beside the
+   2. The library, laid out like Apple Books: a sidebar (Studying Now, Library, More Classes, Class Code) beside the
       main column on wide screens, a tab bar at the bottom on phones. Classes are book covers on shelves:
       "Continue" for the class you opened last, "Your Library", then "More to Explore" (classes that need a code).
    Visual language: Apple (system font, white and #f5f5f7, Apple blue, pills, soft shadows).
@@ -204,7 +204,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
   </div>
   <div class="content">
     <h1>Understanding Takes Time.</h1>
-    <p class="second">A calmer way to read, reflect, and remember.</p>
+    <p class="second">A calmer way to study, reflect, and remember.</p>
     <button type="button" class="enter" id="enter">Enter Eureka</button>
     <a class="about" href="about/index.html">What is Eureka? ›</a>
   </div>
@@ -214,7 +214,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
 <div class="app" id="classes">
   <aside class="side" aria-label="Library">
     <a class="brand" href="#classes">Eureka</a>
-    <a href="#now" class="on" data-nav="now"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5C5.5 4.5 8.5 4.5 12 6.5v13c-3.5-2-6.5-2-9-1z"/><path d="M21 5.5c-2.5-1-5.5-1-9 1v13c3.5-2 6.5-2 9-1z"/></svg>Reading Now</a>
+    <a href="#now" class="on" data-nav="now"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5C5.5 4.5 8.5 4.5 12 6.5v13c-3.5-2-6.5-2-9-1z"/><path d="M21 5.5c-2.5-1-5.5-1-9 1v13c3.5-2 6.5-2 9-1z"/></svg>Studying Now</a>
     <span class="lab">Library</span>
     <a href="#library" data-nav="library"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4v16M9 4v16M13 5l5 15"/></svg>All Classes</a>
     <a href="#more" data-nav="more"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l-1 12H7z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg>More to Explore</a>
@@ -230,7 +230,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
   </aside>
   <main class="main">
     <p class="date" id="date"></p>
-    <h2 class="big" id="now">Reading Now</h2>
+    <h2 class="big" id="now">Studying Now</h2>
     <section class="sec" style="margin-top:20px" aria-labelledby="hCont"><div id="cont"></div></section>
     <section class="sec" id="library" aria-labelledby="hLib"><header><h3 id="hLib">Your Library</h3><span id="libCount"></span></header>
       <div class="chips" id="chips" role="toolbar" aria-label="Show"></div>
@@ -250,11 +250,11 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
         <div class="msg" id="msg" role="status" hidden></div>
       </form>
     </section>
-    <p class="foot">Eureka · Reading guides, practice and exams for your classes. Your progress is kept on this device. <a href="about/index.html" style="color:var(--accent);text-decoration:none">What is Eureka? ›</a></p>
+    <p class="foot">Eureka · Study guides, practice and exams for your classes. Your progress is kept on this device. <a href="about/index.html" style="color:var(--accent);text-decoration:none">What is Eureka? ›</a></p>
   </main>
 </div>
 <nav class="tabs" id="tabs" aria-label="Library">
-  <a href="#now" class="on" data-nav="now"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5C5.5 4.5 8.5 4.5 12 6.5v13c-3.5-2-6.5-2-9-1z"/><path d="M21 5.5c-2.5-1-5.5-1-9 1v13c3.5-2 6.5-2 9-1z"/></svg>Reading Now</a>
+  <a href="#now" class="on" data-nav="now"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5C5.5 4.5 8.5 4.5 12 6.5v13c-3.5-2-6.5-2-9-1z"/><path d="M21 5.5c-2.5-1-5.5-1-9 1v13c3.5-2 6.5-2 9-1z"/></svg>Studying Now</a>
   <a href="#library" data-nav="library"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4v16M9 4v16M13 5l5 15"/></svg>Library</a>
   <a href="#more" data-nav="more"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l-1 12H7z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg>Explore</a>
   <a href="#code" data-nav="code"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0"/></svg>Class Code</a>
@@ -367,7 +367,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
     if (scope.startsWith("col:") && !col(scope.slice(4))) scope = "all"; if (scope === "hidden" && !L.hidden.length) scope = "all";
     // Continue
     const cur = visible.slice().sort((a, b) => opened(b) - opened(a) || progress(b) - progress(a))[0];
-    $("cont").innerHTML = cur ? (() => { const pct = progress(cur); return `<a class="cont" href="${cur.path}index.html" data-open="${cur.id}">${cover(cur)}<span><span class="k2">${pct ? "Continue" : "Start reading"}</span><h4>${esc(cur.title)}</h4><p>${esc(cur.blurb)}</p>
+    $("cont").innerHTML = cur ? (() => { const pct = progress(cur); return `<a class="cont" href="${cur.path}index.html" data-open="${cur.id}">${cover(cur)}<span><span class="k2">${pct ? "Continue" : "Start studying"}</span><h4>${esc(cur.title)}</h4><p>${esc(cur.blurb)}</p>
         <span class="bar" aria-hidden="true"><i style="width:${Math.max(pct, 2)}%"></i></span><span class="sm">${cur.professor ? esc(cur.professor) + " · " : ""}${esc(cur.school)} · ${pct}% complete</span><span class="row" style="display:flex;border:0;padding:0"><span class="pill">${pct ? "Continue" : "Open"}</span></span></span></a>` })()
       : `<div class="empty"><b>Your library is empty</b>Add a class with its class code and it will appear here.</div>`;
     // chips + sidebar
