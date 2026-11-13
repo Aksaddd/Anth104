@@ -78,6 +78,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
   box-shadow:0 1px 1px rgba(0,0,0,.14),0 10px 22px -6px rgba(0,0,0,.34),0 22px 40px -18px rgba(0,0,0,.3);transition:transform .25s ease,box-shadow .25s ease}
 .cover::before{content:"";position:absolute;inset:0 auto 0 0;width:7%;background:linear-gradient(90deg,rgba(0,0,0,.28),rgba(255,255,255,.22) 45%,rgba(0,0,0,.12) 70%,transparent)}
 .cover::after{content:"";position:absolute;inset:0;background:radial-gradient(120% 80% at 80% 0%,rgba(255,255,255,.3),transparent 55%);pointer-events:none}
+.cover .k small{display:block;margin-top:.5em;font-size:.82em;font-weight:500;letter-spacing:.02em;text-transform:none;opacity:.82}
 .cover .a{position:relative;display:block;width:86%;margin:4% auto 6% 0;flex:1;min-height:0}
 .cover.art{justify-content:flex-start;padding:10% 10% 9% 14%}
 .cover.art .t{font-size:1.02em;margin-top:auto}.cover.art .p{margin-top:.9em}
@@ -343,7 +344,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
       <circle cx="120" cy="38" r="19" fill="#ffd166" opacity=".28"/><circle cx="120" cy="38" r="11" fill="#ffd166"/>
       <g fill="#7a2e12" opacity=".55"><circle cx="36" cy="56" r="3"/><circle cx="80" cy="80" r="3"/><circle cx="164" cy="68" r="3"/></g>`
   };
-  const cover = (c, locked) => `<span class="cover${locked ? " locked" : ""}${ART[c.id] ? " art" : ""}" style="--c1:${c.cover[0]};--c2:${c.cover[1]}">${locked ? `<span class="lock" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2h1a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2zm2 0h6V8a3 3 0 0 0-6 0z"/></svg></span>` : ""}<span class="k">${esc(c.name)}</span>${ART[c.id] ? `<svg class="a" viewBox="0 0 200 200" aria-hidden="true">${ART[c.id]}</svg>` : ""}<span class="t">${esc(c.title)}</span><span class="p">Eureka</span></span>`;
+  const cover = (c, locked) => `<span class="cover${locked ? " locked" : ""}${ART[c.id] ? " art" : ""}" style="--c1:${c.cover[0]};--c2:${c.cover[1]}">${locked ? `<span class="lock" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2h1a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2zm2 0h6V8a3 3 0 0 0-6 0z"/></svg></span>` : ""}<span class="k">${esc(c.name)}<small>${esc(c.school)}</small></span>${ART[c.id] ? `<svg class="a" viewBox="0 0 200 200" aria-hidden="true">${ART[c.id]}</svg>` : ""}<span class="t">${esc(c.title)}</span><span class="p">Eureka</span></span>`;
   const STAR = `<span class="star" aria-label="Favorite"><svg viewBox="0 0 24 24"><path d="M12 3.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8L3.6 9.7l5.8-.8z"/></svg></span>`;
   function book(c) {
     const pct = progress(c), done = has(L.done, c.id);
