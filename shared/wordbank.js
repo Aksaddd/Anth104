@@ -48,13 +48,40 @@
   // dictionary(word): a general English dictionary (dictionaryapi.dev), for words the class dictionary doesn't have.
   // define(word): the class dictionary first (with its word parts), then the class glossary, then the general one.
   const dcache = {};
+  // Outside sources, tried in order until one answers. Each receives only the word itself.
+  //   1. dictionaryapi.dev   everyday English words
+  //   2. Wiktionary          rarer and technical words, and other languages' words used in English
+  //   3. Wikipedia           names, places and multi-word terms ("Papua New Guinea", "Sapir-Whorf hypothesis")
+  // A word that is not found as written is tried again in its plain form ("stoned" → "stone", "ideologies" → "ideology").
+  async function getJSON(url) { const c = new AbortController(), tm = setTimeout(() => c.abort(), 6000); try { const r = await fetch(url, { signal: c.signal }); return r.ok ? await r.json() : null } catch (e) { return null } finally { clearTimeout(tm) } }
+  const plain = s => { const d = document.createElement("div"); d.innerHTML = String(s || ""); return d.textContent.replace(/\s+/g, " ").trim() };
+  function lemmas(k) {
+    const f = [k];
+    if (/ies$/.test(k)) f.push(k.slice(0, -3) + "y"); if (/(s|x|ch|sh)es$/.test(k)) f.push(k.slice(0, -2)); if (/s$/.test(k) && !/ss$/.test(k)) f.push(k.slice(0, -1));
+    if (/ied$/.test(k)) f.push(k.slice(0, -3) + "y"); if (/ed$/.test(k)) f.push(k.slice(0, -2), k.slice(0, -1)); if (/ing$/.test(k)) f.push(k.slice(0, -3), k.slice(0, -3) + "e");
+    if (/(.)\1(ed|ing)$/.test(k)) f.push(k.replace(/(.)\1(ed|ing)$/, "$1")); if (/ly$/.test(k)) f.push(k.slice(0, -2));
+    return [...new Set(f)].filter(x => x.length > 2);
+  }
+  async function fromDictionary(k) { const j = await getJSON("https://api.dictionaryapi.dev/api/v2/entries/en/" + encodeURIComponent(k)); const m = j && j[0] && j[0].meanings && j[0].meanings[0]; return m && m.definitions && m.definitions[0] ? { word: j[0].word || k, def: m.definitions[0].definition, pos: m.partOfSpeech || "", src: "Dictionary", parts: [] } : null }
+  async function fromWiktionary(k) {
+    const j = await getJSON("https://en.wiktionary.org/api/rest_v1/page/definition/" + encodeURIComponent(k.replace(/ /g, "_"))); if (!j) return null;
+    for (const lang of [j.en].concat(Object.values(j)).filter(Boolean)) for (const e of lang) for (const d of e.definitions || []) { const def = plain(d.definition); if (def) return { word: k, def, pos: (e.partOfSpeech || "").toLowerCase(), src: "Wiktionary", parts: [] } }
+    return null;
+  }
+  async function fromWikipedia(title) {
+    const j = await getJSON("https://en.wikipedia.org/api/rest_v1/page/summary/" + encodeURIComponent(title.replace(/ /g, "_")) + "?redirect=true"); if (!j || j.type !== "standard" || !j.extract) return null;
+    const first = (j.extract.match(/^.*?[.!?](?=\s|$)/) || [j.extract])[0]; return { word: j.title || title, def: first.length > 320 ? first.slice(0, 317) + "…" : first, pos: "", src: "Wikipedia", parts: [] };
+  }
   async function dictionary(word) {
-    const k = norm(word); if (k in dcache) return dcache[k]; if (!/^[a-z][a-z' -]{1,40}$/.test(k)) return (dcache[k] = null);
-    try {
-      const c = new AbortController(), tm = setTimeout(() => c.abort(), 6000), r = await fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + encodeURIComponent(k), { signal: c.signal }); clearTimeout(tm); if (!r.ok) throw 0;
-      const j = await r.json(), m = j[0].meanings[0];
-      return (dcache[k] = { word: j[0].word || word, def: m.definitions[0].definition, pos: m.partOfSpeech || "", src: "Dictionary", parts: [] });
-    } catch (e) { return (dcache[k] = null) }
+    const raw = String(word || "").trim().replace(/[.:;!?]+$/, ""), k = norm(raw); if (k in dcache) return dcache[k]; if (k.length < 2 || k.length > 80) return (dcache[k] = null);
+    const single = /^[a-zà-ɏ'’-]+$/.test(k), named = /[A-Z]/.test(raw.slice(0, 1)) || /[ ,]/.test(raw);
+    let out = null;
+    if (single) { for (const f of lemmas(k)) { out = await fromDictionary(f); if (out) break } }
+    if (!out && !/,/.test(k)) { for (const f of single ? lemmas(k) : [k]) { out = await fromWiktionary(f); if (out) break } }
+    if (!out && (named || !single)) { for (const tt of [...new Set([raw, raw.split(",")[0].trim()])]) { out = await fromWikipedia(tt); if (out) break } }
+    if (!out && single) out = await fromWikipedia(raw);
+    if (out && norm(out.word) !== k) out.word = raw;   // keep the word as the student met it; the meaning may be of its plain form
+    return (dcache[k] = out);
   }
   async function define(word) {
     if (window.BioLookup) { try { const r = await window.BioLookup.find(word); if (r && r.def) return { word: r.term, def: r.def, pos: "", src: "Class dictionary", parts: (r.parts || []).map(p => ({ root: p.root, mean: p.mean })) } } catch (e) { } }
