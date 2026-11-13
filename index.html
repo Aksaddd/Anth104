@@ -3,7 +3,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Eureka · Understanding takes time</title>
-<meta name="description" content="Eureka: a calmer way to read, reflect, and remember. Reading guides, practice and examinations for your classes. Enter your class code to open your class.">
+<meta name="description" content="Eureka: a calmer way to read, reflect, and remember. Reading guides, practice and exams for your classes. Enter your class code to open your class.">
 <meta name="theme-color" content="#05070d">
 <link rel="preload" as="image" href="assets/hero/eureka-poster.jpg" media="(min-width:700px)">
 <link rel="preload" as="image" href="assets/hero/eureka-poster-sm.jpg" media="(max-width:699px)">
@@ -12,24 +12,23 @@
 <script src="shared/settings.js"></script>
 <style>
 /* The front page.
-   1. The hero from the Eureka app's landing page: a night sky behind "Understanding Takes Time", the second line and
-      the button arriving a moment later (or at once if you click anywhere).
-   2. The course directory, in the house style: black on warm white, a fine serif, small letter-spaced capitals, hairlines.
+   1. Hero (from the Eureka app's landing page): a night sky behind "Understanding Takes Time".
+   2. The library, laid out like Apple Books: a sidebar (Reading Now, Library, More Classes, Class Code) beside the
+      main column on wide screens, a tab bar at the bottom on phones. Classes are book covers on shelves:
+      "Continue" for the class you opened last, "Your Library", then "More to Explore" (classes that need a code).
+   Visual language: Apple (system font, white and #f5f5f7, Apple blue, pills, soft shadows).
 
-   The sky video is kept light so it never stutters: the still poster paints first (20–60 KB), the video (0.5 MB on
-   phones, 1.1 MB on larger screens, down from 55 MB) is only fetched once the page has finished loading, and it is
-   skipped altogether for reduced motion, data saver or a slow connection. It pauses whenever it is off screen. */
-@import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..600;1,6..96,400..600&display=swap");
-:root{--bg:#faf9f7;--paper:#fff;--ink:#0b0b0c;--muted:#6f6b66;--line:#e4e0d9;--fill:#f1eee9;--accent:#0b0b0c;
-  --serif:"Didot","Bodoni 72","Bodoni MT","Bodoni Moda","Playfair Display",Georgia,"Times New Roman",serif;
-  --body:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Helvetica,Arial,sans-serif;--display:var(--serif)}
-:root[data-theme="dark"]{--bg:#0b0b0c;--paper:#141415;--ink:#f4f2ee;--muted:#a09b94;--line:#2a2a2c;--fill:#1c1c1e;--accent:#f4f2ee}
+   The sky video stays light: the poster paints first, the video (0.5 MB on phones, 1.1 MB on larger screens) is only
+   fetched once the page has loaded, is skipped for reduced motion, data saver or a slow connection, and pauses off screen. */
+:root{--bg:#fff;--side:#f5f5f7;--paper:#fff;--ink:#1d1d1f;--muted:#6e6e73;--faint:#86868b;--line:#d2d2d7;--fill:#f5f5f7;--accent:#0071e3;--accent-hover:#0077ed;
+  --display:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --body:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --serif:ui-serif,"New York","Iowan Old Style",Georgia,serif}
+:root[data-theme="dark"]{--bg:#000;--side:#1c1c1e;--paper:#1c1c1e;--ink:#f5f5f7;--muted:#98989f;--faint:#8e8e93;--line:#38383a;--fill:#1c1c1e;--accent:#0a84ff;--accent-hover:#409cff}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.6 var(--body);-webkit-font-smoothing:antialiased}
-.inner{max-width:1120px;margin:0 auto;padding:0 28px}
-:is(a,button,input):focus-visible{outline:1px solid currentColor;outline-offset:3px}
-.caps{font:500 11px/1 var(--body);letter-spacing:.24em;text-transform:uppercase}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--body);letter-spacing:-.022em;-webkit-font-smoothing:antialiased}
+:is(a,button,input):focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:8px}
 
 /* ---------- 1. hero */
 .hero{position:relative;height:100vh;height:100svh;min-height:520px;overflow:hidden;background:#05070d url(assets/hero/eureka-poster-sm.jpg) center/cover no-repeat;color:#fff;cursor:pointer}
@@ -38,66 +37,102 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.6 var(--body
 .hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.5s ease-in-out;z-index:1;pointer-events:none}
 .hero video.on{opacity:1}
 .hero .veil{position:absolute;inset:0;z-index:2;background:linear-gradient(to bottom,rgba(0,0,0,.3) 0%,rgba(0,0,0,.1) 30%,rgba(0,0,0,.1) 70%,rgba(0,0,0,.5) 100%)}
-.hero .top{position:absolute;top:0;left:0;right:0;z-index:11;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:64px;padding:0 28px}
-.hero .mark{grid-column:2;font:400 20px/1 var(--serif);letter-spacing:.34em;text-transform:uppercase;color:#fff;text-decoration:none;padding-left:.34em;opacity:.92}
-.setbtn{justify-self:end;display:inline-flex;align-items:center;gap:8px;border:0;background:none;color:#fff;opacity:.8;cursor:pointer;font:500 11px/1 var(--body);letter-spacing:.2em;text-transform:uppercase}
-.setbtn:hover{opacity:1}.setbtn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.4}
+.hero .top{position:absolute;top:0;left:0;right:0;z-index:11;display:flex;align-items:center;justify-content:space-between;height:52px;padding:0 22px}
+.hero .mark{font:600 19px/1 var(--display);letter-spacing:-.02em;color:#fff;text-decoration:none;opacity:.95}
+.setbtn{display:inline-flex;align-items:center;gap:6px;border:0;background:none;color:#fff;opacity:.85;cursor:pointer;font:400 13px/1 var(--body)}
+.setbtn:hover{opacity:1}.setbtn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.6}
 .hero .content{position:relative;z-index:10;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center}
-.hero h1{margin:0;font:300 clamp(28px,6vw,56px)/1.3 Georgia,"Times New Roman",serif;letter-spacing:.02em;color:#fff}
-.hero .second{margin:24px 0 0;max-width:600px;font:300 clamp(16px,3vw,22px)/1.6 var(--body);letter-spacing:.01em;color:rgba(255,255,255,.85);opacity:0;transform:translateY(10px);transition:opacity .5s ease-out,transform .5s ease-out}
-.hero .enter{margin-top:48px;padding:18px 44px;font:500 15px/1 var(--body);letter-spacing:.08em;text-transform:uppercase;color:#fff;background:transparent;border:1px solid rgba(255,255,255,.6);border-radius:6px;cursor:pointer;opacity:0;transform:translateY(15px);visibility:hidden;transition:opacity .5s ease-out,transform .5s ease-out,background-color .3s ease,border-color .3s ease}
-.hero .enter:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.9)}
+.hero h1{margin:0;font:600 clamp(34px,7vw,72px)/1.06 var(--display);letter-spacing:-.03em;color:#fff}
+.hero .second{margin:16px 0 0;max-width:600px;font:400 clamp(19px,2.6vw,26px)/1.3 var(--display);letter-spacing:-.01em;color:rgba(255,255,255,.86);opacity:0;transform:translateY(10px);transition:opacity .5s ease-out,transform .5s ease-out}
+.hero .enter{margin-top:34px;padding:13px 26px;font:400 17px/1 var(--body);color:#fff;background:var(--accent);border:0;border-radius:980px;cursor:pointer;opacity:0;transform:translateY(15px);visibility:hidden;transition:opacity .5s ease-out,transform .5s ease-out,background-color .2s ease}
+.hero .enter:hover{background:var(--accent-hover)}
 .hero.s2 .second{opacity:1;transform:none}
 .hero.s3 .enter{opacity:1;transform:none;visibility:visible}
-.hero .hint{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);z-index:10;display:flex;flex-direction:column;align-items:center;gap:8px;opacity:.6;animation:gentlePulse 2s ease-in-out infinite;transition:opacity .4s}
-.hero .hint span{font:400 12px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7)}
+.hero .hint{position:absolute;bottom:34px;left:50%;transform:translateX(-50%);z-index:10;display:flex;flex-direction:column;align-items:center;gap:6px;opacity:.6;animation:gentlePulse 2s ease-in-out infinite;transition:opacity .4s}
+.hero .hint span{font:400 12px/1 var(--body);color:rgba(255,255,255,.75)}
 .hero.s2 .hint{opacity:0;animation:none}
 @keyframes gentlePulse{0%,100%{opacity:.4;transform:translateX(-50%) translateY(0)}50%{opacity:.8;transform:translateX(-50%) translateY(5px)}}
 
-/* ---------- 2. the course directory */
-.dir{padding:84px 0 0;scroll-margin-top:0}
-.dirhead{text-align:center}
-.dirhead .caps{color:var(--muted)}
-.dirhead h2{margin:22px 0 0;font:400 clamp(40px,7vw,76px)/1 var(--serif);letter-spacing:-.015em}
-.dirhead h2 i{font-style:italic}
-.rule{width:44px;height:1px;background:var(--ink);margin:30px auto 24px}
-.lede{max-width:470px;margin:0 auto;color:var(--muted);font-size:15.5px;line-height:1.75}
-.join{max-width:440px;margin:44px auto 0;text-align:left}
-.join label{display:block;color:var(--muted);margin-bottom:12px}
-.join .row{display:flex;align-items:stretch;border-bottom:1px solid var(--ink)}
-.join input{flex:1;min-width:0;border:0;background:none;color:var(--ink);font:400 20px/1 var(--serif);letter-spacing:.14em;text-transform:uppercase;padding:12px 0}
-.join input::placeholder{color:#b9b4ac;text-transform:none;letter-spacing:.02em;font-style:italic}
-.join input:focus{outline:none}
-.btn{border:0;background:var(--ink);color:var(--bg);cursor:pointer;padding:0 22px;font:600 11px/1 var(--body);letter-spacing:.22em;text-transform:uppercase;margin-bottom:6px;min-height:40px}
-.btn:hover{opacity:.82}.btn:disabled{opacity:.4;cursor:default}
-.join small{display:block;margin-top:12px;color:var(--muted);font-size:12.5px;line-height:1.6}
-.msg{margin-top:14px;font-size:13px;padding:10px 0;border-top:1px solid var(--line)}
-.msg.no{color:#9b1c1c}.msg.ok{color:var(--ink)}[data-theme="dark"] .msg.no{color:#ff9a8f}
-.join.shake{animation:shake .4s}@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
-main{padding-bottom:40px}
-.sechead{display:flex;align-items:baseline;justify-content:space-between;border-top:1px solid var(--ink);padding-top:16px;margin:64px 0 30px}
-.sechead h3{margin:0;font:400 30px/1.1 var(--serif)}
-.sechead .caps{color:var(--muted)}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:0;border-left:1px solid var(--line);border-top:1px solid var(--line)}
-.cc{position:relative;display:flex;flex-direction:column;min-height:400px;padding:30px 28px 28px;border:0;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--paper);color:inherit;text-decoration:none;text-align:left;font:inherit;cursor:pointer;transition:background .25s}
-.cc:hover{background:var(--fill)}
-.cc .no{color:var(--muted)}
-.cc .code{margin-top:54px;color:var(--ink);line-height:1.5}
-.cc h4{margin:14px 0 0;font:400 34px/1.08 var(--serif);letter-spacing:-.01em}
-.cc p{margin:18px 0 0;color:var(--muted);font-size:14px;line-height:1.7}
-.cc .meta{margin-top:auto;padding-top:28px;display:flex;align-items:flex-end;justify-content:space-between;gap:14px}
-.cc .meta span:first-child{color:var(--muted);font-size:12px;line-height:1.5}
-.cc .go{font:600 11px/1 var(--body);letter-spacing:.22em;text-transform:uppercase;border-bottom:1px solid var(--ink);padding-bottom:5px;white-space:nowrap}
-.cc.locked h4{color:var(--muted)}
-.cc.locked .go{border-bottom-style:dotted}
-.empty{border:1px solid var(--line);background:var(--paper);padding:44px 28px;text-align:center;color:var(--muted);font:italic 400 19px/1.5 var(--serif)}
-.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:36px;margin-top:76px;padding-top:34px;border-top:1px solid var(--line)}
-.notes h5{margin:0 0 10px;font:400 21px/1.2 var(--serif)}
-.notes p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.75}
-.notes .caps{display:block;color:var(--muted);margin-bottom:16px}
-footer{border-top:1px solid var(--line);margin-top:76px;padding:26px 0 40px;text-align:center;color:var(--muted)}
-@media (max-width:560px){.dir{padding-top:60px}.cc{min-height:340px}.hero .mark{font-size:17px}.setbtn span{display:none}.hero .top{padding:0 18px}}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.cc,.join.shake,.hero .second,.hero .enter,.hero video{transition:none;animation:none}.hero .hint{animation:none}}
+/* ---------- 2. the library (Apple Books) */
+.app{display:grid;grid-template-columns:250px minmax(0,1fr);min-height:100vh;scroll-margin-top:0}
+.side{position:sticky;top:0;align-self:start;height:100vh;height:100dvh;background:var(--side);border-right:1px solid color-mix(in srgb,var(--line) 60%,transparent);padding:22px 14px 18px;display:flex;flex-direction:column;gap:2px}
+.side .brand{font:700 22px/1 var(--display);letter-spacing:-.03em;padding:4px 10px 18px;color:var(--ink);text-decoration:none}
+.side .lab{font:600 12px/1 var(--body);color:var(--faint);padding:16px 10px 8px;letter-spacing:-.01em}
+.side a,.side button.nav{display:flex;align-items:center;gap:10px;width:100%;border:0;background:none;text-align:left;cursor:pointer;color:var(--ink);text-decoration:none;font:400 15px/1 var(--body);letter-spacing:-.016em;padding:9px 10px;border-radius:9px}
+.side a svg,.side button.nav svg{width:19px;height:19px;flex:none;fill:none;stroke:var(--accent);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.side a:hover,.side button.nav:hover{background:color-mix(in srgb,var(--ink) 6%,transparent)}
+.side a.on{background:color-mix(in srgb,var(--ink) 9%,transparent);font-weight:500}
+.side .sp{flex:1}
+.main{padding:34px clamp(20px,4.4vw,56px) 110px;min-width:0}
+.main h2.big{margin:0;font:700 34px/1.1 var(--display);letter-spacing:-.03em}
+.main .date{margin:0 0 4px;font:600 13px/1 var(--body);color:var(--faint);text-transform:uppercase;letter-spacing:.02em}
+.sec{margin-top:38px;scroll-margin-top:24px}
+.sec>header{display:flex;align-items:baseline;justify-content:space-between;gap:12px;border-top:1px solid var(--line);padding-top:16px;margin-bottom:16px}
+.sec h3{margin:0;font:700 22px/1.15 var(--display);letter-spacing:-.022em}
+.sec header span{font:400 15px/1 var(--body);color:var(--faint)}
+/* a book: cover + what's under it */
+.cover{position:relative;display:flex;flex-direction:column;justify-content:space-between;aspect-ratio:2/3;border-radius:5px 9px 9px 5px;padding:12% 11% 10% 15%;color:#fff;overflow:hidden;background:linear-gradient(150deg,var(--c1),var(--c2));
+  box-shadow:0 1px 1px rgba(0,0,0,.14),0 10px 22px -6px rgba(0,0,0,.34),0 22px 40px -18px rgba(0,0,0,.3);transition:transform .25s ease,box-shadow .25s ease}
+.cover::before{content:"";position:absolute;inset:0 auto 0 0;width:7%;background:linear-gradient(90deg,rgba(0,0,0,.28),rgba(255,255,255,.22) 45%,rgba(0,0,0,.12) 70%,transparent)}
+.cover::after{content:"";position:absolute;inset:0;background:radial-gradient(120% 80% at 80% 0%,rgba(255,255,255,.3),transparent 55%);pointer-events:none}
+.cover .k{position:relative;font:600 .62em/1.2 var(--body);letter-spacing:.06em;text-transform:uppercase;opacity:.9}
+.cover .t{position:relative;font:700 1.18em/1.08 var(--serif);letter-spacing:-.01em;text-wrap:balance}
+.cover .p{position:relative;font:600 .56em/1 var(--body);letter-spacing:.14em;text-transform:uppercase;opacity:.82}
+.cover.locked{filter:saturate(.55) brightness(.96)}
+.cover .lock{position:absolute;right:8%;top:6%;z-index:1;width:1.6em;height:1.6em;border-radius:50%;background:rgba(0,0,0,.32);display:grid;place-items:center}
+.cover .lock svg{width:.85em;height:.85em;fill:#fff}
+.shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:30px 26px}
+.book{display:flex;flex-direction:column;gap:10px;border:0;background:none;padding:0;text-align:left;color:inherit;text-decoration:none;cursor:pointer;font-size:15px;min-width:0}
+.book:hover .cover{transform:translateY(-5px);box-shadow:0 1px 1px rgba(0,0,0,.14),0 18px 30px -8px rgba(0,0,0,.4),0 30px 50px -20px rgba(0,0,0,.34)}
+.book .under{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:26px}
+.book .pct{font:400 13px/1 var(--body);color:var(--faint);font-variant-numeric:tabular-nums}
+.book .new{font:700 10px/1 var(--body);color:#fff;background:var(--accent);border-radius:4px;padding:4px 6px;letter-spacing:.02em}
+.get{font:700 13px/1 var(--body);color:var(--accent);background:color-mix(in srgb,var(--ink) 7%,transparent);border-radius:980px;padding:7px 15px;letter-spacing:-.01em;white-space:nowrap}
+.book:hover .get{background:var(--accent);color:#fff}
+.book .ttl{font:500 14px/1.3 var(--body);letter-spacing:-.016em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.book .by{font:400 13px/1.3 var(--body);color:var(--faint);margin-top:-6px}
+/* Continue: the class you opened last */
+.cont{display:grid;grid-template-columns:minmax(120px,170px) minmax(0,1fr);gap:26px;align-items:center;background:var(--fill);border-radius:22px;padding:26px;text-decoration:none;color:inherit}
+.cont .cover{font-size:17px}
+.cont .k2{font:600 12px/1 var(--body);color:var(--faint);text-transform:uppercase;letter-spacing:.03em}
+.cont h4{margin:8px 0 6px;font:700 28px/1.1 var(--display);letter-spacing:-.028em}
+.cont p{margin:0;color:var(--muted);font-size:15px;line-height:1.45;max-width:54ch}
+.cont .bar{height:5px;border-radius:980px;background:color-mix(in srgb,var(--ink) 10%,transparent);margin:16px 0 8px;max-width:340px;overflow:hidden}
+.cont .bar i{display:block;height:100%;border-radius:inherit;background:var(--accent)}
+.cont .row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:14px}
+.pill{display:inline-block;font:400 17px/1 var(--body);color:#fff;background:var(--accent);border:0;border-radius:980px;padding:11px 22px;cursor:pointer;text-decoration:none}
+.pill:hover{background:var(--accent-hover)}.pill:disabled{opacity:.5;cursor:default}
+.cont .sm{font-size:13px;color:var(--faint)}
+.empty{background:var(--fill);border-radius:22px;padding:34px 24px;text-align:center;color:var(--muted)}
+.empty b{display:block;color:var(--ink);font:700 22px/1.2 var(--display);letter-spacing:-.022em;margin-bottom:6px}
+/* class code */
+.code{background:var(--fill);border-radius:22px;padding:26px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;align-items:center}
+.code h4{margin:0 0 6px;font:700 24px/1.12 var(--display);letter-spacing:-.025em}
+.code p{margin:0;color:var(--muted);font-size:15px;line-height:1.45}
+.code form{display:flex;gap:10px}
+.code input{flex:1;min-width:0;font:400 17px/1 var(--body);letter-spacing:.04em;text-transform:uppercase;padding:13px 16px;border-radius:12px;border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+.code input::placeholder{text-transform:none;letter-spacing:-.01em;color:var(--faint)}
+.code input:focus{outline:4px solid color-mix(in srgb,var(--accent) 28%,transparent);border-color:var(--accent)}
+.msg{grid-column:1/-1;font-size:14px;border-radius:12px;padding:10px 14px;margin-top:-6px}
+.msg.ok{background:rgba(52,199,89,.14);color:#1d7a3a}.msg.no{background:rgba(255,59,48,.1);color:#c4261d}
+[data-theme="dark"] .msg.ok{color:#5fe08a}[data-theme="dark"] .msg.no{color:#ff8079}
+.code.shake{animation:shake .4s}@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.foot{margin-top:46px;padding-top:18px;border-top:1px solid var(--line);color:var(--faint);font-size:12px;line-height:1.5}
+/* phones: tab bar instead of the sidebar */
+.tabs{display:none}
+@media (max-width:820px){
+  .app{display:block}.side{display:none}
+  .main{padding:22px 18px 104px}
+  .shelf{grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:24px 18px}
+  .cont{grid-template-columns:104px minmax(0,1fr);gap:16px;padding:18px;border-radius:18px}.cont .cover{font-size:11px}.cont h4{font-size:21px}.cont p{display:none}
+  .code{grid-template-columns:1fr;padding:20px;border-radius:18px}
+  .tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(4,1fr);padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));background:color-mix(in srgb,var(--bg) 78%,transparent);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-top:.5px solid var(--line);transform:translateY(110%);transition:transform .3s ease}
+  .tabs.show{transform:none}
+  .tabs a,.tabs button{display:flex;flex-direction:column;align-items:center;gap:3px;border:0;background:none;color:var(--faint);text-decoration:none;font:500 10px/1 var(--body);padding:5px 0;cursor:pointer}
+  .tabs svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  .tabs .on{color:var(--accent)}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.cover,.hero .second,.hero .enter,.hero video,.tabs{transition:none}.hero .hint,.code.shake{animation:none}}
 </style>
 <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
 <script defer src="/_vercel/insights/script.js"></script>
@@ -108,98 +143,124 @@ footer{border-top:1px solid var(--line);margin-top:76px;padding:26px 0 40px;text
   <div class="veil" aria-hidden="true"></div>
   <div class="top">
     <a class="mark" href="index.html">Eureka</a>
-    <button type="button" class="setbtn" id="settingsBtn" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span>Settings</span></button>
+    <button type="button" class="setbtn" id="settingsBtn" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Settings</button>
   </div>
   <div class="content">
-    <h1>Understanding Takes Time</h1>
+    <h1>Understanding Takes Time.</h1>
     <p class="second">A calmer way to read, reflect, and remember.</p>
     <button type="button" class="enter" id="enter">Enter Eureka</button>
   </div>
-  <div class="hint" aria-hidden="true"><span>Click anywhere</span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="1.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg></div>
+  <div class="hint" aria-hidden="true"><span>Click anywhere</span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.75)" stroke-width="1.6"><path d="M12 5v14M5 12l7 7 7-7"/></svg></div>
 </section>
 
-<section class="dir" id="classes">
-  <div class="inner dirhead">
-    <p class="caps">The pursuit of knowledge</p>
-    <h2>Your <i>classes</i></h2>
-    <div class="rule" aria-hidden="true"></div>
-    <p class="lede">Reading guides, practice and examinations, composed for your classes with care. Enter your class code to open yours.</p>
-    <form class="join" id="join" autocomplete="off">
-      <label class="caps" for="code" id="joinLabel">Class code</label>
-      <div class="row"><input id="code" name="code" placeholder="Enter your code" autocapitalize="characters" spellcheck="false" aria-describedby="joinHelp"><button class="btn" id="joinBtn">Enter</button></div>
-      <small id="joinHelp">Your professor or a classmate gives you a code for each class. You enter it once on this device.</small>
-      <div class="msg" id="msg" role="status" hidden></div>
-    </form>
-  </div>
-  <main class="inner">
-    <div id="mine"></div>
-    <div id="more"></div>
-    <section class="notes" aria-label="How Eureka works">
-      <div><span class="caps">I</span><h5>Read</h5><p>Each class is set out as short passages, written from its own materials, with a question or two after every one.</p></div>
-      <div><span class="caps">II</span><h5>Practice</h5><p>Drills by subject, review games and a list of everything you marked to see again. Your progress is kept on this device.</p></div>
-      <div><span class="caps">III</span><h5>Sit the exam</h5><p>A fresh mock examination whenever you want one, drawn from the whole class, so the real one feels familiar.</p></div>
+<div class="app" id="classes">
+  <aside class="side" aria-label="Library">
+    <a class="brand" href="#classes">Eureka</a>
+    <a href="#now" class="on" data-nav="now"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5C5.5 4.5 8.5 4.5 12 6.5v13c-3.5-2-6.5-2-9-1z"/><path d="M21 5.5c-2.5-1-5.5-1-9 1v13c3.5-2 6.5-2 9-1z"/></svg>Reading Now</a>
+    <span class="lab">Library</span>
+    <a href="#library" data-nav="library"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4v16M9 4v16M13 5l5 15"/></svg>All Classes</a>
+    <a href="#more" data-nav="more"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l-1 12H7z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg>More to Explore</a>
+    <a href="#code" data-nav="code"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0"/></svg>Class Code</a>
+    <span class="sp"></span>
+    <button type="button" class="nav" id="sideSettings"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8.4"/></svg>Settings</button>
+  </aside>
+  <main class="main">
+    <p class="date" id="date"></p>
+    <h2 class="big" id="now">Reading Now</h2>
+    <section class="sec" style="margin-top:20px" aria-labelledby="hCont"><div id="cont"></div></section>
+    <section class="sec" id="library" aria-labelledby="hLib"><header><h3 id="hLib">Your Library</h3><span id="libCount"></span></header><div id="mine"></div></section>
+    <section class="sec" id="more" aria-labelledby="hMore"><header><h3 id="hMore">More to Explore</h3><span>Opens with a class code</span></header><div id="store"></div></section>
+    <section class="sec" id="code" aria-labelledby="hCode">
+      <form class="code" id="join" autocomplete="off">
+        <div><h4 id="hCode">Have a class code?</h4><p id="joinHelp">Your professor or a classmate gives you a code for each class. Enter it once and the class is added to your library on this device.</p></div>
+        <div class="code-form"><div style="display:flex;gap:10px" class="rowf"><input id="code-in" name="code" placeholder="Class code" autocapitalize="characters" spellcheck="false" aria-label="Class code" aria-describedby="joinHelp"><button class="pill" id="joinBtn">Add</button></div></div>
+        <div class="msg" id="msg" role="status" hidden></div>
+      </form>
     </section>
+    <p class="foot">Eureka · Reading guides, practice and exams for your classes. Your progress is kept on this device.</p>
   </main>
-  <footer><div class="inner caps">Eureka · Understanding takes time</div></footer>
-</section>
+</div>
+<nav class="tabs" id="tabs" aria-label="Library">
+  <a href="#now" class="on" data-nav="now"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5C5.5 4.5 8.5 4.5 12 6.5v13c-3.5-2-6.5-2-9-1z"/><path d="M21 5.5c-2.5-1-5.5-1-9 1v13c3.5-2 6.5-2 9-1z"/></svg>Reading Now</a>
+  <a href="#library" data-nav="library"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4v16M9 4v16M13 5l5 15"/></svg>Library</a>
+  <a href="#more" data-nav="more"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l-1 12H7z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg>Explore</a>
+  <a href="#code" data-nav="code"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0"/></svg>Class Code</a>
+</nav>
 
 <script>
 (() => {
   // ---------- the hero: timed reveal, and a sky video that never gets in the way
   const hero = document.getElementById("hero"), sky = document.getElementById("sky"), $ = id => document.getElementById(id);
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const reveal = () => { hero.classList.add("s2", "s3", "ready") };
   const t1 = setTimeout(() => hero.classList.add("s2"), 2500), t2 = setTimeout(() => hero.classList.add("s3", "ready"), 4000);
   hero.addEventListener("click", e => { if (e.target.closest("button,a")) return; clearTimeout(t1); clearTimeout(t2); reveal() });
-  const toClasses = () => document.getElementById("classes").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
-  $("enter").onclick = toClasses;
-
+  $("enter").onclick = () => $("classes").scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
   const conn = navigator.connection || {}, slow = conn.saveData || /(^|-)2g|3g/.test(conn.effectiveType || "");
-  const still = matchMedia("(prefers-reduced-motion: reduce)").matches || slow;   // these visitors keep the still sky
   function startSky() {
-    if (still || sky.src) return;
+    if (reduce || slow || sky.src) return;   // these visitors keep the still sky
     sky.src = innerWidth * (devicePixelRatio || 1) > 1400 ? "assets/hero/eureka-1080.mp4" : "assets/hero/eureka-720.mp4";
     sky.addEventListener("canplay", () => { sky.classList.add("on") }, { once: true });
-    sky.addEventListener("error", () => { sky.remove() }, { once: true });   // the poster stays
-    const p = sky.play(); if (p && p.catch) p.catch(() => { });   // autoplay refused (low-power mode): the poster stays
+    sky.addEventListener("error", () => { sky.remove() }, { once: true });
+    const p = sky.play(); if (p && p.catch) p.catch(() => { });
   }
-  // fetch the video only after everything else has loaded, and only play it while the hero is on screen and the tab is visible
   const idle = window.requestIdleCallback || (f => setTimeout(f, 300));
   if (document.readyState === "complete") idle(startSky); else addEventListener("load", () => idle(startSky), { once: true });
   let inView = true;
   const playState = () => { if (!sky.src || !sky.isConnected) return; if (inView && !document.hidden) { const p = sky.play(); if (p && p.catch) p.catch(() => { }) } else sky.pause() };
-  if ("IntersectionObserver" in window) new IntersectionObserver(es => { inView = es[0].isIntersecting; playState() }, { threshold: .05 }).observe(hero);
+  if ("IntersectionObserver" in window) new IntersectionObserver(es => { inView = es[0].isIntersecting; playState(); $("tabs").classList.toggle("show", !inView) }, { threshold: .05 }).observe(hero);
   document.addEventListener("visibilitychange", playState);
 
-  // ---------- the course directory
-  const P = window.Platform;
+  // ---------- the library
+  const P = window.Platform, LAST = "a104-last-class";
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const want = new URLSearchParams(location.search).get("join");   // sent here by a class page that needs its code
-  const no = c => "N° " + String(P.COURSES.indexOf(c) + 1).padStart(2, "0");
-  function card(c, open) {
-    const inner = `<span class="caps no">${no(c)}</span><span class="caps code">${esc(c.name)} · ${esc(c.school)}</span><h4>${esc(c.title)}</h4><p>${esc(c.blurb)}</p>`;
+  // how far along a class is: questions answered at least once across its drills
+  function progress(c) {
+    let done = 0, total = 0;
+    (c.progress || []).forEach(([key, n]) => { total += n; try { const d = JSON.parse(localStorage.getItem(key) || "null"); if (d && d.stats) done += Math.min(n, Object.keys(d.stats).length) } catch (e) { } });
+    return total ? Math.round(100 * done / total) : 0;
+  }
+  const cover = (c, locked) => `<span class="cover${locked ? " locked" : ""}" style="--c1:${c.cover[0]};--c2:${c.cover[1]}">${locked ? `<span class="lock" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2h1a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2zm2 0h6V8a3 3 0 0 0-6 0z"/></svg></span>` : ""}<span class="k">${esc(c.name)}</span><span class="t">${esc(c.title)}</span><span class="p">Eureka</span></span>`;
+  function book(c, open) {
+    const pct = progress(c);
     return open
-      ? `<a class="cc" href="${c.path}index.html">${inner}<span class="meta"><span>${esc(c.stats)}</span><span class="go">Discover</span></span></a>`
-      : `<button type="button" class="cc locked" data-lock="${c.id}">${inner}<span class="meta"><span>By class code</span><span class="go">Enter code</span></span></button>`;
+      ? `<a class="book" href="${c.path}index.html" data-open="${c.id}">${cover(c)}<span class="under">${pct ? `<span class="pct">${pct}%</span>` : `<span class="new">NEW</span>`}<span class="pct" aria-hidden="true">•••</span></span><span class="ttl">${esc(c.title)}</span><span class="by">${esc(c.name)} · ${esc(c.school)}</span></a>`
+      : `<button type="button" class="book" data-lock="${c.id}">${cover(c, true)}<span class="under"><span class="get">GET</span></span><span class="ttl">${esc(c.title)}</span><span class="by">${esc(c.name)} · ${esc(c.school)}</span></button>`;
   }
   function paint() {
     const mine = P.COURSES.filter(c => P.has(c.id)), more = P.COURSES.filter(c => !P.has(c.id));
-    $("mine").innerHTML = `<div class="sechead"><h3>Your classes</h3><span class="caps">${mine.length ? String(mine.length).padStart(2, "0") : "—"}</span></div>` + (mine.length ? `<div class="cards">${mine.map(c => card(c, true)).join("")}</div>` : `<div class="empty">Enter a class code above to open your first class.</div>`);
-    $("more").innerHTML = more.length ? `<div class="sechead"><h3>${mine.length ? "More classes" : "The collection"}</h3><span class="caps">${String(more.length).padStart(2, "0")}</span></div><div class="cards">${more.map(c => card(c, false)).join("")}</div>` : "";
+    let last = null; try { last = localStorage.getItem(LAST) } catch (e) { }
+    const cur = mine.find(c => c.id === last) || mine.slice().sort((a, b) => progress(b) - progress(a))[0];
+    $("cont").innerHTML = cur ? (() => { const pct = progress(cur); return `<a class="cont" href="${cur.path}index.html" data-open="${cur.id}">${cover(cur)}<span><span class="k2">${pct ? "Continue" : "Start reading"}</span><h4>${esc(cur.title)}</h4><p>${esc(cur.blurb)}</p>
+        <span class="bar" aria-hidden="true"><i style="width:${Math.max(pct, 2)}%"></i></span><span class="sm">${pct}% complete · ${esc(cur.stats)}</span><span class="row"><span class="pill">${pct ? "Continue" : "Open"}</span></span></span></a>` })()
+      : `<div class="empty"><b>Your library is empty</b>Add a class with its class code and it will appear here.</div>`;
+    $("mine").innerHTML = mine.length ? `<div class="shelf">${mine.map(c => book(c, true)).join("")}</div>` : `<div class="empty">No classes yet. <a href="#code" style="color:var(--accent);text-decoration:none">Enter a class code ›</a></div>`;
+    $("libCount").textContent = mine.length ? (mine.length === 1 ? "1 class" : mine.length + " classes") : "";
+    $("more").hidden = !more.length; if (more.length) $("store").innerHTML = `<div class="shelf">${more.map(c => book(c, false)).join("")}</div>`;
+    document.querySelectorAll("[data-nav='more']").forEach(a => { a.hidden = !more.length });
     document.querySelectorAll("[data-lock]").forEach(b => b.onclick = () => ask(P.course(b.dataset.lock)));
+    document.querySelectorAll("[data-open]").forEach(a => a.addEventListener("click", () => { try { localStorage.setItem(LAST, a.dataset.open) } catch (e) { } }));
   }
+  const input = $("code-in");
   function say(text, ok) { const m = $("msg"); m.hidden = false; m.className = "msg " + (ok ? "ok" : "no"); m.textContent = text }
-  function ask(c) { $("joinLabel").textContent = `Class code for ${c.name}`; $("join").scrollIntoView({ behavior: "smooth", block: "center" }); $("code").focus({ preventScroll: true }) }
+  function ask(c) { $("hCode").textContent = `Enter the class code for ${c.name}`; $("code").scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" }); input.focus({ preventScroll: true }) }
   $("join").onsubmit = async e => {
-    e.preventDefault(); const v = $("code").value; if (!v.trim()) { $("code").focus(); return }
+    e.preventDefault(); const v = input.value; if (!v.trim()) { input.focus(); return }
     $("joinBtn").disabled = true; const c = await P.join(v); $("joinBtn").disabled = false;
     if (!c) { say("That code didn't match a class. Check it with your professor or classmate and try again.", false); $("join").classList.remove("shake"); void $("join").offsetWidth; $("join").classList.add("shake"); return }
-    $("code").value = ""; say(`${c.name} is open. Taking you there…`, true); paint();
-    setTimeout(() => { location.href = c.path + "index.html" }, 700);
+    input.value = ""; say(`${c.name} was added to your library. Opening it…`, true); try { localStorage.setItem(LAST, c.id) } catch (e) { } paint();
+    setTimeout(() => { location.href = c.path + "index.html" }, 800);
   };
+  $("sideSettings").onclick = () => $("settingsBtn").click();
+  $("date").textContent = new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
+  // sidebar / tab bar: highlight the section in view
+  const navs = document.querySelectorAll("[data-nav]"), setOn = id => navs.forEach(a => a.classList.toggle("on", a.dataset.nav === id));
+  if ("IntersectionObserver" in window) { const io = new IntersectionObserver(es => { es.forEach(en => { if (en.isIntersecting) setOn(en.target.id === "now" ? "now" : en.target.id) }) }, { rootMargin: "-30% 0px -60% 0px" });["now", "library", "more", "code"].forEach(id => io.observe($(id))) }
   paint();
-  // arriving from a class (its Eureka button, or a page that needs its code): go straight to the directory
+  // arriving from a class (its Eureka button, or a page that needs its code): go straight to the library
   if (want && P.course(want) && !P.has(want)) { reveal(); ask(P.course(want)); say(`${P.course(want).name} needs its class code. Enter it to open the class.`, false) }
-  else if (location.hash === "#classes") reveal();
+  else if (location.hash) reveal();
 })();
 </script>
 </body></html>

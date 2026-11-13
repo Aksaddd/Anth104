@@ -2,8 +2,8 @@
 
 One study platform for several classes. Each class has its own study guide: reading chapters, drills, mock exams and review games.
 
-- **Front page (`index.html`).** The hero from the Eureka app (EurekaDemo1's landing page): a night sky behind "Understanding Takes Time", then the course directory, where a class code opens a class. An **Eureka** button on every class's dashboard goes back to the directory.
-- **House style (`shared/maison.css`).** Loaded last on every page: black on warm white, a fine serif for display type, small letter-spaced capitals, hairlines instead of shadows, square black buttons. It only re-colors and re-shapes what pages already have. The dark theme keeps each page's own colors.
+- **Front page (`index.html`).** The hero from the Eureka app (a night sky behind "Understanding Takes Time"), then the library, laid out like Apple Books: classes are book covers on shelves ("Continue", "Your Library", "More to Explore"), with a sidebar on wide screens and a tab bar on phones. A class code adds a class to the library. An **Eureka** button on every class's dashboard goes back to it.
+- **Shared look (`shared/maison.css`).** Apple's design language on every page: the system font, white and light gray surfaces, Apple blue for anything you can tap, rounded cards and pill buttons. Loaded last, it brings ANTH 102 in line with the other classes and styles the shared pieces (the Eureka button, the Companions tag).
 - **The reader (`shared/ergoread.js`).** ErgoRead from the Eureka app, on every class's Read & Learn page: reading settings (theme, contrast, size, line height, width, paragraph gap, indent, heading scale, font, alignment), a word bubble when you rest the pointer on a word, a word bank, and a reading-progress bar.
 - **Companions.** Elegance for the pursuit of knowledge, and study pets for the inner child. The pets are not advertised: a **Companions** link with a shining "New" tag on each class dashboard is the way in, and the tag goes quiet once the student has a companion in that class. The pets keep their own playful colors.
 

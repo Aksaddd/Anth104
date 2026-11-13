@@ -31,30 +31,30 @@
 body.er-reading .wrap{max-width:var(--er-width)}
 body.er-reading.er-sepia{background:#ece5d6} body.er-reading.er-dark{background:#0f0f10}
 body.er-sepia .rd-sec .rd-prose strong,body.er-sepia .rd-sec .rd-prose b{color:#2f2416} body.er-dark .rd-sec .rd-prose strong,body.er-dark .rd-sec .rd-prose b{color:#fff}
-.er-bar{position:fixed;top:0;left:0;height:3px;width:0;z-index:60;background:#0b0b0c;transition:width .12s linear;border-radius:0 3px 3px 0}
-.er-fab{position:fixed;left:max(16px,env(safe-area-inset-left,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));z-index:44;display:inline-flex;align-items:center;gap:7px;border:1px solid #e5e7eb;background:#fff;color:#1a1a1a;border-radius:2px;padding:10px 14px;letter-spacing:.14em;text-transform:uppercase;font-size:11px;font:600 11px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.08)}
-.er-fab:hover{border-color:#0b0b0c;color:#0b0b0c} .er-fab b{font:700 15px Georgia,serif}
+.er-bar{position:fixed;top:0;left:0;height:3px;width:0;z-index:60;background:#0071e3;transition:width .12s linear;border-radius:0 3px 3px 0}
+.er-fab{position:fixed;left:max(16px,env(safe-area-inset-left,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));z-index:44;display:inline-flex;align-items:center;gap:7px;border:1px solid #e5e7eb;background:#fff;color:#1a1a1a;border-radius:980px;padding:9px 14px;font:600 13.5px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.1)}
+.er-fab:hover{border-color:#0071e3;color:#0071e3} .er-fab b{font:700 15px Georgia,serif}
 [data-theme="dark"] .er-fab{background:#1c1c1e;color:#f5f5f7;border-color:#38383a}
-.er-panel{position:fixed;left:max(16px,env(safe-area-inset-left,0px));bottom:68px;z-index:70;width:min(320px,calc(100vw - 32px));max-height:min(78vh,640px);overflow:auto;background:#fff;color:#1a1a1a;border:1px solid #e5e7eb;border-radius:4px;box-shadow:0 20px 50px rgba(0,0,0,.18);font:13px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;animation:erUp .18s ease}
+.er-panel{position:fixed;left:max(16px,env(safe-area-inset-left,0px));bottom:68px;z-index:70;width:min(320px,calc(100vw - 32px));max-height:min(78vh,640px);overflow:auto;background:#fff;color:#1a1a1a;border:1px solid #e5e7eb;border-radius:18px;box-shadow:0 20px 50px rgba(0,0,0,.18);font:13px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;animation:erUp .18s ease}
 @keyframes erUp{from{opacity:0;transform:translateY(8px)}}
 .er-head{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid #f3f4f6;position:sticky;top:0;background:#fff;z-index:1}
-.er-head .ic{width:32px;height:32px;border-radius:8px;background:#f1eee9;color:#0b0b0c;display:grid;place-items:center;font:700 15px Georgia,serif}
+.er-head .ic{width:32px;height:32px;border-radius:8px;background:#e8f1fc;color:#0071e3;display:grid;place-items:center;font:700 15px Georgia,serif}
 .er-head h2{margin:0;font-size:15px;font-weight:700} .er-head p{margin:0;font-size:11px;color:#6b7280}
 .er-head .x{margin-left:auto;border:0;background:none;color:#9ca3af;font-size:16px;cursor:pointer;border-radius:6px;padding:4px 7px} .er-head .x:hover{background:#f3f4f6}
 .er-body{padding:14px 16px;display:flex;flex-direction:column;gap:14px}
 .er-lab{display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:#374151;margin-bottom:6px} .er-lab span{font-weight:500;color:#6b7280;font-variant-numeric:tabular-nums}
 .er-row{display:flex;gap:6px} .er-row button{flex:1;border:1px solid #e5e7eb;background:#fff;border-radius:8px;padding:8px 4px;font:500 12px inherit;font-family:inherit;cursor:pointer;color:#374151}
-.er-row button[aria-pressed="true"]{border:2px solid #0b0b0c;padding:7px 3px;background:#f1eee9;color:#0b0b0c}
-.er-panel input[type=range]{width:100%;accent-color:#0b0b0c;margin:0}
+.er-row button[aria-pressed="true"]{border:2px solid #0071e3;padding:7px 3px;background:#e8f1fc;color:#0071e3}
+.er-panel input[type=range]{width:100%;accent-color:#0071e3;margin:0}
 .er-foot{display:flex;gap:8px} .er-foot button{flex:1;border:1px solid #e5e7eb;background:#fff;border-radius:8px;padding:9px;font:500 12.5px inherit;font-family:inherit;color:#6b7280;cursor:pointer} .er-foot button:hover{background:#f9fafb;border-color:#d1d5db}
-.er-foot .pri{color:#0b0b0c;border-color:#d9d5cd;background:#f1eee9}
+.er-foot .pri{color:#0071e3;border-color:#b9d7fb;background:#e8f1fc}
 .er-note{background:#f9fafb;border-radius:8px;padding:9px 11px;font-size:11.5px;color:#6b7280}
-.er-bub{position:fixed;z-index:80;width:min(300px,calc(100vw - 24px));background:#fff;color:#1a1a1a;border:1px solid #e5e7eb;border-radius:4px;box-shadow:0 12px 32px rgba(0,0,0,.18);padding:12px 14px;font:13.5px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;animation:erUp .15s ease}
+.er-bub{position:fixed;z-index:80;width:min(300px,calc(100vw - 24px));background:#fff;color:#1a1a1a;border:1px solid #e5e7eb;border-radius:14px;box-shadow:0 12px 32px rgba(0,0,0,.18);padding:12px 14px;font:13.5px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;animation:erUp .15s ease}
 .er-bub h3{margin:0;font-size:16px;font-weight:700;display:flex;align-items:baseline;gap:8px} .er-bub h3 small{font-weight:500;font-size:11.5px;color:#6b7280;font-style:italic}
 .er-bub p{margin:6px 0 0} .er-bub .src{font-size:11px;color:#9ca3af;margin-top:6px}
-.er-bub .acts{display:flex;gap:8px;margin-top:10px} .er-bub .acts button{border:0;border-radius:8px;padding:7px 11px;font:600 12.5px inherit;font-family:inherit;cursor:pointer;background:#0b0b0c;color:#fff} .er-bub .acts button.sec{background:#f3f4f6;color:#374151}
+.er-bub .acts{display:flex;gap:8px;margin-top:10px} .er-bub .acts button{border:0;border-radius:8px;padding:7px 11px;font:600 12.5px inherit;font-family:inherit;cursor:pointer;background:#0071e3;color:#fff} .er-bub .acts button.sec{background:#f3f4f6;color:#374151}
 .er-bub .acts button:disabled{background:#d1fae5;color:#047857;cursor:default}
-.er-word{border-bottom:2px solid #0b0b0c;border-radius:2px}
+.er-word{border-bottom:2px solid #0071e3;border-radius:2px}
 .er-bank{display:flex;flex-direction:column;gap:8px} .er-bank div{border:1px solid #e5e7eb;border-radius:10px;padding:9px 11px;position:relative}
 .er-bank b{font-size:14px} .er-bank p{margin:3px 0 0;color:#4b5563;font-size:12.5px} .er-bank button{position:absolute;top:6px;right:6px;border:0;background:none;color:#9ca3af;cursor:pointer;font-size:13px}
 @media (prefers-reduced-motion:reduce){.er-panel,.er-bub{animation:none}.er-bar{transition:none}}
