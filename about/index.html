@@ -4,7 +4,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Eureka · From a pile of class files to questions you can practice</title>
 <meta name="description" content="Eureka turns a class's scattered slides, readings and worksheets into one calm place to read, practice and review. See how it works for students and for professors.">
-<meta name="theme-color" content="#ffffff">
+<meta name="theme-color" content="#05070d">
+<link rel="preload" as="image" href="../assets/hero/eureka-poster.jpg" media="(min-width:700px)">
 <script src="../shared/platform.js"></script>
 <script>window.COURSE = { id: "hub", prefix: "a104-", name: "Eureka", base: "../" };</script>
 <script src="../shared/settings.js"></script>
@@ -19,13 +20,20 @@
 :root{--bg:#fff;--alt:#f5f5f7;--paper:#fff;--ink:#1d1d1f;--muted:#6e6e73;--faint:#86868b;--line:#d2d2d7;--accent:#0071e3;--accent-hover:#0077ed;--good:#248a3d;--good-soft:#e5f6e9;
   --display:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;
   --body:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif}
-:root[data-theme="dark"]{--bg:#000;--alt:#161617;--paper:#1c1c1e;--ink:#f5f5f7;--muted:#a1a1a6;--faint:#8e8e93;--line:#38383a;--accent:#0a84ff;--accent-hover:#409cff;--good:#30d158;--good-soft:#12301b}
+:root,:root[data-theme="dark"]{--bg:#05070d;--alt:rgba(255,255,255,.035);--paper:rgba(18,23,36,.74);--ink:#f5f5f7;--muted:rgba(235,238,245,.72);--faint:rgba(235,238,245,.5);--line:rgba(255,255,255,.16);--accent:#2997ff;--accent-hover:#47a6ff;--good:#30d158;--good-soft:rgba(48,209,88,.16)}
+/* The night sky from the front page sits behind the whole page: the still paints first, the video joins once the
+   page has loaded (never for reduced motion, data saver or a slow connection) and pauses when the tab is hidden. */
+.sky{position:fixed;inset:0;z-index:-1;background:#05070d url(../assets/hero/eureka-poster-sm.jpg) center/cover no-repeat}
+@media (min-width:700px){.sky{background-image:url(../assets/hero/eureka-poster.jpg)}}
+.sky video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.5s ease-in-out}
+.sky video.on{opacity:1}
+.sky::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(3,5,10,.42),rgba(3,5,10,.62) 40%,rgba(3,5,10,.82))}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--body);letter-spacing:-.022em;-webkit-font-smoothing:antialiased}
+body{margin:0;background:#05070d;color:var(--ink);font:400 17px/1.47 var(--body);letter-spacing:-.022em;-webkit-font-smoothing:antialiased}
 .inner{max-width:1040px;margin:0 auto;padding:0 22px}
 :is(a,button):focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:8px}
-.gnav{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--bg) 78%,transparent);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:.5px solid color-mix(in srgb,var(--line) 70%,transparent)}
+.gnav{position:sticky;top:0;z-index:40;background:rgba(5,7,13,.6);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:.5px solid color-mix(in srgb,var(--line) 70%,transparent)}
 .gnav .inner{display:flex;align-items:center;gap:26px;height:48px}
 .gnav .brand{font:600 19px/1 var(--display);letter-spacing:-.02em;color:var(--ink);text-decoration:none}
 .gnav nav{display:flex;gap:24px;margin-left:auto}
@@ -35,9 +43,8 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.47 var(--bod
 .pill:hover{background:var(--accent-hover)}.pill.sm{font-size:12.5px;padding:7px 13px}
 .link{color:var(--accent);text-decoration:none;font-size:19px}.link:hover{text-decoration:underline}
 section{padding:96px 0}
-.alt{background:var(--alt)}
-.eyebrow{margin:0 0 10px;font:600 17px/1.2 var(--display);color:#bf4800;letter-spacing:-.01em}
-[data-theme="dark"] .eyebrow{color:#ff9f0a}
+.alt{background:var(--alt);border-block:1px solid rgba(255,255,255,.06)}
+.eyebrow{margin:0 0 10px;font:600 17px/1.2 var(--display);color:#ffd27a;letter-spacing:-.01em}
 h1{margin:0;font:700 clamp(40px,7.2vw,80px)/1.05 var(--display);letter-spacing:-.035em}
 h2{margin:0;font:700 clamp(32px,5vw,56px)/1.07 var(--display);letter-spacing:-.03em}
 h3{margin:0;font:600 clamp(21px,2.4vw,24px)/1.17 var(--display);letter-spacing:-.02em}
@@ -48,8 +55,8 @@ h3{margin:0;font:600 clamp(21px,2.4vw,24px)/1.17 var(--display);letter-spacing:-
 
 /* ---------- the demonstration */
 .demo{margin:52px auto 0;max-width:980px}
-.stage{position:relative;aspect-ratio:16/10;border-radius:28px;overflow:hidden;background:linear-gradient(160deg,#f5f5f7,#e8e8ed);box-shadow:0 30px 80px -30px rgba(0,0,0,.35),0 0 0 1px rgba(0,0,0,.06);font-size:clamp(9px,1.45vw,15px);text-align:left;container-type:inline-size}
-[data-theme="dark"] .stage{background:linear-gradient(160deg,#1c1c1e,#0b0b0c);box-shadow:0 30px 80px -30px #000,0 0 0 1px rgba(255,255,255,.08)}
+.stage{--paper:#fff;--ink:#1d1d1f;--muted:#6e6e73;--faint:#86868b;--line:#d2d2d7;--alt:#f5f5f7;--accent:#0071e3;--good:#248a3d;--good-soft:#e5f6e9;color:#1d1d1f;
+  position:relative;aspect-ratio:16/10;border-radius:28px;overflow:hidden;background:linear-gradient(160deg,#f5f5f7,#e8e8ed);box-shadow:0 40px 120px -30px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.14),0 0 90px rgba(120,160,255,.12);font-size:clamp(9px,1.45vw,15px);text-align:left;container-type:inline-size}
 .stage *{letter-spacing:-.015em}
 .sc{position:absolute;inset:0;opacity:0;transition:opacity .6s ease;pointer-events:none}
 .stage[data-s="1"] .s1,.stage[data-s="2"] .s2,.stage[data-s="3"] .s3,.stage[data-s="4"] .s3,.stage[data-s="4"] .s4{opacity:1}
@@ -77,7 +84,6 @@ h3{margin:0;font:600 clamp(21px,2.4vw,24px)/1.17 var(--display);letter-spacing:-
 .card h4{margin:.5em 0 .6em;font:700 1.2em/1.2 var(--display)}
 .pass p{margin:0;font-size:.98em;line-height:1.55;color:var(--muted)}
 .pass mark{background:linear-gradient(90deg,#ffe58a,#ffe58a) no-repeat 0 0/0% 100%;color:var(--ink);border-radius:.2em;padding:.05em 0;transition:background-size 1.4s ease .3s}
-[data-theme="dark"] .pass mark{background-image:linear-gradient(90deg,#6b5200,#6b5200)}
 .stage[data-s="3"] .pass mark,.stage[data-s="4"] .pass mark{background-size:100% 100%}
 .q{opacity:0;transform:translateX(1.5em);transition:opacity .6s ease 1.5s,transform .6s ease 1.5s}
 .stage[data-s="3"] .q,.stage[data-s="4"] .q{opacity:1;transform:none}
@@ -105,20 +111,19 @@ h3{margin:0;font:600 clamp(21px,2.4vw,24px)/1.17 var(--display);letter-spacing:-
 .cap{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:20px;min-height:28px;flex-wrap:wrap}
 .cap p{margin:0;font:500 17px/1.3 var(--display);color:var(--ink);transition:opacity .3s}
 .dots{display:flex;gap:8px}
-.dots button{width:8px;height:8px;border-radius:50%;border:0;padding:0;background:var(--line);cursor:pointer;transition:background .3s,width .3s}
-.dots button[aria-current="true"]{background:var(--ink);width:22px;border-radius:980px}
+.dots button{width:8px;height:8px;border-radius:50%;border:0;padding:0;background:rgba(255,255,255,.3);cursor:pointer;transition:background .3s,width .3s}
+.dots button[aria-current="true"]{background:#fff;width:22px;border-radius:980px}
 .vidlink{margin-top:10px;font-size:14px;color:var(--faint)}.vidlink a{color:var(--accent);text-decoration:none}
 
 /* ---------- the rest of the page */
 .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px;margin-top:48px}
-.step{background:var(--paper);border-radius:22px;padding:26px 24px}
+.step{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:26px 24px}
 .alt .step{background:var(--paper)}
 .step .n{font:700 15px/1 var(--display);color:var(--faint)}
 .step h3{margin:14px 0 8px}
 .step p{margin:0;color:var(--muted);font-size:15px;line-height:1.5}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:48px}
-.who{background:var(--alt);border-radius:28px;padding:36px 32px}
-.alt .who{background:var(--paper)}
+.who{background:var(--paper);border:1px solid var(--line);border-radius:28px;padding:36px 32px}
 .who .tag{font:600 14px/1 var(--display);color:var(--accent)}
 .who h3{font-size:clamp(26px,3.2vw,34px);font-weight:700;letter-spacing:-.028em;margin:10px 0 18px;line-height:1.1}
 .who ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:16px}
@@ -126,7 +131,7 @@ h3{margin:0;font:600 clamp(21px,2.4vw,24px)/1.17 var(--display);letter-spacing:-
 .who li b{color:var(--ink);font-weight:600}
 .who li svg{width:22px;height:22px;margin-top:2px;fill:none;stroke:var(--accent);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .inside{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin-top:44px;text-align:left}
-.inside div{background:var(--paper);border-radius:18px;padding:20px 20px 22px}
+.inside div{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:20px 20px 22px}
 .inside b{display:block;font:600 17px/1.2 var(--display);margin-bottom:6px}
 .inside span{color:var(--muted);font-size:14.5px;line-height:1.45}
 .note{max-width:680px;margin:28px auto 0;color:var(--faint);font-size:13px;line-height:1.5}
@@ -134,7 +139,7 @@ footer{border-top:1px solid var(--line);padding:22px 0 40px;color:var(--faint);f
 @media (max-width:760px){section{padding:68px 0}.two{grid-template-columns:1fr}.gnav nav a:not(.keep){display:none}.stage{border-radius:18px}.who{padding:28px 22px;border-radius:22px}.hero{padding-top:52px}}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.sc,.file,.row,.q,.opt,.why,.cursor,.pass mark,.prog .bar i{transition:none!important}}
 /* ?demo=1: only the stage, edge to edge (used to record the shareable video) */
-body.demo-only{background:#f5f5f7;overflow:hidden}
+body.demo-only{background:#f5f5f7;overflow:hidden}body.demo-only .sky{display:none}body.demo-only .cap p{color:#1d1d1f}
 body.demo-only>*:not(.keepdemo){display:none!important}
 body.demo-only .hero{padding:0}body.demo-only .hero>.inner>*:not(.demo){display:none}
 body.demo-only .inner{max-width:none;padding:0}body.demo-only .demo{margin:0;max-width:none}
@@ -145,6 +150,7 @@ body.demo-only .dots,body.demo-only .vidlink{display:none}
 <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
 <script defer src="/_vercel/insights/script.js"></script>
 </head><body>
+<div class="sky" aria-hidden="true"><video id="sky" muted loop playsinline preload="none" tabindex="-1" disablepictureinpicture disableremoteplayback></video></div>
 <header class="gnav"><div class="inner">
   <a class="brand" href="../index.html">Eureka</a>
   <nav aria-label="On this page"><a href="#how">How it works</a><a href="#students">For students</a><a href="#professors">For professors</a><a href="#inside">What's inside</a></nav>
@@ -284,6 +290,17 @@ body.demo-only .dots,body.demo-only .vidlink{display:none}
   if (reduce) { show(3); stage.classList.add("hit") } else show(0);
   if ("IntersectionObserver" in window && !only) new IntersectionObserver(es => { es[0].isIntersecting && !document.hidden ? play() : pause() }, { threshold: .35 }).observe(stage); else play();
   document.addEventListener("visibilitychange", () => { document.hidden ? pause() : play() });
+  // the sky behind the page
+  const sky = document.getElementById("sky"), conn = navigator.connection || {}, slow = conn.saveData || /(^|-)2g|3g/.test(conn.effectiveType || "");
+  function startSky() {
+    if (only || reduce || slow || sky.src) return;
+    sky.src = innerWidth * (devicePixelRatio || 1) > 1400 ? "../assets/hero/eureka-1080.mp4" : "../assets/hero/eureka-720.mp4";
+    sky.addEventListener("canplay", () => sky.classList.add("on"), { once: true }); sky.addEventListener("error", () => sky.remove(), { once: true });
+    const p = sky.play(); if (p && p.catch) p.catch(() => { });
+  }
+  const idle = window.requestIdleCallback || (f => setTimeout(f, 300));
+  if (document.readyState === "complete") idle(startSky); else addEventListener("load", () => idle(startSky), { once: true });
+  document.addEventListener("visibilitychange", () => { if (!sky.src || !sky.isConnected) return; if (document.hidden) sky.pause(); else { const p = sky.play(); if (p && p.catch) p.catch(() => { }) } });
   window.EurekaDemo = { show, play, pause, restart: () => { pause(); show(0); playing = true; next() }, total: SC.reduce((a, s) => a + s[1], 0) };
 })();
 </script>
