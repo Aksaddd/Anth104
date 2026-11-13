@@ -96,7 +96,10 @@ body.er-sepia .rd-sec .rd-prose strong,body.er-sepia .rd-sec .rd-prose b{color:#
 .er-bank div{border-color:var(--l)}.er-bank p{color:var(--m)}
 .er-bub{background:var(--paper,#fff);color:var(--ink,#1a1a1a);border-color:var(--line,#e5e7eb)}.er-bub h3 small,.er-bub .src{color:var(--muted,#6b7280)}
 .er-bub .acts button.sec{background:var(--fill,#f3f4f6);color:var(--ink,#374151)}
-@media (max-width:560px){.er-panel{left:8px!important;right:8px!important;top:auto!important;bottom:8px!important;width:auto;max-height:72vh}}
+.er-panel.er-sheet{left:8px;right:8px;top:auto;bottom:max(8px,env(safe-area-inset-bottom,0px));width:auto;max-width:560px;margin:0 auto;max-height:min(44vh,360px)}
+.er-panel.er-sheet .er-note{display:none}
+body:has(.er-panel) .lk-tip{display:none}   /* the first-visit tip steps aside while the panel is open */
+.er-panel.er-sheet .er-head{padding:10px 14px}.er-panel.er-sheet .er-body{padding:12px 14px;gap:12px}
 @media (prefers-reduced-motion:reduce){.er-panel,.er-bub{animation:none}.er-bar{transition:none}}
 `; document.head.appendChild(st);
 
@@ -143,8 +146,16 @@ body.er-sepia .rd-sec .rd-prose strong,body.er-sepia .rd-sec .rd-prose b{color:#
     if ($("erReset")) $("erReset").onclick = () => { S = Object.assign({}, DEF); save(); apply(); paintPanel() };
   }
   function openPanel(v) { view = v || "settings"; if (!panel) { panel = document.createElement("div"); panel.className = "er-panel"; panel.setAttribute("role", "dialog"); panel.setAttribute("aria-label", "ErgoRead reading settings"); document.body.appendChild(panel) } paintPanel(); place(); markBtn() }
-  // the panel hangs under the Aa button (on a phone it is a sheet at the bottom)
-  function place() { const b = document.querySelector(".er-aa"); if (!panel || !b) return; const r = b.getBoundingClientRect(), w = Math.min(330, innerWidth - 32); panel.style.width = w + "px"; panel.style.left = Math.max(16, Math.min(innerWidth - w - 16, r.right - w)) + "px"; panel.style.top = Math.max(12, Math.min(r.bottom + 10, innerHeight - 220)) + "px"; panel.style.maxHeight = "calc(100vh - " + (Math.max(12, r.bottom + 10) + 16) + "px)" }
+  // The panel must not sit on the text you are adjusting. Where there is room it stands in the margin beside the
+  // reading column; otherwise it is a short sheet along the bottom edge, leaving the passage above it in view.
+  function place() {
+    const b = document.querySelector(".er-aa"), col = document.querySelector(".rd-sec") || document.querySelector(".wrap"); if (!panel || !b) return;
+    const w = Math.min(320, innerWidth - 16), c = col ? col.getBoundingClientRect() : { left: 0, right: innerWidth }, s = panel.style, r = b.getBoundingClientRect();
+    const right = innerWidth - c.right - 32 >= w, left = c.left - 32 >= w, side = right || left;
+    panel.classList.toggle("er-sheet", !side); s.width = side ? w + "px" : "";
+    if (side) { const top = Math.max(12, Math.min(r.top, innerHeight - 240)); s.left = (right ? c.right + 16 : c.left - w - 16) + "px"; s.top = top + "px"; s.maxHeight = "calc(100vh - " + (top + 16) + "px)" }
+    else { s.left = s.top = s.maxHeight = "" }
+  }
   function markBtn() { const b = document.querySelector(".er-aa"); if (b) b.setAttribute("aria-expanded", !!panel) }
   addEventListener("resize", place); addEventListener("scroll", place, { passive: true });
   document.addEventListener("pointerdown", e => { if (panel && !panel.contains(e.target) && !e.target.closest(".er-aa")) closePanel() });
