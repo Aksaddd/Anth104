@@ -927,7 +927,8 @@ body.bb-on{padding-bottom:96px}
 @media (min-width:900px){.cf-room{width:100vw;height:100vh;height:100dvh;border-radius:0;box-shadow:none}}
 .cf-top{position:absolute;z-index:2;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:calc(10px + env(safe-area-inset-top,0px)) 14px 10px;background:linear-gradient(rgba(74,47,29,.82),rgba(74,47,29,0));color:#fff}
 .cf-top b{display:block;font:800 20px -apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif}.cf-top small{font:500 13px -apple-system,sans-serif;opacity:.9}
-.cf-x{border:0;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.9);color:#4a2f1d;font-size:16px;cursor:pointer}
+.cf-top>:first-child{min-width:0;padding-right:12px;text-shadow:0 1px 6px rgba(0,0,0,.55)}.cf-top{align-items:flex-start}
+.cf-x{flex:none;border:0;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.9);color:#4a2f1d;font-size:16px;cursor:pointer}
 .cf-cat{cursor:pointer;transition:transform 2.3s ease-in-out;outline:none}.cf-cat:hover>svg,.cf-cat:focus>svg{filter:drop-shadow(0 0 4px #fff) drop-shadow(0 0 8px #ffd84a)}
 .cf-cat .dx-blink{animation:bbBlink 5s ease-in-out infinite}.cf-cat .dx-tail{animation:bbTailSway 3.4s ease-in-out infinite}.cf-cat .dx-earr{animation:bbEarFlick 7s ease-in-out infinite}
 .cf-cat.walk .dx-pawl,.cf-cat.walk .dx-hindr{animation:bbStride .36s ease-in-out infinite alternate}.cf-cat.walk .dx-pawr,.cf-cat.walk .dx-hindl{animation:bbStride .36s ease-in-out -.36s infinite alternate-reverse}

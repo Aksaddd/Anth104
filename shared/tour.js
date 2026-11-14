@@ -165,6 +165,25 @@
 .grow .side{flex:.9;border-left:1px dashed #d9b98a;padding-left:3%;margin-left:1%}
 .cmp[data-s="4"] .grow .side{transition-delay:2.2s}
 .gate2{margin:30px auto 0;display:flex;justify-content:center;gap:20px;flex-wrap:wrap;align-items:center}
+/* phones: the stage is taller and its type scales with the screen, so nothing in a scene is cut off */
+@media (max-width:640px){
+  .tstage{aspect-ratio:4/5;font-size:2.7vw;border-radius:20px}
+  .win,.cw{inset:4% 4%}
+  .win{grid-template-columns:1fr}.win aside{display:none}
+  .win main{padding:1.3em 1.3em}
+  .shelf2{grid-template-columns:repeat(3,1fr);gap:1em}.shelf2>div:empty{display:none}.shelf2 .cover{font-size:.62em}
+  .cont2{grid-template-columns:24% 1fr}.cont2 .cover{font-size:.5em}
+  .menu2{right:8%;top:47%}
+  .cnav{gap:.9em;padding:.9em 1em;font-size:.74em;flex-wrap:nowrap;overflow:hidden}.cnav span:not(.on){display:none}
+  .rd{padding:1.5em 8% 0}.chk{left:8%;right:8%}.bub{left:12%;top:60%}.rd .p2{display:block}
+  .dr{grid-template-columns:1fr;font-size:1em;padding:1.2em}.subj{display:none}
+  .mk{grid-template-columns:1fr;gap:1em;align-content:center;padding:1.3em}.score svg{width:38%}.score b{top:24%}
+  .ds{padding:1.1em 6% 0}
+  .cafe2{width:94%;gap:3%}.pet{max-width:none}
+  .study{grid-template-columns:1fr;width:86%;gap:1em}.buddy{width:42%;margin:0 auto}
+  .grow{flex-wrap:wrap;width:94%;row-gap:1.2em}.grow .side{flex-basis:60%;border-left:0;border-top:1px dashed #d9b98a;padding:1em 0 0;margin:0}
+  .navx{width:90%;gap:.9em;flex-wrap:wrap;row-gap:.7em;font-size:.8em}
+}
 @media (prefers-reduced-motion:reduce){.tsc,.pet,.grow .g,.grow .arr,.cont2 .bar i,.menu2,.star2,.chips2 .newc,.toast2,.xpb2 i,.qx div,.rprog i,.rd mark,.bub,.dq .o,.dq .o b,.whyx,.subj div u,.cells.done,.score,.ring2,.rep{transition:none!important}.lib .cont2 .pillx{animation:none!important}.ntag,.cmp[data-s="3"] .buddy svg,.cmp[data-s="3"] .xpf{animation:none!important}}
 `;
   function html(lib) {
