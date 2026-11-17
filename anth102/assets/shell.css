@@ -26,7 +26,7 @@ html{scroll-padding-top:calc(var(--gnav-h) + 12px)}
 
 /* ===== Settings sheet (iOS grouped style) */
 html.gs-open{overflow:hidden}
-.gsheet-wrap{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.32);display:flex;align-items:flex-start;justify-content:center;padding:max(24px,env(safe-area-inset-top,0px)) 12px 24px;overflow-y:auto;animation:gsfade .2s ease}
+.gsheet-wrap{position:fixed;inset:0;bottom:auto;height:100vh;height:100dvh;z-index:100;background:rgba(0,0,0,.32);display:flex;align-items:flex-start;justify-content:center;padding:max(24px,env(safe-area-inset-top,0px)) 12px 24px;overflow-y:auto;animation:gsfade .2s ease}
 .gsheet{width:100%;max-width:480px;background:#f2f2f7;color:#1d1d1f;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.3);font:400 15px/1.35 -apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;letter-spacing:-.01em;animation:gsup .25s cubic-bezier(.2,.8,.2,1)}
 @keyframes gsfade{from{opacity:0}} @keyframes gsup{from{transform:translateY(16px);opacity:0}}
 @media (prefers-reduced-motion:reduce){.gsheet-wrap,.gsheet{animation:none}}

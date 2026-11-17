@@ -114,7 +114,9 @@ button.st-row{cursor:pointer} button.st-row:active{background:var(--s-fill)}
 .st-choose .st-cbtn.pri{background:var(--s-acc);color:#fff}.st-choose .st-cbtn.pri small{color:rgba(255,255,255,.85)}
 .st-sample{padding:4px 16px 14px;color:var(--s-muted);font-size:calc(15px * var(--rs,1));font-family:var(--read)}
 @keyframes stFade{from{opacity:0}} @keyframes stUp{from{opacity:0;transform:translateY(24px) scale(.98)}}
-@media (max-width:560px){.st-veil{align-items:flex-end;padding:0}.st-sheet{border-radius:16px 16px 0 0;max-height:92vh;width:100%;padding-bottom:env(safe-area-inset-bottom,0px)}}
+.st-veil{height:100vh;height:100dvh;bottom:auto}
+.st-sheet{max-height:min(88vh,760px);max-height:min(calc(100dvh - 32px),760px)}
+@media (max-width:560px){.st-veil{align-items:flex-end;padding:0}.st-sheet{border-radius:16px 16px 0 0;max-height:88vh;max-height:calc(100dvh - 28px - env(safe-area-inset-top,0px));width:100%;padding-bottom:env(safe-area-inset-bottom,0px)}}
 @media (prefers-reduced-motion:reduce){.st-veil,.st-sheet{animation:none}}`;
   const GEAR = `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>`;
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
